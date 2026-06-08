@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>20 Bridges Race Tracker – Joey Nizzardo</title>
+<meta name="theme-color" content="#1a2e6b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Race Tracker">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%2220%20Bridges%20Race%20Tracker%22%2C%22short_name%22%3A%22Race%20Tracker%22%2C%22description%22%3A%22Joey%20Nizzardo%20%5Cu2013%2020%20Bridges%20Swim%20Around%20Manhattan%2C%20June%2015%202026%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%230d0d1a%22%2C%22theme_color%22%3A%22%231a2e6b%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage/png%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAAMGUlEQVR4nO2dW2wU1xnHz3ovTmqv74bYONjY%2BFLcGhqapnVLSEgptIQkpVKj9BLRSs1DqZTXKg99zFNfkOg7cluJpiVNRAGRFCu9yG2hKRRsZHzBBnyNbTD4ine97sO4J%2BPZ3dmZObfvzHw/RdHe98z3/fZ/zsws61B12zGCIF7JUz0ARG9QIIQJFAhhAgVCmECBECZQIIQJFAhhAgVCmECBECYiqgcAgpKaRm9PnB3p5zsS7QiiQJ51cfJSQVMqEAJxNMbte/neJ98KJFMaG8zD8KVMfhMIiDcZoWPzk0k%2BEQiyN%2Bn4ySTtBdJLHQvG4LXWSFeBtPbGgtaBpJ9AflLHgo6BpJNAPlbHjF4a6SFQQNQxo4tGGpwLC6A9FPjbDjqB4JdPAsCjCKhAqI4FsBpBnMLQnmwArAysBAJYIGhAiyJACYT2OAdOraAIBKciugCkYuqnMCCF0BEI05niBEJ72FFbQ5UCoT28UFhJZQKhPXxRVU81AqE9IlBSVdmLaFRHKPKX1VITCO2Rg8w6yxMI7ZGJtGpLEgjtkY%2BcmssQCO1RhYTKQzmVgWiKcIEwftQiuv5iBUJ7ICC0CwIFQnvgIK4XogRCe6AhqCNCBEJ7YCKiL%2Bq/DwSQzpNHs9217%2BhJeePQgRD3P7aidfzYqGNGa434ninjLJC%2B9jhUx4y%2BGnF0iKdAmtrjQR0zmmrEy6GgH4lmtIfLK2gNN4F0jB9evdfRIV794iNQkO0R8Wpy4NK1gE5hIvqto0PscBBIx/hBDNh7F8QEEhcVAQwhVoEwfnSHsYNMAuloj%2BiQ0DGEWPoYxCkM4Yh3gTB%2B1L4LXzx3ExMIYcKjQDrGD2KPt55iAiFMeBEI48eveOgsJhDCBAqEMOFaIJy//I3b/mICIUy4E0j3%2BJHz9VNNv%2BRKcdVlTCCEicAJJDoedI8ft7gQSPf5C3GO814HLoGIyJAIWvyQYAqEcMSpQD6bv0REhc/ix2HHg5tAfPvtM3ucE1yBCL%2BuB9YeEnCBCI/eB9ke4vDHFXy2AMpIoH6dwzk5f4MBf2BqHcOGIPw%2BEF9QoA3k1AjVsaCBQJ0nj0puG1riHA0EIhsjAbsLityLaLUraJxNlGO/jtYjgTKCsQQB6AlkxskuEprEHfsE0kkgCu5sy8SHApnBWBKNzwWiYCwJgmkRrYs9zsGlt1tKahptHNJ4L4wdKhOa5JkcU5iOCRTMX54Xik0C%2BVAgCprEi4AKRGH/ybCAyxT0NRBtv44/PgecQAhE8WZSwOPHnmAJRMFM4kUg1kBOyGlSkHMo6ItoV6BJ6aBAXkCTKCgQE2gSCsSHwJqEAnEmaCahQKIIiEkokHD8bRIKJA9fmoQCKcBPJtkI5M9f52h4/U36f1XsO3rS%2BE/hGLLBsT45zoXNjvTDDyGbQqTfNdhxXPBwrGQ87yZTLMb6%2BPlL9Z4/Q/I1MiPtX/tzqY8/BeISv2o1EgrH%2BvhNICeloWa4erA/4F6fj9/%2Bmc29mgmUcYNdGcD%2BCpARVB8bh3QSiOOKGMLimjtC65PNIT1%2BI1FQv32jkbT6pGukwXEgcW1Ofx21h468IbM%2Bu986YbkFukCiQ0J3h0TXJz1yLA7BncIkzy/aTWdyBkz34dOzx3ALaALJb6deUSS/PtmiyFECEbkhpDAMtMghaYNMP4SYnkOh6rZju986YX%2BwiMgSCEj/gAwjHckDy3YM2qzRukDGFRuNRAsE7fgejofYnsSgzuSZbUoPKDlA61a2d1e1KgJYH5o1ocOn1rLdZ0FQCIGdLwyUD0/VAHL%2BmRWD9UV0tp00M9wFUt4b5ygZqtr6OBRofTc%2B5/Ei7mhkD1Gxk69LfT49DpTTIYdKOkGX6piR6ZDy%2BjjvdYbjQDbTGfssprw07AjdBCD1cS5QhiPR4qYzINVhRFwU6VifzKcysjnEMovpWJ1siHAITn1cdTnHqYz07PGwVXBKwx0umwatPjwFIlnmL4dbCPAIGHdYthFgfdxOMo5OpjpZAw12HA/gN9gNHG64FvURIpAB41JaeWlEw7gMAlIfgQIZeNAISGnk4EEjOPXxsJPkWiADhxrBKY1kHGoErT7yBCJpBxUbXn8TWjlAAb8%2B3o7RcBMI0R1vAnn/TjTHU2OIcjx3E%2BiX6hFdYBIIQ8gfsPSRNYHQId1h7CBOYQgTHATCENIX9t5hAiFM8BEIQ0hHuHSNWwKhQ3rBq184hSFM8BQIQ0gXOHaKcwKhQ/Dh2yP%2BUxg6BBnu3cE1EMKEEIEwhGAioi%2BiEggdgoagjgicwtAhOIjrhdg1EDoEAaFdEL6IRofUIrr%2BuBeGMCFDIAwhVUiovKQEQofkI6fm8qYwdEgm0qotdQ2EDslBZp1z/NVm7hjbhv8oURDyP6Jq9sIwikSgpKrKduPRIb6oqqfK40DoEC8UVlL2GsjC7Ei/oPVQvKSoqramum5L2ebKeHE8mh9LpVJL84tTY5P913pv993K9sRINNr6dFtdc0NxeUksP7a0uDQ19snA9d5bN6xNOvKT1yqqNlluTKVSiZXE3OzD6bHJge6bY8Mj/LdtI2o/h95/nYMvfDWKxqI/%2BvlPbR5wd2D4w9%2BfSyYSltvLn6g8%2BNpLBfHC9KeM3rrzwTtnEysr9JaMAlnov9b70fsfrK1Z/yAJFyBEOJRTGZJr8eT2uude3m%2B5sbAo/uIPj2S0hxCypX7rgVdfdPtGjW0tzV9o9TLEXECwhyifwsxwn86SyeTNKz2DPX0zE9ORaGRbS8Mz%2B/dEY1Hj3vodjaWV5fenZujj2w/uzX/8sfXBTN%2B7ePr87Mz92qb65185EI6ECSHV255s3tV682pP%2BnuNDN4%2B99v3CCGRaKS2qX7fkYOhUMi4a3trU%2B9/ujluFwFjDwElEOF3lGhtjQz29P3jwl8W5xeNWxIrKzc%2Bvk4I%2BdqhffRhVbVbqECFxfG6lgZ619/Ods5MThNCbt3or6zevLN9t3H755/ZlVEgSjKRHOzpa2z77NbGuvVXLili3BwzcNQxgDKFmWGvUTKRuHj6PLWHMrxx7RzLj9HLZntWlh%2BN3x6lV2/3DdHLZZsrikqLXQ3m0dKyq8fbAM0eAi2BKIIOWOflbfjAzD%2Bcp5crqzZ/%2Bu4z9zcMZvqe%2BWpF1aaH9x9ke4tINLK1cVtNw1Z6y53%2BYa/jNY0BnjoGQAUy4K7R9s8108urydWRgWF6NV4Sp5eXF5bMz1peXFpbW6NrmnimKammofaNX2T4Zdax4ZH/dv2bZcxg1TGAOIVZ4FXB8icqn3r2S/Rq96Wry6bJJZafTy8nk0nLc1OrKdMjY8QZi/MLlzu7kgnrqzkHuD1EC4EIIbMj/YylrKjadOgH345E13fBRofuXu7scvH8kJc3/Uxhwcs//m6Lp9149k2WA%2BgpzILnGa26ruYbrx6myTFxZ/TCqTOpVMr8mJVHj%2BjlSGRDWUKhUDgcNj1yhaRBd%2BPD4XBJZVn7gb1VtVuMu776refv9A%2Blr%2BizoYU3FD0SyIzbj2ZdS8M3v/8KtefuwPC537yXfgx6bnaOXn6s4HHzXfTg0P8f%2BdDm7VZXV2cmpi6%2Be57eEg6H63c0ORmqLqljRqcEMkMLbR9Izbtanz38Al3/Dlzv/ej9Dy3ZYzA1PtnY1rL%2BmhWl5rtKK8vMV6fHP8k5vMW5hcTKSjS2bq39nr920pjRL4Es2Hxqd7bv3vvS16k91/91pfOPFzLaQwgZ7h2kl2P5%2BXQCIoTUNtXTy/cmp2324SkF8UJqDyEk25vqGDkWdE0gC%2BmB9OX9e9q%2B8hR9wKXOrqt/v2zzCvMP5oZ7B%2BnhxD2HXrh4%2BpxxKqP16Z30Yd2XrtqPJC8cLq0saz%2Bw13zjzMRUxtH6AChn4/lSUFR07Jdv53xY75Wev575M71aWBz/zhvfs6x4zIwNj/yp4zS96uRsPCFkYW7%2Bdyc6komEn7yhaD%2BFcWT%2BwdzZX7%2B7MDef8d7RobsXTp1x/ZqzD/5w/MT00A1f2kN8M4XxYnpi6p1fdez4Ytu2lu3F5SXR/Njy4pLxHbT0L5RlI5lILM3NT4%2BPD17r6e76p/kAgf/w5xTmFs9nS/yaK87BBCIEPWAA10AIEygQwgQKhDCBAiFMoEAIEygQwgQKhDCBAiFM/A/dslt9/K8s7QAAAABJRU5ErkJggg%3D%3D%22%2C%22sizes%22%3A%22192x192%22%2C%22type%22%3A%22image/png%22%2C%22purpose%22%3A%22any%20maskable%22%7D%2C%7B%22src%22%3A%22data%3Aimage/png%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAIAAAB7GkOtAAAlEklEQVR4nO3dWZQc1X3H8ZqeVaMZzUijjdGgBS3ILMMi9uBYLAKDARFjgzEnDiTnOA8Q885DXnJCnnJOfELOycniQ0iOIWA7BsxmGWGBEKsESEIIbWjfpRmNZqRZumfy0HbTmu6pulV1q%2Bre%2B/9%2BTh5iVN1T3f2v/6/ura2ms/tRDwAgTy7rFQAAZIMAAAChCAAAEIoAAAChCAAAEIoAAAChCAAAEIoAAAChCAAAEIoAAAChCAAAEIoAAAChCAAAEIoAAAChCAAAEIoAAAChCAAAEIoAAAChCAAAEIoAAAChCAAAEIoAAAChCAAAEIoAAAChCAAAEKou6xUANGvvWpzcm/fu357cmwMpIwBgmUT7e/y/TkLAIgQAzJVtr4%2Bm6jqTCjATAQBT2NjuFVV%2BNCIBJiAAkA2H270KIgEmIACQHuFN31/5l0MYIB0EABJEx49m3PdGHiAhBAA0o%2Blrx%2BAACSEAoAd9Px2l75kkQHwEAKKj6WeIYQHiIwAQGn3fNAwLEA0BAFX0ffORBAiFAEAA%2Br6NSAKoIABQHX3fDSQBfBAAOAd931UkASoRAPA8%2Br4kJAFKCADpaP1iFX96YkAyAkAuWj88YkA2AkAc%2Bj4qMS8kEwEgCK0fgRgQiEIAiEDrRyjEgBAEgMvo%2B4iDeSHnEQBuovVDIwYEriIAXEPrR0KIAfcQAO6g9SMFxIBLCAAX0PqRMmLADQSA3Wj9yBAxYDsCwFa0fhiCGLBXLusVQBR0f5iGmrQRIwDLsJnBWAwFrEMAWIPWDysQAxYhACxA64d1iAErcAzAdHR/2IvqNRwjAHOx8cABDAVMRgCYiNYPxxADZmIKyDh0f7iK2jYNIwCDsHnAeQwFjMIIwBR0f8hBtRuCEUD22BggEEMBEzACyBjdH5JR/9liBJAZSh/wGApkihFANuj%2BQDm2iEwwAkgbhQ5UxVAgfYwAUkX3B/yxjaSJAEgPlQ2oYEtJDVNAaaCggVCYDkoHI4DE0f2BaNh2kkYAJIsKBuJgC0oUU0BJoXABLZgOSg4jgETQ/QG92KaSQADoR6UCSWDL0o4pIJ0oUCBRTAfpxQhAG7o/kA62NV0IAD2oSCBNbHFaEAAaUItA%2Btju4iMA4qIKgayw9cVEAMRC/QHZYhuMg7OAIqLsAENwalBkjACioPsDpmGrjIAACI06A8zEthkWARAOFQaYjC00FAIgBGoLMB/bqToCQBVVBdiCrVURAaCEegLswjarggAIRiUBNmLLDUQABKCGAHux/fojAPxQPYDt2Ip9EAATom4AN7AtT4QAqI6KAVzCFl0VAVAFtQK4h%2B26EgEwHlUCuIqtexwC4BzUB%2BA2tvFyBMDXqAxAArb0EgLgD6gJQA629yICwPOoBkAetnqPAPCoA0Aqtn3pAUAFAJIJ7wCiA0D4bw/Ak90H5AaA5F8dQDmx3UBuAACAcEIDQGzgA6hKZk%2BQGAAyf2kA/gR2BnEBIPA3BqBIWn%2BQFQDSfl0AYYnqEoICQNTvCiAyOb1CSgDI%2BUUBxCekY0gJAADAOCICQEiYA9BIQt9wPwAk/IoAkuB893A8AJz//QAkyu0e4ngAAAAmUpf1CiTI7ehGBKufflhlsZsffjrZ9YBV2rsW9%2B7fnvVaJKKms/vRrNchEXR/eMod3x95AM/znMwANwOA7i%2Bclr5fiSQQzr0McHkKCNIk1Pcr358kgBscHAGw%2By9Q0q2/KmJAIMcGAa4FAN1fmkxafzliQBqXMsCpAKD7i5J56y9HDIjiTAZwDAD2Mar1FxVXiRiAXdy5EIzdfyEM7P4lJq8bNHKm2zgSAM78HvBnfoc1fw2hhRs9hykg2MGixsp0EGzhwgjAjSiGD4u6f4mN64xQHOg81geAA78B/NnbSe1dcyiyvf9YHwBwm%2B091Pb1h9vsDgDb4xf%2B3OiebnwKTMTqLmRxAFj9vSOQS33Tpc%2BCSvb2IosDAA5zr2O694ngAFsDwN7IRSBXe6WrnwuetR3JygCw9LsG4DAb%2B5KVAQCHub2b7Pang3XsCwAbYxaKJPRHCZ9RLOu6k30BAFfJ6YxyPikMZ1kAWBewAESxq0fZFAB2fbMIRdpOsbTPK4pFncqmAAAAaGRNAFgUqghL5u6wzE8thC39ypoAAADoZUcA2BKniEDyjrDkz%2B48K7qWHQEAANDOggCwIkgRDbvAfAMOM793mR4A5n%2BDADARwzuY6QEAAEiI0QFgeHgiJmY/ivge3GZyHzM6AAAAyTE3AEyOTQBQZ2w3MzcA4DbmPcrxbSAThgaAsYEJABGY2dMMDQAAQNJMDAAzoxIA4jCws5kYAACAFBgXAAaGJLTjmGclvhMJTOtvxgUAACAdZgWAafEIAHoZ1eXMCgAAQGoIAAAQyqAAMGpkBAAJMafXGRQAAIA0mRIA5kQiACTNkI5nSgAAAFJmRAAYEoYAkBoT%2Bp4RAQAASB8BAABCZR8AJoyDACB9mXe/7AMAAt388NNZr4Jx%2BE6QvowDIPMABIAMZdsDGQEAgFBZBgC7/wCQYSdkBAAAQhEAyAbHPMvxbSATmQUA8z8AUJRVP2QEAABCEQDIDPMeRXwPyEo2AcD8DwCUy6QrMgIAAKEIAGSJ2Q%2B%2BAWQogwBg/gcAKqXfGxkBIGOSd4Elf3aYgAAAAKHSDgDmf1BJ5o6wzE8Nfyl3SEYAACAUAQAjSNsdlvZ5YaZUA4D5HwDwl2afZAQAU8jZKZbzSWE4AgAGkdAZJXxG2CK9AGD%2BByrc7o9ufzroklq3ZAQAAEIRADCOq7vJrn4u2IsAgInc65XufSI4IKUA4AAAwnKpY7r0WZCOdHomIwCYy42%2B6cangJMIABjN9u5p%2B/rDbWkEAPM/iMPeHmrvmsMEKXRORgCwgI2d1MZ1hjR1Wa8AoKTYT1c//XDG66GA1g9bMAKATczvreavIVCSeABwAAB6mdxhTV432Cjp/skUEOxj4HQQrR82IgBgK0NigNYPexEAsFuGMUDrh%2B0IALgg5Rig9cMNNZ3djyb37hwBRiYSSgL6PjLRu397Qu/MCAAOKnVqLUlA34erCAC4bFzvVswDOj6EIAAss/rph2lPkfHVAeUSDAAOACSkfDeWjgY4r71rcUKHARgB2I0wABAZAWAT/yns0r%2BSBABUEAAOYlgAQAUB4DjCAMBECABBCAMA5ZIKAE4BMhwHDACLJHQiECMAayR0ewOGBYBYBAC%2BRhgAohAAqI4wAJyX1N1AOQaQqKyegkISAFlJ4hgAAWA9wgCQwJoAoPtnIsOHIxIGQAq0ZwAB4CbCAHAPAYDQmCMC3EAAIBbCALAXAQA9mCMCrEMAQD/CALACAYBkEQaAsSwIALq/G0gCwEB6M4BbQcA43IUCSAcBgCoy3P0fhzAAkkMAwBqEAaAXAQAr8UAbID4CAOOZM/%2BjgmEBEBkBAHcQBkAonAaKCdk1FPBBGMAZek8DJQAQjCQADEEAIDPOJIFHGMBOBACy51ISeIQB7GH0lcB0fyFKHdOxJAAM1961WGMGcBYQYiEJAHsRANDD3iRg/gdiEQDQzN4kAKQhAJAUkgAwHAGAxJEEgJkIAKSHJACMQgAgA%2BYkAUeAIRkBgCyZkwSAQJqvBOZCMMSUfhIwCIBdNF4IRgDAUCQBUBUBAEFIAqAcAQCJSALAIwAgHEkAyQgAwPNIAohEAADnIAkgBwEAVEcSwHkEABCAJICrCABAFUkAxxAAQGgkAdxAAADRkQSwGgEAaEASwEYEAKATSQCLEABAIkgCmI8AAJJFEsBYBACQEpIApiEAgLSRBDAEAQBkhiRAtggAIHskATJBAAAGIQmQJgIAMBFJgBSYGwAeGQCQBEiMxu7vEQBAokgC6EUAAPYhCaAFAQBYjCRAHAQA4AKSABHoDYA6je8FQF2pHaefBEARAQAlC3/0eOV/3PnMT1X%2BFf7SSQJ2/%2BNwtf4JAEyoVNaRSzn%2BO4jCmMAoEuqfAMA5qu7L6H1bYzcGc5AEWZFW/7msVwBGKBZo2DKtfNVEyt9N/VW4%2BeGni/8X/300rI27xNY/IwDRyqtw4Y8e3/nMT6vWZbRinehVpb9i/gDZHIwJkkD96x8B6D1LCUlQ2QdRLHotixm1T2S4CGMCdv/Hsbf%2BtXdX/dcBeFwKYLBxg1xDeu64NWFAEErgmIAAKLG9/rUHAFNAUhhS6yqKq0oMKGJ2SAX1XxUjAMdZVPcTIQnCKk8C4bv/jtW/9hEAZwG5zIHq91z5FGnSde6Q7dyonEQ/BQHgrBSqv7hvksIeuhtbcvokZwD1r4IAcJPeivEp8Wj/FAEZAHXUv6JEjgF4HAbIjq5CKT8zQcul8BpXTMv7wEnO1//6Jx/T8j5FBIAjtO8gaO%2Bz5q8h7GV%2BdWlfQy1JQAC4IH5tFfdQUmupPlddhkIGwBNc//EzgGMA1rNxakXX3%2BLAACTX/7Innor5DowALBaq9Cv3OIzafa5ct7CfTvcawXTUf0nkoQAjAFuF3fEZN8I1qvq9c9cnwuiYoYA01H%2B5yEOBpAKAW8IlKnK/S%2B3M5QhirhsZIAf1XylaBiQ1BeQxC5SMmG3OzNIfR8JnRDQSaiPmZww1HUQA2CROZVhR%2BuVEfVioEFUScT6segZwDMAaigVRWeg7n/mpddXvTbDaih%2BE6SD3UP%2BecmdXnw5iBGCBsO1My0WM5ohzOaUDHx/Uf/H/Wf/kY2En%2BgMDgxGA6aLtzJp8sCusOJ%2BFoYDtqP/ip4h2omdgYCQYAJwIFF%2B0Ya97D1QpfpZo53GTAfai/ouK3X9cN9cyHZTgFJDHLFAMwoe9E2E6SAjqv1xpZ7rUzXVNBzEFZCKGvRNhOkgC6n8ixSaucTqIADAOw15/TAe5jfr3p3c6KNkA4DBAWOodyvBL25MW%2BdJ5MsBk1H%2Blql20vOOHmg4atyQjAINE6E0Shr0TifzZyQAzUf%2BhRJ4OKs%2BAZA8CexwHVqM%2B7DX5joZZiXwnRb49Q1D/PgLnUSqngxQHBOuffIwRQPYY9sbEdJDVqP%2BY4kwHEQAZY9irBdNBlqL%2BtYg8HZT4FJDHLNDE4pzuhqr4Si3CjxUo7Hk0YS8OYASQGao/CVwiYAvqPwlhBwFfB0D8x0tCnUr1R74XpnDRvjcyIE3Uf3IqM8AnFf4wBRTtsgJFTAGVcIF7arhphIGo/7AiX0qleNOI6lNAekcDXA5WxAXuaeKmEaah/sOK0zkVDwvXdHY/OlG71zgOYBAQ8ymmiIxv3gT8ChFo2XX235v3OwjMUQFdqP4M8ZT5zFH/GfLfj8/5d3ldGSB5FijOo%2BwSWB2JeLRkhqj/aDT2TJ/DwjV3PzcW7S3CEjgLxCEvo3BYOGXUfxzad5qrHhZWvQ6A6aCwOORlGg4Lp4n6N03Vw8KqI4Dyt4hG1AiASU%2BT8eskjW84vuSmzc%2B5G2ioAPDIAAVc4mgFfqaE8MXGl8JB02VPPBXlbqDMBfmj%2Bm3BXFASqH9bFHflxweAyg7%2BsieeIgYqLfzR41zgbpfIN40gBipR/zbK6Xq0mAqHTwblnuaW4lkCWlD/GqXZJ3OepkeLScY9za3GswRiov7tdc7zACI3dPXwcOw4MGc7uIRfMyy%2BsSSkPQIoiXyGj3pyuDQLRPU7hptGhEL9JyHlDhl8EFgxFaRNB3GBu5O4aYQi6t8N1R8JqXgv6aoCA8P2WSAucHceN43wQf0nKuMRQFHkw8KewlDA6lkgLnCXgJtGTIT6T1T6vXHCC8GK3T/ak8JcnQ6KNuwtvorqt0vx9xr3iwufDqL%2B3VN9CqhcEtNB1s0CMewVi%2Bkgj/pPi0EjgJIkpoPsmgVi2CsZ00HUfzoy6YpK9wKSPB3EsBeSp4Oof7eFuBlcmjeNMAQXuKNE4E0jqH/nhbsbaJybRoyLAcNngaLd8Ithr9vi3DTCrhig/lOWVT8MPghcVeV0UKjd/GKEGHgoOFTRV%2B4GUvpCVP7uYStH9xrpQf1nJasACP08gKLI00FFZk4Khd3lYdgrVuTpoCIzRwPUv0ARA8CLd3aQ53nLnnjKqFmgmDc2ofqlifm7m5YB1H%2BGMuyE0QPAi3d2UOULM6Re/ZztgJI4ZwdVvjBD1L9YEY8BjBPnYrGiTGoo8gnOXOSCcnEuFiu9UOsaKaH%2BTZDtREisEUBJzOkg74%2B1mM4%2BUfy/xbAX5eLXA/WPTOgZAZREntVJ4YyCmGdujHutjjWCa%2BJUFPUvUObHQev0vl3VowLRlFenOYfaKH34qHpUIBrqHynQPAIoF/NaAZU9lFI5qizJOc5IU/xrBah/52U%2BAtBzDKCqmNcKlJuo%2BPxnM2POyXKOM%2BKIea3ARG9Vjvq3Wubd30s0ALx4B4cVNxi9i43DwS7EkcKdRKl/xJHgFFA5c075D4XShxbmnPIfCvWfHBN2/73UAqDIohig9KGdRTFA/SdNYgAUGR4DlD4SZXgMUP8pMKT7e0kfA6hq/ZOPxb9wTK/SXCfVj6SVysycYqP%2BxcogAIrM6f5FlD7SZFq9mbY%2BSEcGU0ATWfbEUzHPFlVUPCePiodRijWZwgQR9Z8tc%2BZ/vAxHAJXGjQkUCzTaYlQ/TBOtRKl/xKH5VhDxrX/ysconhUXbMxr3Kooe5qtapdS/M4za/feMmgIqqfqoyKobgP%2Bl8FQ8nEH9u4EAUGLg44IBIA7Tur9n1DEAAECaDA0AA6MSACIzs6cZGgAAgKSZGwBmBiYAhGVsNzM3AAAAiTI6AIyNTQBQZHIfMzoAAADJMT0ATA5PAPBneAczPQA8479BAKjK/N5lQQAAAJJgRwCYH6QAUM6KrmVHAAAAtLMmAKyIUwDw7OlX1gQAAEAvmwLAllAFIJlFncqmAPCs%2BmYBCGRXj7IsAAAAutgXAHYFLAA5rOtO9gUAAEALKwPAupgF4Dwb%2B5KVAeDZ%2BV0DcJWlHcnWAAAAxGRxAFgauQAcY28vsjgAPJu/dwBusLoL2R0AAIDIrA8Aq%2BMXgNVs7z/WB4Bn/28AwEYOdB4XAgAAEIEjAeBAFAOwiBs9x5EA8Fz5PQCYz5lu404AAABCcSoAnIllAMZyqc84FQCeW78NANM41mFcCwDPuV8IgCHc6y0OBgAAQIWbAeBeUAPIlpNdxc0A8Bz9tQBkwtV%2B4mwAeO7%2BZgDS5HAncTkAAAA%2BHA8Ah6MbQArc7iGOB4Dn%2Bu8HIDnOdw/3A8AT8CsC0E5C3xARAACASlICQEKYA9BFSMeQEgCemF8UQExyeoWgAPAk/a4AohHVJWQFgCfs1wUQirT%2BIC4APHm/MQAVAjuDxADwRP7SAHzI7AlCAwAAIDcAZAY%2BgEpiu4HcAPAE/%2BoASiT3AdEB4Mn%2B7QEI7wDSA8ATXwGAWGz7BIDnUQeAPGz1HgFQQjUAcrC9FxEAX6MmAAnY0ksIgHNQGYDb2MbLEQDjUR%2BAq9i6xyEAqqBKAPewXVciAKqjVgCXsEVXRQBMiIoB3MC2PBECwA91A9iOrdgHARCA6gHsxfbrjwAIRg0BNmLLDUQAKKGSALuwzaogAFRRT4At2FoVEQAhUFWA%2BdhO1REA4VBbgMnYQkMhAEKjwgAzsW2GRQBEQZ0BpmGrjKAu6xWwVbHa2rsWZ70igHS0/sgYAcRC5QHZYhuMgwCIi/oDssLWFxMBoAFVCKSP7S4%2BAkAPahFIE1ucFhwE1qZ3/3aOCRc1NjXO6JzV1jG1raO9bVr75Ckt9Q0N9Y0NDQ31Y543PDg0PDg0PDTc13Pq2MEjxw8dPX7o6PDQcHLrk8vlZnbN7pzfNX32zCnT2ppbJtc11NfW1o4MjwwPDfX39vWe6Dm89%2BDBr/b3951ObjWgC91fl5rO7kezXgfXyIyBpklNXQvnzZ4357y5nVNndIR6baFQ2PPlrq2fbD6wa9/Y2JjGtWqZ0nrJtZcv7l46aXKzyvKH9hz4Yv2mnZ9vi7Aare1THvzJI%2BHX0RsbGxstjBby%2BeGh4cGzgwN9p0/3nu49duL4kWPHDx4dHR2N8J6uovXrRQAkQk4GNLdOXrB00YKlC2fPm5PLxZ1R7D3R885v3jy050D8Faurq7vqpusvvuay2trasK89efTEutd/f3D3/lCvihwAPvIjI/t37t35%2BbavvthBEtD9tSMAkiIkA%2B7764c6Zk3X%2B55bP9n83htvjwyPRH6HaTOn3/r9O9s7psZZjY3vbfjgd2vVhwJJBEDJQF//R2%2B9t%2B2zLQm9v/no/kngIHBSevdvp2SjWXrFJXf/xfeaJjVFe3nn/K57Hvl%2BzO7veV739VeuuP%2Bu2rrQA4gkTJ7Ssnzlitt/cHd9Q0PW65I2NqXkEADJonCjmX7ezNsfvCdC853ROevbD65saNTTJedfeMEt372jpqZGy7vFN2/JBXc8tNKQTEoHW1CiCIDEUcHRzOo67%2Bqbbwj1kuaWyd9%2B8J66ep3nts1fuvCaW/5E4xvGNPv8zutWfDPrtUgJ207SCIA0MIaN5tJrr2ifPk19%2BeUrVyie7RPKZTcs61xwvva3jeyiq7rDnmdlHTaZdHAdQHpEXShwurdv347dh/Yc6Dl2ov/U6fxIvqGxoaV9Sue8rqVXXqzY1mtqai67Ydmal1apLLzo0qVdC%2BcFLvbVFzu2rN/Uc%2BzE8OBQS1vrnAVzu6%2B/srV9iv%2Br/vSuW57/l2cMOQ%2Bnpqbm4qu71776VtYrkhRaf2oIgFQ5nwH5fH7n5m1frN909MDhcf80eHZw8Ozg8UNHN76/4aJll15/%2B7dU5rIvuGjx2ldWFwoF/8Vqa2uvCZovGh0d/f2Lq3Zs2lr6L73He3qP92z7bMttD9w9x3cff8rUtouu7t78waeBK%2Bzv7MCZ//7Hf6/87w2NjW0d7XMXz7/kmssbFY5%2Bz1%2B60NUAoPuniSmgtLk6th0ZHv507Uc//6efrXlpVWX3H2fL%2Bk2vP/eSyg51fUP9rPPPC1xs0aUXtrS1%2Bi/z0ep15d2/ZGR45I1nXzrd2%2Bf/8stuWBb/QoeJDA8NHTt4ZP2aD1741/85daIncPnmlsmBoxbruLppmIwAyIZLhT42NrZl/abn/vm/Ply9bvDMWcVXHdi1d8PbH6os2TF7RuAyF19zuf8Cp070bHr/k4n%2BNZ/Pv7/qHf93mNzaMn/pwsA1ienM6YG3fv1blSXbprUnvC6pcmmLsAgBkBk39neOHTz8f//x3NpXVp8dOBP2tRvf2zAyHHwLoNb2Nv8Fps3smB4UEls%2B3uQ/4Ni9dedAX7//myzp/ob/AlocPXBYZRDQ0NSYwsqkwI0NwVIEQMZsL/23X37z%2BKGj0V6bHxk5sGtf4GINTQEn9S/4xqLAN9n95U7/BcbGxvZs/8p/mTkL56ZzHVavQgDkwt/iwkC217/tCIDsSd4D6j1%2BMnihoHsxnL9wvv8CA339gVP8nucd3nvQf4Ha2to5C7oC3ye%2BGi/40rPhwaEU1iQ5ksveHASAKWRuDEMKXWxocNDnX%2Bvq6qZ3zvR/B8Uxispis%2BfOUXmrmKZ0tAcuc%2Bpkb%2BLrkRiZ1W4gTgM1iMAHzatMZPedPOXzr9M7ZwaenKMyo%2BJ5Xt/J3rGxMf8bP8ycM1vlreKY0Tkr8EZGg2fOqhwnMBCt3yiMAIwjagvpmBV8hs%2Bxg0d8/nWqwjVl/aeUHvMyOjp6pn/Af5mpM0JcmRxBc0vzTffeFrjYjs1fJroaCRFV21ZgBGAiIUOBhsZG/8uvPM870z/gHwBt04Pv%2BjlwOuD0nq//3OmBya0tPgs0Tmpqap6kfrarovqGhj9cCHbtFYG3Qc2P5D97d73eFUgard9MBIC5nI%2BBi67uDrwYeMemL/3vyN/aFnw91NBZv6MI5y4ZfEyipa01cgBMmtz84799PNprS9a9sUY90jJH6zcZU0Cmc3X7aZnSesWNV/svk8/nN74XsKs7afKkwL%2BlfsKM/wHnP/5F/febU/fRW%2B9t3bA5wxUIxdXqdQYjAAu4NxTI1dbect8d9Q31/ottXLfhTH/A9WVNzcHtOD%2BSV1yxQj54SZXIScJAX/87r67euy3gYgVD0PqtQABYw6UYWL5yReAdfo4fOrrhneB7RdQ1BNdwIR9wL7kSlaioqw/IrSTs3fbVm796Lc5jMlND67cIU0CWsf3ymZqamuUrb1t0yYX%2Biw2eObvqhVdGg24C6nmeyjPfR8dUb%2BOs8gTgCE%2BZj2/ukgUP/uSRy25YZvIFwLYXp0AEgJUs3czq6upW3H/XkssC7qiTz%2BffeO5llWt3PcU7Iig/2F0lAHK12Ww1Tc2Trr31xvt%2B/OCUqQE3R8qEpTUpHAFgK%2Bv2thonNX3nz787/8IL/BcbLRRWPf/Kkf2HFN9WZZTgKT/UV%2BXxv6OFLB8LM3VGx71/9UC7wsmvqbGuFFFCANjNlm2vpa115SP3B877jxYKq37x6r4du9XfOfBZMZ7n5WpU67xG4Y7/Kn8xUU3Nk27/wT0NjdnfDdSW8sNEOAjsAsOPD0%2BbNf3OH97b3DrZf7FCvrDqhVf2Bt2ScxyVw7a1yo%2BJr6sLXjI/Ev1I7ERPBKutq21sapo2s2POBXMvvPyipuaAE43aprVftfy6dW%2BsibwmMdH33UAAuMPMGOic33XbA3c3NAbcRXlkePiN514%2BuHt/2PcfHDjrBd05p049ABSW1H4ZsOd5hXzhTP/Amf6B/bv2fvrux8tXrpi3JGCu7KKruze%2Bv0HxLhca0fpdwhSQa4walS%2B8eMmdD90b2P3PDpx5%2BelfROj%2BxdcGLtOo/OwUlSXPDugPgHJDZwd/98KrgbcmzeVyi1N5QE2JUaUFLQgAN5mwrV563RW33HdH4Fk6p072vviz548fPhbtr6jsAgfOqJSoPJBd8fSkOAqFwkdvvRe42ILkH1FZZEI5IQlMAbmstNGmPy903Ypvdl9/ZeBiRw8cfv3Zl%2BJMqqjc6jnw8EPJ5Cl%2Bd4LzPG9ocCiJKaBKB3btzY%2BM%2BF90Nm3W9Nra2uQOStP0nUcAiJDm4YFcLrf83uBLvTzP27Nt15u/fE39Pg1V9RwLfqaYyg3jPM%2Brq6sLvM9Pz7ETSqsV2%2BjoaF/PqWkzp/ssk8vlWqe2KT1VLSRavxAEgCApxEB9Q8Nt939nzgVzA5f8YsPmta%2BsVrnwyt/xQ0dGR0f9nwnTFnSUuEjlOVxH9x9WXLH4RoaCTzdqnKT5ZFBavygEgDjJzQs1tzTf8cN7O2YHP%2BNl/Zr316/5QMsfzY/kjx866v%2BgrunnBTwzsmiGwmKH9wU8N1ijhqbgB9DrujERfV8mAkAuvQOCto6pdz50b2t7wGTL6Ojo2ldWb/3kcy1/tGjfjj3%2BAdDc0tw2rT3wIbrnzQt43u9ooXDwq31hVy%2Ba2traKVPbAxeLc1FCEa1fMs4Ckk7LCR4zu2av/Mv7A7t/fmTkt//7st7u73neV1/sCFxmftAJM7lc7vxF8/2X2b9r7/DQsPqKxXH%2BonmBT8vx4p2Tyrk9YAQAz4s3LzR3yYJb77sz8BKqswNnXn/2Jf/nO0Zz8ujxE4eP%2BU89fWPZpZs/%2BNTnhJmFlywJPAK8fePWiKsYUl1d3VU3XR%2B42Gih0B/%2BnFSaPkoYAeAcxb1C9R6x9IpLbn/g7sDu39dz6sWfPZ9E9y/a/OFn/gtMmdrmc1pqfUPDtbfc6P8OZ04PqAw14mtqnnTbA3f5n/9TdPTgkdFR1TvThf1lIQEjAFSnOCa47rYbVe6gOWVq2w/%2B5uFoa1IoFP7z75/yX2bHpq3LvnVtS1urzzLLll/X33e6ci%2B%2BobHh2w/eE3itwKfrPlbvtmHV1tY2TmqaNrOja9G8Cy%2B7SOV6NM/z9ny5K3AZOj58EAAIkOHVZOoKhcKHq9fd/Ge3%2ByyTy%2BVuuvf2BUsXff7RZz3HTg4PDrW0tXYtnNd9/ZX%2ByeF5Xl/PqS0fb4q/nloeCl9UyBe2b/xion%2Bl70MFAQBVhifBjk1bl3Qv7Vo4z3%2Bx%2BUsXBh4QrvT2b95UevBAijZ98EnlA5Pp%2BwiFYwAIzdjZ5N%2B/uErl3nBhfbZufWpnfyo6efTE%2BjXvl/6nsb8IDEcAILre/dvHEpsWj%2BBM/8Abz70c894S4%2Bz%2BcteHb76r8Q3jO93b99rPf31i91b6PmIiAOCUowcOv/7si7rO1t/95a7Vv3wt/v0qNNq3bft//d0/HNjySdYrAhdwDACuObh7/0tPv3Dr9%2B5sV7sF0EQ2vrfhg9%2BtNaf79/f2rvvN65%2B%2B8676M%2B4BfwQAHHTyyPFf/dvPr1p%2B/cXXXFYb9ECCSj3HTrz7%2BhpD5v3zIyN7v9z%2B%2BfsfbtvwaSGvc3YLIADgpvxI/v1V72z%2B4NNLrrt88aVLA6/yLTq898CWjzft/Hxb%2Bjv%2BY2NjhXx%2BZGjobP9A/6m%2BU8dPnDh8%2BPDuPQd37Y5/wx%2BgqprO7kezXgfA85I8uzSXy806/7zz5nVNnz2jraN9Usvk%2Bvr6XG0uPzIyPDR8uqev90TPkX0HD3y1L7VH7HLkFiYgAGAuMy84iIB2DzMxBQRzVe2bhqcCvR4WIQBgmcAOm2hC0N/hEgIArqFHA4q4EAwAhCIAAEAoAgAAhCIAAEAoAgAAhCIAAEAoAgAAhCIAAEAoAgAAhCIAAEAoAgAAhCIAAEAoAgAAhCIAAEAoAgAAhCIAAEAoAgAAhCIAAEAoAgAAhCIAAEAoAgAAhCIAAEAoAgAAhCIAAECo/wfVVOFPdLISpAAAAABJRU5ErkJggg%3D%3D%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image/png%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#e8eaf0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;padding-bottom:60px;}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;margin:0 0 8px;}
+.banner{background:linear-gradient(135deg,#1a2e6b,#0d1f4a);padding:14px 16px 10px;border-bottom:2px solid #2a4a90;}
+.banner h1{font-size:17px;font-weight:700;color:#fff;letter-spacing:.03em;}
+.banner .sub{font-size:11px;color:#7090c0;margin-top:2px;}
+.tabs{display:flex;background:#111128;border-bottom:1px solid #1e2a50;overflow-x:auto;}
+.tab{flex:1;min-width:60px;padding:10px 4px;text-align:center;font-size:11px;font-weight:600;color:#5070a0;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;}
+.tab.active{color:#4da8ff;border-bottom:2px solid #4da8ff;}
+.panel{display:none;padding:12px 10px;}
+.panel.active{display:block;}
+.stat-row{display:flex;gap:8px;margin-bottom:12px;}
+.stat-card{flex:1;background:#131328;border:1px solid #1e2a50;border-radius:8px;padding:10px 8px;text-align:center;}
+.stat-card .val{font-size:22px;font-weight:700;color:#4da8ff;line-height:1.1;}
+.stat-card .lbl{font-size:10px;color:#5070a0;margin-top:2px;text-transform:uppercase;letter-spacing:.06em;}
+.stat-card.green .val{color:#4caf50;}
+.stat-card.red .val{color:#f44336;}
+.stat-card.yellow .val{color:#ffb300;}
+.settings-row{background:#131328;border:1px solid #1e2a50;border-radius:8px;padding:10px 12px;margin-bottom:12px;display:flex;align-items:center;flex-wrap:wrap;gap:10px;}
+.settings-row label{font-size:12px;color:#7090c0;}
+.settings-row input[type=time]{background:#0a0a1a;border:1px solid #2a4a80;border-radius:5px;color:#e0e8ff;padding:5px 8px;font-size:14px;width:110px;}
+.btn-sm{background:#1e3a70;border:1px solid #2a5090;color:#90c0ff;padding:5px 10px;border-radius:5px;font-size:12px;cursor:pointer;white-space:nowrap;}
+.btn-sm:active{background:#2a4a90;}
+.btn-danger{background:#4a1010;border-color:#7a2020;color:#ff8080;}
+.btn-green{background:#0d3a1a;border-color:#1a6030;color:#60d080;}
+.ms-table{width:100%;border-collapse:collapse;font-size:12px;}
+.ms-table th{background:#1a2e6b;color:#90b8e8;padding:7px 5px;text-align:center;font-size:11px;font-weight:600;}
+.ms-table td{padding:6px 5px;border-bottom:1px solid #1a1a30;vertical-align:middle;}
+.ms-table tr.start-row td{background:#0d2010;}
+.ms-table tr.finish-row td{background:#0d2010;}
+.ms-table tr.bridge-row td{background:#1a1a0d;}
+.ms-table input[type=time]{background:#0a0a1a;border:1px solid #2a3a60;border-radius:4px;color:#e0e8ff;padding:3px 4px;font-size:12px;width:85px;}
+.ms-table input[type=time]:focus{outline:none;border-color:#4da8ff;}
+.chip{display:inline-block;padding:2px 7px;border-radius:10px;font-size:11px;font-weight:700;}
+.chip.green{background:#1a3d1a;color:#4caf50;}
+.chip.red{background:#3d1a1a;color:#f44336;}
+.chip.yellow{background:#3d2e00;color:#ffb300;}
+.chip.grey{background:#2a2a3a;color:#6080a0;}
+.chip.bridge{background:#2a2000;color:#e0c060;}
+.ms-name{font-size:12px;font-weight:600;color:#c8d8f0;}
+.ms-sub{font-size:10px;color:#5070a0;}
+.ms-miles{font-size:10px;color:#6080a0;text-align:center;}
+.ms-est{font-size:11px;color:#7090b0;text-align:center;}
+.bridge-counter{background:#131328;border:1px solid #2a3a00;border-radius:12px;padding:20px;text-align:center;margin-bottom:16px;}
+.bridge-counter .big{font-size:64px;font-weight:700;color:#e0c060;line-height:1;}
+.bridge-counter .total{font-size:20px;color:#7060a0;}
+.bridge-counter .label{font-size:12px;color:#6080a0;margin:8px 0 16px;text-transform:uppercase;letter-spacing:.08em;}
+.bridge-btns{display:flex;gap:12px;justify-content:center;}
+.bridge-btn{width:60px;height:60px;border-radius:50%;font-size:28px;font-weight:700;cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;}
+.bridge-btn.plus{background:#4a3a00;color:#e0c060;}
+.bridge-btn.minus{background:#2a1a1a;color:#a06040;}
+.bridge-btn:active{transform:scale(.93);}
+.bridges-left{font-size:13px;color:#a0a0c0;margin-top:12px;}
+.feed-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+.feed-header h2{margin:0;}
+.interval-toggle{display:flex;gap:6px;}
+.itbtn{padding:5px 12px;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid #2a4a80;background:#131328;color:#5070a0;}
+.itbtn.active{background:#1a3070;color:#90c0ff;border-color:#4a7ad0;}
+.feed-table{width:100%;border-collapse:collapse;font-size:12px;}
+.feed-table th{background:#1a2e6b;color:#90b8e8;padding:7px 5px;text-align:center;font-size:11px;}
+.feed-table td{padding:6px 5px;border-bottom:1px solid #1a1a30;vertical-align:middle;text-align:center;}
+.feed-table input[type=time]{background:#0a0a1a;border:1px solid #2a3a60;border-radius:4px;color:#e0e8ff;padding:3px 4px;font-size:12px;width:85px;}
+.feed-done-row td{opacity:.45;}
+.cw-badge{background:#003a40;color:#40d0e0;border-radius:4px;padding:2px 6px;font-size:10px;font-weight:700;}
+.ouf-badge{background:#3a1a40;color:#c060e0;border-radius:4px;padding:2px 6px;font-size:10px;font-weight:700;}
+.next-feed-bar{background:#0a1a2a;border:1px solid #1a4a2a;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#60c080;}
+.next-feed-bar span{font-weight:700;color:#a0e8b0;}
+.proj-bar{background:#0a1a0a;border:1px solid #1a4a2a;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;}
+.proj-bar .pf-label{color:#5080a0;font-size:11px;text-transform:uppercase;letter-spacing:.06em;}
+.proj-bar .pf-time{font-size:22px;font-weight:700;color:#60c080;margin-top:2px;}
+.proj-bar .pf-delta{font-size:12px;margin-top:2px;}
+.note-box{background:#131328;border-left:3px solid #4a6090;border-radius:0 6px 6px 0;padding:8px 10px;font-size:11px;color:#7090b0;margin-bottom:10px;}
+/* NOTES FIELD */
+.notes-area{width:100%;background:#0a0a1a;border:1px solid #2a3a60;border-radius:6px;color:#e0e8ff;padding:10px;font-size:13px;font-family:inherit;resize:vertical;min-height:100px;margin-bottom:10px;}
+.notes-area:focus{outline:none;border-color:#4da8ff;}
+
+/* ── REPORT TAB ── */
+#tab-report .report-section{background:#131328;border:1px solid #1e2a50;border-radius:8px;padding:12px;margin-bottom:14px;}
+#tab-report .report-section h3{font-size:13px;color:#90b8e8;margin-bottom:8px;border-bottom:1px solid #1e2a50;padding-bottom:6px;}
+#tab-report .r-table{width:100%;border-collapse:collapse;font-size:12px;}
+#tab-report .r-table th{background:#1a2e6b;color:#90b8e8;padding:6px 5px;font-size:11px;}
+#tab-report .r-table td{padding:5px;border-bottom:1px solid #1a1a30;vertical-align:middle;font-size:12px;}
+#tab-report .r-kv{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #1a1a30;font-size:12px;}
+#tab-report .r-kv:last-child{border-bottom:none;}
+#tab-report .r-kv .rk{color:#7090b0;}
+#tab-report .r-kv .rv{font-weight:600;color:#c8d8f0;}
+.export-box{background:#0a0a0a;border:1px solid #2a3a60;border-radius:6px;padding:10px;font-size:10px;color:#6080a0;font-family:monospace;word-break:break-all;max-height:120px;overflow-y:auto;margin-bottom:8px;}
+
+/* ── PRINT STYLES ── */
+@media print {
+  body{background:#fff;color:#000;padding:0;}
+  .tabs,.tab,.btn-sm,.bridge-btns,.settings-row,.note-box,.notes-area,
+  #tab-status,#tab-milestones,#tab-bridges,#tab-feeds,
+  .panel:not(#tab-report){display:none!important;}
+  #tab-report{display:block!important;padding:0;}
+  .banner{background:#1a2e6b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  #tab-report .report-section{border:1px solid #ccc;background:#fff!important;}
+  #tab-report .report-section h3{color:#1a2e6b!important;border-color:#ccc;}
+  #tab-report .r-table th{background:#1a2e6b!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  #tab-report .r-table td{border-color:#eee;}
+  #tab-report .r-kv .rk{color:#555;}
+  #tab-report .r-kv .rv{color:#000;}
+  .chip.green{background:#d4edda!important;color:#155724!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .chip.red{background:#f8d7da!important;color:#721c24!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .chip.yellow{background:#fff3cd!important;color:#856404!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .chip.grey{background:#e9ecef!important;color:#495057!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .no-print{display:none!important;}
+  .export-box{display:none!important;}
+}
+</style>
+</head>
+<body>
+<div class="banner">
+  <h1>🏊 20 Bridges Race Tracker</h1>
+  <div class="sub">Joey Nizzardo &nbsp;·&nbsp; June 15, 2026 &nbsp;·&nbsp; Tracker #3 on ultraswimming.org</div>
+</div>
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('status',this)">Status</div>
+  <div class="tab" onclick="switchTab('milestones',this)">Miles</div>
+  <div class="tab" onclick="switchTab('bridges',this)">Bridges</div>
+  <div class="tab" onclick="switchTab('feeds',this)">Feeds</div>
+  <div class="tab" onclick="switchTab('report',this)">Report</div>
+</div>
+
+<!-- ══ STATUS ══ -->
+<div id="tab-status" class="panel active">
+  <div class="settings-row">
+    <label>Start Time:</label>
+    <input type="time" id="startTime" value="01:15" oninput="onStartChange()">
+    <button class="btn-sm" onclick="setNow('startTime')">Set Now</button>
+    <button class="btn-sm btn-danger" onclick="resetAll()">Reset</button>
+  </div>
+  <div id="proj-finish-bar" class="proj-bar" style="display:none;">
+    <div class="pf-label">Projected Finish</div>
+    <div class="pf-time" id="projFinishTime">—</div>
+    <div class="pf-delta" id="projFinishDelta"></div>
+  </div>
+  <div class="stat-row">
+    <div class="stat-card" id="sc-elapsed"><div class="val" id="sv-elapsed">—</div><div class="lbl">Elapsed</div></div>
+    <div class="stat-card" id="sc-pace"><div class="val" id="sv-pace">—</div><div class="lbl">Pace %</div></div>
+    <div class="stat-card" id="sc-miles"><div class="val" id="sv-miles">—</div><div class="lbl">Miles</div></div>
+  </div>
+  <div class="stat-row">
+    <div class="stat-card"><div class="val" id="sv-bridges">0</div><div class="lbl">Bridges</div></div>
+    <div class="stat-card"><div class="val" id="sv-feeds">0</div><div class="lbl">Feeds</div></div>
+    <div class="stat-card"><div class="val" id="sv-next-feed">—</div><div class="lbl">Next Feed</div></div>
+  </div>
+  <div class="note-box">Enter times in Milestones as Joey passes each checkpoint. Use Feeds tab for feed tracking. Bridges tab for the 20-bridge counter.</div>
+  <div class="note-box">🌅 Sunrise 5:24 AM &nbsp;·&nbsp; 🚢 Pier 25 departs 12:15 AM &nbsp;·&nbsp; ☔ Rain date Jun 17 ~2:00 AM</div>
+</div>
+
+<!-- ══ MILESTONES ══ -->
+<div id="tab-milestones" class="panel">
+  <div class="note-box">Tap "Now" or enter time as Joey passes. Blank rows are skipped — won't break calculations.</div>
+  <table class="ms-table" id="msTable">
+    <thead><tr><th>Checkpoint</th><th>Est.</th><th>Actual</th><th>±</th></tr></thead>
+    <tbody id="msBody"></tbody>
+  </table>
+</div>
+
+<!-- ══ BRIDGES ══ -->
+<div id="tab-bridges" class="panel">
+  <div class="bridge-counter">
+    <div class="big" id="bridgeCount">0</div>
+    <div class="total">/ 20</div>
+    <div class="label">Bridges Passed</div>
+    <div class="bridge-btns">
+      <button class="bridge-btn minus" onclick="adjustBridge(-1)">−</button>
+      <button class="bridge-btn plus" onclick="adjustBridge(1)">+</button>
+    </div>
+    <div class="bridges-left" id="bridgesLeft">20 bridges remaining</div>
+  </div>
+  <div class="note-box">Tap + each time you pass under a bridge. Also auto-increments when you log times for bridge milestones (Willis Ave, Macombs Dam, Henry Hudson, GW, Brooklyn, Williamsburg).</div>
+</div>
+
+<!-- ══ FEEDS ══ -->
+<div id="tab-feeds" class="panel">
+  <div class="feed-header">
+    <h2>Feed Schedule</h2>
+    <div class="interval-toggle">
+      <button class="itbtn" id="btn40" onclick="setFeedInterval(40)">40 min</button>
+      <button class="itbtn" id="btn30" onclick="setFeedInterval(30)">30 min</button>
+    </div>
+    <button class="btn-sm" onclick="recalcFeeds()">Recalc →</button>
+  </div>
+  <div class="next-feed-bar" id="nextFeedBar">Next feed: —</div>
+  <table class="feed-table">
+    <thead><tr><th>#</th><th>Type</th><th>Est.</th><th>Actual</th><th>✓</th></tr></thead>
+    <tbody id="feedBody"></tbody>
+  </table>
+  <div class="note-box" style="margin-top:10px;">Odd = 🥥 Coconut Water · Even = 🌿 Once Upon a Farm. Toggle interval then "Recalc →" to shift future feeds from last completed.</div>
+</div>
+
+<!-- ══ REPORT ══ -->
+<div id="tab-report" class="panel">
+  <div class="no-print" style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+    <button class="btn-sm btn-green" onclick="window.print()">🖨 Print / Save PDF</button>
+    <button class="btn-sm" onclick="copyExport()">📋 Copy Raw Data</button>
+  </div>
+
+  <div class="report-section">
+    <h3>Race Summary</h3>
+    <div id="rpt-summary"></div>
+  </div>
+
+  <div class="report-section">
+    <h3>Milestone Log — Est. vs. Actual</h3>
+    <table class="r-table">
+      <thead><tr><th>Checkpoint</th><th>Est.</th><th>Actual</th><th>El. Act.</th><th>Variance</th></tr></thead>
+      <tbody id="rpt-ms"></tbody>
+    </table>
+  </div>
+
+  <div class="report-section">
+    <h3>Section Analysis (leg-by-leg pace)</h3>
+    <table class="r-table">
+      <thead><tr><th>Leg</th><th>Miles</th><th>Est. Leg</th><th>Act. Leg</th><th>±</th></tr></thead>
+      <tbody id="rpt-legs"></tbody>
+    </table>
+    <div style="font-size:11px;color:#5070a0;margin-top:6px;">Each row = time between consecutive logged checkpoints.</div>
+  </div>
+
+  <div class="report-section">
+    <h3>Feed Log</h3>
+    <table class="r-table">
+      <thead><tr><th>#</th><th>Type</th><th>Est.</th><th>Actual</th><th>Done</th></tr></thead>
+      <tbody id="rpt-feeds"></tbody>
+    </table>
+  </div>
+
+  <div class="report-section">
+    <h3>Race Notes</h3>
+    <p style="font-size:11px;color:#5070a0;margin-bottom:8px;">Enter observations here for post-race analysis and future planning.</p>
+    <textarea class="notes-area" id="notesField" placeholder="Water temp, current strength, energy levels, feed feedback, gear notes, anything worth remembering for next time..." oninput="saveNotes()"></textarea>
+  </div>
+
+  <div class="report-section no-print">
+    <h3>Export Data (send to Claude for strategic PDF)</h3>
+    <p style="font-size:11px;color:#5070a0;margin-bottom:8px;">Copy this and paste it into a new Claude conversation to generate the strategic analysis PDF.</p>
+    <div class="export-box" id="exportBox"></div>
+    <button class="btn-sm" onclick="copyExport()">Copy to Clipboard</button>
+  </div>
+</div>
+
+<script>
+const MS=[
+  {id:0, name:'Mill Rock',          sub:'START',               est:'01:15',elMin:0,  miles:0.0, bridge:false,isStart:true, isFinish:false},
+  {id:1, name:'East 107th St.',     sub:'',                    est:'01:25',elMin:10, miles:0.7, bridge:false,isStart:false,isFinish:false},
+  {id:2, name:'Willis Ave Bridge',  sub:'Bridge',              est:'01:42',elMin:27, miles:1.8, bridge:true, isStart:false,isFinish:false},
+  {id:3, name:'Macombs Dam Bridge', sub:'Bridge',              est:'02:07',elMin:52, miles:3.6, bridge:true, isStart:false,isFinish:false},
+  {id:4, name:'W 207th St.',        sub:'Bridge area',         est:'02:42',elMin:87, miles:6.2, bridge:true, isStart:false,isFinish:false},
+  {id:5, name:'Henry Hudson Bridge',sub:'Spuyten Duyvil',      est:'03:04',elMin:109,miles:7.7, bridge:true, isStart:false,isFinish:false},
+  {id:6, name:'GW Bridge',          sub:'George Washington',   est:'03:30',elMin:135,miles:10.3,bridge:true, isStart:false,isFinish:false},
+  {id:7, name:'Riverbank/145th',    sub:'Pacing zone (Hudson)',est:'03:44',elMin:149,miles:11.8,bridge:false,isStart:false,isFinish:false},
+  {id:8, name:'Pier 92/94',         sub:'W 52nd St.',          est:'04:33',elMin:198,miles:16.4,bridge:false,isStart:false,isFinish:false},
+  {id:9, name:'Pier 40',            sub:'Leroy St.',           est:'05:08',elMin:233,miles:19.3,bridge:false,isStart:false,isFinish:false},
+  {id:10,name:'Pier A',             sub:'Battery Park',        est:'05:39',elMin:264,miles:21.2,bridge:false,isStart:false,isFinish:false},
+  {id:11,name:'Brooklyn Bridge',    sub:'Bridge',              est:'05:56',elMin:281,miles:22.7,bridge:true, isStart:false,isFinish:false},
+  {id:12,name:'Williamsburg Bridge',sub:'Bridge',              est:'06:16',elMin:301,miles:24.1,bridge:true, isStart:false,isFinish:false},
+  {id:13,name:'East 31st St.',      sub:'',                    est:'06:42',elMin:327,miles:26.0,bridge:false,isStart:false,isFinish:false},
+  {id:14,name:'Roosevelt Is. E63',  sub:'E 63rd St.',          est:'07:00',elMin:345,miles:27.5,bridge:false,isStart:false,isFinish:false},
+  {id:15,name:'Roosevelt Is. E75',  sub:'E 75th St.',          est:'07:06',elMin:351,miles:null, bridge:false,isStart:false,isFinish:false},
+  {id:16,name:'Mill Rock',          sub:'FINISH',              est:'07:14',elMin:359,miles:29.1,bridge:false,isStart:false,isFinish:true},
+];
+const EST_TOTAL=359,MAX_FEEDS=12;
+
+let state={startTime:'01:15',actuals:{},bridgeCount:0,feedInterval:40,feeds:[],notes:''};
+function save(){try{localStorage.setItem('tracker20b',JSON.stringify(state));}catch(e){}}
+function load(){try{const d=localStorage.getItem('tracker20b');if(d)state={...state,...JSON.parse(d)};}catch(e){}}
+
+function t2m(t){if(!t)return null;const[h,m]=t.split(':').map(Number);return h*60+m;}
+function m2t(m){m=((m%1440)+1440)%1440;const h=Math.floor(m/60),mm=m%60;return String(h).padStart(2,'0')+':'+String(mm).padStart(2,'0');}
+function fmt(t){if(!t)return'—';const[h,m]=t.split(':').map(Number);const ap=h<12?'AM':'PM',hh=h%12||12;return`${hh}:${String(m).padStart(2,'0')} ${ap}`;}
+function fmtEl(min){if(min===null||isNaN(min))return'—';const h=Math.floor(min/60),m=min%60;return h>0?`${h}h ${m}m`:`${m}m`;}
+function estClock(ms){return m2t(t2m(state.startTime)+ms.elMin);}
+function actElapsed(id){
+  const a=state.actuals[id];if(!a)return null;
+  let el=t2m(a)-t2m(state.startTime);
+  if(el<-120)el+=1440;return el;
+}
+function variance(id,estEl){
+  const a=actElapsed(id);if(a===null||estEl===0)return null;
+  return((a-estEl)/estEl)*100;
+}
+function chip(v){
+  if(v===null)return'<span class="chip grey">—</span>';
+  const s=v>=0?'+':'';
+  if(v<-5)return`<span class="chip green">${s}${v.toFixed(1)}%</span>`;
+  if(v>5) return`<span class="chip red">${s}${v.toFixed(1)}%</span>`;
+  return`<span class="chip yellow">${s}${v.toFixed(1)}%</span>`;
+}
+
+// FEEDS
+function buildFeeds(keepActuals){
+  const sm=t2m(state.startTime),old=state.feeds||[],feeds=[];
+  let t=sm+state.feedInterval;
+  for(let i=0;i<MAX_FEEDS;i++){
+    const o=old[i]||{};
+    feeds.push({estTime:m2t(t),actualTime:keepActuals&&o.actualTime?o.actualTime:'',done:keepActuals?(o.done||false):false,type:i%2===0?'CW':'OUF'});
+    t+=state.feedInterval;
+    if(t-sm>EST_TOTAL+60)break;
+  }
+  state.feeds=feeds;
+}
+function recalcFeeds(){
+  let lastIdx=-1,lastMin=t2m(state.startTime);
+  state.feeds.forEach((f,i)=>{if(f.done&&f.actualTime){lastIdx=i;lastMin=t2m(f.actualTime);}});
+  for(let i=lastIdx+1;i<state.feeds.length;i++)
+    state.feeds[i].estTime=m2t(lastMin+(i-lastIdx)*state.feedInterval);
+  save();renderFeeds();
+}
+
+// RENDER MILESTONES
+function renderMilestones(){
+  const tb=document.getElementById('msBody');tb.innerHTML='';
+  MS.forEach(ms=>{
+    const ec=estClock(ms),actual=state.actuals[ms.id]||'',v=actual?variance(ms.id,ms.elMin):null;
+    const rc=ms.isStart||ms.isFinish?(ms.isStart?'start-row':'finish-row'):ms.bridge?'bridge-row':'';
+    const nb=ms.bridge?'<span class="chip bridge">🌉</span> ':'';
+    const tr=document.createElement('tr');if(rc)tr.className=rc;
+    tr.innerHTML=`<td>${nb}<span class="ms-name">${ms.name}</span>${ms.sub?`<div class="ms-sub">${ms.sub}</div>`:''}${ms.miles!==null?`<div class="ms-miles">${ms.miles} mi</div>`:''}</td><td class="ms-est">${fmt(ec)}</td><td><input type="time" value="${actual}" oninput="onActual(${ms.id},this.value)"><div style="text-align:center;margin-top:3px;"><button class="btn-sm" style="font-size:10px;padding:2px 7px;" onclick="msNow(${ms.id})">Now</button></div></td><td style="text-align:center;">${chip(v)}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+// RENDER FEEDS
+function renderFeeds(){
+  const tb=document.getElementById('feedBody');tb.innerHTML='';
+  let nextFeed=null;
+  state.feeds.forEach((f,i)=>{
+    const badge=f.type==='CW'?'<span class="cw-badge">🥥 CW</span>':'<span class="ouf-badge">🌿 OUF</span>';
+    const tr=document.createElement('tr');
+    if(f.done)tr.className='feed-done-row';
+    tr.innerHTML=`<td style="font-weight:700;color:#8090c0;">${i+1}</td><td>${badge}</td><td style="color:#8090b0;">${fmt(f.estTime)}</td><td><input type="time" value="${f.actualTime||''}" oninput="onFeedTime(${i},this.value)"></td><td><input type="checkbox" ${f.done?'checked':''} onchange="onFeedDone(${i},this.checked)" style="width:18px;height:18px;cursor:pointer;"></td>`;
+    tb.appendChild(tr);
+    if(!f.done&&!nextFeed)nextFeed=f;
+  });
+  const bar=document.getElementById('nextFeedBar');
+  bar.innerHTML=nextFeed?`Next feed: <span>${fmt(nextFeed.estTime)}</span> — ${nextFeed.type==='CW'?'🥥 Coconut Water':'🌿 Once Upon a Farm'}`:'✅ All feeds completed!';
+}
+
+// RENDER STATUS
+function renderStatus(){
+  let lastEl=null,lastMiles=0,lastEstEl=null,vars=[];
+  MS.forEach(ms=>{if(state.actuals[ms.id]){const el=actElapsed(ms.id);if(el!==null){lastEl=el;if(ms.miles!==null)lastMiles=ms.miles;lastEstEl=ms.elMin;if(ms.elMin>0)vars.push(variance(ms.id,ms.elMin));}}});
+  document.getElementById('sv-elapsed').textContent=lastEl!==null?fmtEl(lastEl):'—';
+  document.getElementById('sv-miles').textContent=lastMiles>0?lastMiles.toFixed(1):'—';
+  const sc=document.getElementById('sc-pace');
+  if(vars.length>0){const avg=vars.reduce((a,b)=>a+b,0)/vars.length;sc.className='stat-card '+(avg<-5?'green':avg>5?'red':'yellow');document.getElementById('sv-pace').textContent=(avg>=0?'+':'')+avg.toFixed(1)+'%';}
+  else{sc.className='stat-card';document.getElementById('sv-pace').textContent='—';}
+  document.getElementById('sv-bridges').textContent=state.bridgeCount;
+  const df=(state.feeds||[]).filter(f=>f.done).length;document.getElementById('sv-feeds').textContent=df;
+  const nf=(state.feeds||[]).find(f=>!f.done);document.getElementById('sv-next-feed').textContent=nf?fmt(nf.estTime):'✓';
+  if(vars.length>=2&&lastEstEl&&lastEstEl>0){
+    const avg=vars.reduce((a,b)=>a+b,0)/vars.length;
+    const rem=EST_TOTAL-lastEstEl,projRem=rem*(1+avg/100);
+    const sm=t2m(state.startTime),pf=sm+(lastEl||0)+projRem;
+    const pfT=m2t(pf),delta=pf-(sm+EST_TOTAL),d=Math.round(Math.abs(delta));
+    document.getElementById('projFinishTime').textContent=fmt(pfT);
+    const de=document.getElementById('projFinishDelta');
+    de.textContent=delta>1?`▲ ${d} min behind est.`:delta<-1?`▼ ${d} min ahead of est.`:'Right on schedule';
+    de.style.color=delta>5?'#f44336':delta<-5?'#4caf50':'#ffb300';
+    document.getElementById('proj-finish-bar').style.display='block';
+  }
+}
+
+function renderBridges(){
+  const c=state.bridgeCount;document.getElementById('bridgeCount').textContent=c;
+  const l=20-c;document.getElementById('bridgesLeft').textContent=l>0?`${l} bridge${l!==1?'s':''} remaining`:'🎉 All 20 bridges!';
+}
+
+// RENDER REPORT
+function renderReport(){
+  // Summary
+  const startAct=state.actuals[0]||state.startTime;
+  const finishAct=state.actuals[16]||null;
+  const totalEl=finishAct?actElapsed(16):null;
+  const vars=MS.filter(ms=>ms.id>0&&state.actuals[ms.id]&&ms.elMin>0).map(ms=>variance(ms.id,ms.elMin)).filter(v=>v!==null);
+  const avgVar=vars.length>0?(vars.reduce((a,b)=>a+b,0)/vars.length):null;
+  const df=(state.feeds||[]).filter(f=>f.done).length;
+  document.getElementById('rpt-summary').innerHTML=`
+    <div class="r-kv"><span class="rk">Swimmer</span><span class="rv">Joey Nizzardo</span></div>
+    <div class="r-kv"><span class="rk">Date</span><span class="rv">Monday, June 15, 2026</span></div>
+    <div class="r-kv"><span class="rk">Event</span><span class="rv">20 Bridges Swim Around Manhattan (29.1 mi)</span></div>
+    <div class="r-kv"><span class="rk">Est. Start</span><span class="rv">1:15 AM</span></div>
+    <div class="r-kv"><span class="rk">Actual Start</span><span class="rv">${fmt(startAct)}</span></div>
+    <div class="r-kv"><span class="rk">Finish Time</span><span class="rv">${finishAct?fmt(finishAct):'Not recorded'}</span></div>
+    <div class="r-kv"><span class="rk">Total Elapsed</span><span class="rv">${totalEl!==null?fmtEl(totalEl):'—'} (Est. 5h 59m)</span></div>
+    <div class="r-kv"><span class="rk">Avg. Pace Variance</span><span class="rv">${avgVar!==null?(avgVar>=0?'+':'')+avgVar.toFixed(1)+'%':'—'}</span></div>
+    <div class="r-kv"><span class="rk">Bridges Counted</span><span class="rv">${state.bridgeCount} / 20</span></div>
+    <div class="r-kv"><span class="rk">Feeds Completed</span><span class="rv">${df}</span></div>
+  `;
+
+  // Milestones
+  const msBody=document.getElementById('rpt-ms');msBody.innerHTML='';
+  MS.forEach(ms=>{
+    const a=state.actuals[ms.id]||null;
+    const aEl=a?actElapsed(ms.id):null;
+    const v=a&&ms.elMin>0?variance(ms.id,ms.elMin):null;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${ms.bridge?'🌉 ':ms.isFinish?'🏁 ':''}${ms.name}${ms.sub?' ('+ms.sub+')':''}</td><td style="text-align:center;">${fmt(estClock(ms))}</td><td style="text-align:center;font-weight:${a?'600':'400'};color:${a?'':'#888'}">${a?fmt(a):'—'}</td><td style="text-align:center;">${aEl!==null?fmtEl(aEl):'—'}</td><td style="text-align:center;">${chip(v)}</td>`;
+    msBody.appendChild(tr);
+  });
+
+  // Section legs
+  const legBody=document.getElementById('rpt-legs');legBody.innerHTML='';
+  const logged=MS.filter(ms=>state.actuals[ms.id]);
+  for(let i=1;i<logged.length;i++){
+    const a=logged[i],b=logged[i-1];
+    const estLeg=a.elMin-b.elMin;
+    const actAEl=actElapsed(a.id),actBEl=actElapsed(b.id);
+    const actLeg=(actAEl!==null&&actBEl!==null)?actAEl-actBEl:null;
+    const lv=(actLeg!==null&&estLeg>0)?((actLeg-estLeg)/estLeg)*100:null;
+    const mDiff=(a.miles!==null&&b.miles!==null)?(a.miles-b.miles).toFixed(1):null;
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${b.name} → ${a.name}</td><td style="text-align:center;">${mDiff?mDiff+' mi':'—'}</td><td style="text-align:center;">${fmtEl(estLeg)}</td><td style="text-align:center;font-weight:600;">${actLeg!==null?fmtEl(actLeg):'—'}</td><td style="text-align:center;">${chip(lv)}</td>`;
+    legBody.appendChild(tr);
+  }
+  if(logged.length<2)legBody.innerHTML='<tr><td colspan="5" style="text-align:center;color:#5070a0;padding:10px;">No segments to analyze yet</td></tr>';
+
+  // Feeds
+  const fb=document.getElementById('rpt-feeds');fb.innerHTML='';
+  (state.feeds||[]).forEach((f,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${i+1}</td><td>${f.type==='CW'?'🥥 Coconut Water':'🌿 Once Upon a Farm'}</td><td>${fmt(f.estTime)}</td><td style="font-weight:${f.actualTime?'600':'400'}">${f.actualTime?fmt(f.actualTime):'—'}</td><td>${f.done?'✅':'—'}</td>`;
+    fb.appendChild(tr);
+  });
+
+  // Notes
+  document.getElementById('notesField').value=state.notes||'';
+
+  // Export
+  buildExport();
+}
+
+function buildExport(){
+  const exp={
+    event:'20 Bridges Swim Around Manhattan',swimmer:'Joey Nizzardo',date:'June 15 2026',
+    startTime:state.startTime,bridgeCount:state.bridgeCount,feedInterval:state.feedInterval,
+    milestones:MS.map(ms=>({name:ms.name,sub:ms.sub,estElMin:ms.elMin,miles:ms.miles,actualTime:state.actuals[ms.id]||null,actualElMin:state.actuals[ms.id]?actElapsed(ms.id):null,variancePct:state.actuals[ms.id]&&ms.elMin>0?parseFloat(variance(ms.id,ms.elMin).toFixed(2)):null})),
+    feeds:(state.feeds||[]).map((f,i)=>({num:i+1,type:f.type,estTime:f.estTime,actualTime:f.actualTime||null,done:f.done})),
+    notes:state.notes||''
+  };
+  const s=JSON.stringify(exp,null,2);
+  document.getElementById('exportBox').textContent=s;
+  return s;
+}
+function copyExport(){
+  const s=buildExport();
+  navigator.clipboard.writeText(s).then(()=>alert('Copied! Paste into Claude for your strategic PDF.')).catch(()=>{document.getElementById('exportBox').select();});
+}
+
+// EVENTS
+function onStartChange(){state.startTime=document.getElementById('startTime').value;buildFeeds(true);save();renderAll();}
+function setNow(id){const n=new Date();const t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');document.getElementById(id).value=t;state.startTime=t;buildFeeds(true);save();renderAll();}
+function msNow(id){const n=new Date();const t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');state.actuals[id]=t;autoBridge(id);save();renderAll();}
+function onActual(id,v){if(v)state.actuals[id]=v;else delete state.actuals[id];if(v)autoBridge(id);save();renderStatus();renderBridges();}
+function autoBridge(id){const ms=MS.find(m=>m.id===id);if(ms&&ms.bridge){const n=MS.filter(m=>m.bridge&&state.actuals[m.id]).length;if(state.bridgeCount<n)state.bridgeCount=n;}}
+function onFeedTime(i,v){state.feeds[i].actualTime=v;save();renderFeeds();renderStatus();}
+function onFeedDone(i,c){state.feeds[i].done=c;save();renderFeeds();renderStatus();}
+function adjustBridge(d){state.bridgeCount=Math.max(0,Math.min(20,state.bridgeCount+d));save();renderBridges();renderStatus();}
+function setFeedInterval(n){state.feedInterval=n;save();renderAll();}
+function saveNotes(){state.notes=document.getElementById('notesField').value;save();}
+function resetAll(){if(!confirm('Reset ALL data? This cannot be undone.'))return;state={startTime:'01:15',actuals:{},bridgeCount:0,feedInterval:40,feeds:[],notes:''};buildFeeds(false);document.getElementById('startTime').value='01:15';save();renderAll();}
+
+function switchTab(name,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  el.classList.add('active');
+  if(name==='report')renderReport();
+  if(name==='status')renderStatus();
+}
+
+function renderAll(){
+  renderMilestones();renderFeeds();renderStatus();renderBridges();
+  document.getElementById('btn40').className='itbtn'+(state.feedInterval===40?' active':'');
+  document.getElementById('btn30').className='itbtn'+(state.feedInterval===30?' active':'');
+}
+
+load();
+document.getElementById('startTime').value=state.startTime;
+if(!state.feeds||state.feeds.length===0)buildFeeds(false);
+renderAll();
+</script>
+</body>
+</html>
