@@ -19,7 +19,7 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
 .banner h1{font-size:17px;font-weight:700;color:#fff;letter-spacing:.03em;}
 .banner .sub{font-size:11px;color:#7090c0;margin-top:2px;}
 .tabs{display:flex;background:#111128;border-bottom:1px solid #1e2a50;overflow-x:auto;}
-.tab{flex:1;min-width:60px;padding:10px 4px;text-align:center;font-size:11px;font-weight:600;color:#5070a0;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;}
+.tab{flex:1;min-width:58px;padding:10px 4px;text-align:center;font-size:11px;font-weight:600;color:#5070a0;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
 .tab.active{color:#4da8ff;border-bottom:2px solid #4da8ff;}
 .panel{display:none;padding:12px 10px;}
 .panel.active{display:block;}
@@ -42,7 +42,7 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
 .ms-table td{padding:6px 5px;border-bottom:1px solid #1a1a30;vertical-align:middle;}
 .ms-table tr.start-row td{background:#0d2010;}
 .ms-table tr.finish-row td{background:#0d2010;}
-.ms-table tr.bridge-row td{background:#1a1a0d;}
+.ms-table tr.bridge-row td{background:#1e1a05;}
 .ms-table input[type=time]{background:#0a0a1a;border:1px solid #2a3a60;border-radius:4px;color:#e0e8ff;padding:3px 4px;font-size:12px;width:85px;}
 .ms-table input[type=time]:focus{outline:none;border-color:#4da8ff;}
 .chip{display:inline-block;padding:2px 7px;border-radius:10px;font-size:11px;font-weight:700;}
@@ -50,10 +50,10 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
 .chip.red{background:#3d1a1a;color:#f44336;}
 .chip.yellow{background:#3d2e00;color:#ffb300;}
 .chip.grey{background:#2a2a3a;color:#6080a0;}
-.chip.bridge{background:#2a2000;color:#e0c060;}
 .ms-name{font-size:12px;font-weight:600;color:#c8d8f0;}
-.ms-sub{font-size:10px;color:#5070a0;}
-.ms-miles{font-size:10px;color:#6080a0;text-align:center;}
+.ms-sub{font-size:10px;color:#e0c060;}
+.ms-note{font-size:10px;color:#a06030;margin-top:1px;}
+.ms-miles{font-size:10px;color:#6080a0;}
 .ms-est{font-size:11px;color:#7090b0;text-align:center;}
 .bridge-counter{background:#131328;border:1px solid #2a3a00;border-radius:12px;padding:20px;text-align:center;margin-bottom:16px;}
 .bridge-counter .big{font-size:64px;font-weight:700;color:#e0c060;line-height:1;}
@@ -84,11 +84,9 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
 .proj-bar .pf-time{font-size:22px;font-weight:700;color:#60c080;margin-top:2px;}
 .proj-bar .pf-delta{font-size:12px;margin-top:2px;}
 .note-box{background:#131328;border-left:3px solid #4a6090;border-radius:0 6px 6px 0;padding:8px 10px;font-size:11px;color:#7090b0;margin-bottom:10px;}
-/* NOTES FIELD */
+.warn-box{background:#1a0a00;border-left:3px solid #c06020;border-radius:0 6px 6px 0;padding:8px 10px;font-size:11px;color:#e08040;margin-bottom:10px;}
 .notes-area{width:100%;background:#0a0a1a;border:1px solid #2a3a60;border-radius:6px;color:#e0e8ff;padding:10px;font-size:13px;font-family:inherit;resize:vertical;min-height:100px;margin-bottom:10px;}
 .notes-area:focus{outline:none;border-color:#4da8ff;}
-
-/* ── REPORT TAB ── */
 #tab-report .report-section{background:#131328;border:1px solid #1e2a50;border-radius:8px;padding:12px;margin-bottom:14px;}
 #tab-report .report-section h3{font-size:13px;color:#90b8e8;margin-bottom:8px;border-bottom:1px solid #1e2a50;padding-bottom:6px;}
 #tab-report .r-table{width:100%;border-collapse:collapse;font-size:12px;}
@@ -99,21 +97,16 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
 #tab-report .r-kv .rk{color:#7090b0;}
 #tab-report .r-kv .rv{font-weight:600;color:#c8d8f0;}
 .export-box{background:#0a0a0a;border:1px solid #2a3a60;border-radius:6px;padding:10px;font-size:10px;color:#6080a0;font-family:monospace;word-break:break-all;max-height:120px;overflow-y:auto;margin-bottom:8px;}
-
-/* ── PRINT STYLES ── */
-@media print {
+@media print{
   body{background:#fff;color:#000;padding:0;}
-  .tabs,.tab,.btn-sm,.bridge-btns,.settings-row,.note-box,.notes-area,
-  #tab-status,#tab-milestones,#tab-bridges,#tab-feeds,
-  .panel:not(#tab-report){display:none!important;}
+  .tabs,.tab,.btn-sm,.bridge-btns,.settings-row,.note-box,.warn-box,.notes-area,
+  #tab-status,#tab-milestones,#tab-bridges,#tab-feeds,.panel:not(#tab-report){display:none!important;}
   #tab-report{display:block!important;padding:0;}
   .banner{background:#1a2e6b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   #tab-report .report-section{border:1px solid #ccc;background:#fff!important;}
   #tab-report .report-section h3{color:#1a2e6b!important;border-color:#ccc;}
   #tab-report .r-table th{background:#1a2e6b!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   #tab-report .r-table td{border-color:#eee;}
-  #tab-report .r-kv .rk{color:#555;}
-  #tab-report .r-kv .rv{color:#000;}
   .chip.green{background:#d4edda!important;color:#155724!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .chip.red{background:#f8d7da!important;color:#721c24!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
   .chip.yellow{background:#fff3cd!important;color:#856404!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
@@ -136,7 +129,7 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
   <div class="tab" onclick="switchTab('report',this)">Report</div>
 </div>
 
-<!-- ══ STATUS ══ -->
+<!-- STATUS -->
 <div id="tab-status" class="panel active">
   <div class="settings-row">
     <label>Start Time:</label>
@@ -159,20 +152,20 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
     <div class="stat-card"><div class="val" id="sv-feeds">0</div><div class="lbl">Feeds</div></div>
     <div class="stat-card"><div class="val" id="sv-next-feed">—</div><div class="lbl">Next Feed</div></div>
   </div>
-  <div class="note-box">Enter times in Milestones as Joey passes each checkpoint. Use Feeds tab for feed tracking. Bridges tab for the 20-bridge counter.</div>
-  <div class="note-box">🌅 Sunrise 5:24 AM &nbsp;·&nbsp; 🚢 Pier 25 departs 12:15 AM &nbsp;·&nbsp; ☔ Rain date Jun 17 ~2:00 AM</div>
+  <div class="warn-box">⚠️ Must exit Hudson before <b>6:41 AM</b> · Cannot enter East River before <b>4:28 AM</b></div>
+  <div class="note-box">🌅 Sunrise 5:24 AM · 🚢 Pier 25 departs 12:15 AM · ☔ Rain date Jun 17 ~2:00 AM</div>
 </div>
 
-<!-- ══ MILESTONES ══ -->
+<!-- MILESTONES -->
 <div id="tab-milestones" class="panel">
-  <div class="note-box">Tap "Now" or enter time as Joey passes. Blank rows are skipped — won't break calculations.</div>
-  <table class="ms-table" id="msTable">
+  <div class="note-box">All 32 checkpoints from NYOW course sheet. 🌉 = bridge. Tap "Now" or enter time. Blank rows skipped in calculations.</div>
+  <table class="ms-table">
     <thead><tr><th>Checkpoint</th><th>Est.</th><th>Actual</th><th>±</th></tr></thead>
     <tbody id="msBody"></tbody>
   </table>
 </div>
 
-<!-- ══ BRIDGES ══ -->
+<!-- BRIDGES -->
 <div id="tab-bridges" class="panel">
   <div class="bridge-counter">
     <div class="big" id="bridgeCount">0</div>
@@ -184,10 +177,10 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
     </div>
     <div class="bridges-left" id="bridgesLeft">20 bridges remaining</div>
   </div>
-  <div class="note-box">Tap + each time you pass under a bridge. Also auto-increments when you log times for bridge milestones (Willis Ave, Macombs Dam, Henry Hudson, GW, Brooklyn, Williamsburg).</div>
+  <div class="note-box"><b>17 of 20 bridges are in the Milestones tab</b> — counter auto-increments as you log them. The 3 not listed as checkpoints are <b>Queensboro Bridge</b> (E 59th St), <b>Hell Gate Bridge</b> (railroad, ~E 90th), and one more in the East River — tap + manually as you pass them.</div>
 </div>
 
-<!-- ══ FEEDS ══ -->
+<!-- FEEDS -->
 <div id="tab-feeds" class="panel">
   <div class="feed-header">
     <h2>Feed Schedule</h2>
@@ -205,52 +198,34 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
   <div class="note-box" style="margin-top:10px;">Odd = 🥥 Coconut Water · Even = 🌿 Once Upon a Farm. Toggle interval then "Recalc →" to shift future feeds from last completed.</div>
 </div>
 
-<!-- ══ REPORT ══ -->
+<!-- REPORT -->
 <div id="tab-report" class="panel">
   <div class="no-print" style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
     <button class="btn-sm btn-green" onclick="window.print()">🖨 Print / Save PDF</button>
     <button class="btn-sm" onclick="copyExport()">📋 Copy Raw Data</button>
   </div>
-
-  <div class="report-section">
-    <h3>Race Summary</h3>
-    <div id="rpt-summary"></div>
-  </div>
-
+  <div class="report-section"><h3>Race Summary</h3><div id="rpt-summary"></div></div>
   <div class="report-section">
     <h3>Milestone Log — Est. vs. Actual</h3>
-    <table class="r-table">
-      <thead><tr><th>Checkpoint</th><th>Est.</th><th>Actual</th><th>El. Act.</th><th>Variance</th></tr></thead>
-      <tbody id="rpt-ms"></tbody>
-    </table>
+    <table class="r-table"><thead><tr><th>Checkpoint</th><th>Est.</th><th>Actual</th><th>Elapsed</th><th>Variance</th></tr></thead>
+    <tbody id="rpt-ms"></tbody></table>
   </div>
-
   <div class="report-section">
     <h3>Section Analysis (leg-by-leg pace)</h3>
-    <table class="r-table">
-      <thead><tr><th>Leg</th><th>Miles</th><th>Est. Leg</th><th>Act. Leg</th><th>±</th></tr></thead>
-      <tbody id="rpt-legs"></tbody>
-    </table>
-    <div style="font-size:11px;color:#5070a0;margin-top:6px;">Each row = time between consecutive logged checkpoints.</div>
+    <table class="r-table"><thead><tr><th>Leg</th><th>Mi</th><th>Est.</th><th>Actual</th><th>±</th></tr></thead>
+    <tbody id="rpt-legs"></tbody></table>
   </div>
-
   <div class="report-section">
     <h3>Feed Log</h3>
-    <table class="r-table">
-      <thead><tr><th>#</th><th>Type</th><th>Est.</th><th>Actual</th><th>Done</th></tr></thead>
-      <tbody id="rpt-feeds"></tbody>
-    </table>
+    <table class="r-table"><thead><tr><th>#</th><th>Type</th><th>Est.</th><th>Actual</th><th>Done</th></tr></thead>
+    <tbody id="rpt-feeds"></tbody></table>
   </div>
-
   <div class="report-section">
     <h3>Race Notes</h3>
-    <p style="font-size:11px;color:#5070a0;margin-bottom:8px;">Enter observations here for post-race analysis and future planning.</p>
-    <textarea class="notes-area" id="notesField" placeholder="Water temp, current strength, energy levels, feed feedback, gear notes, anything worth remembering for next time..." oninput="saveNotes()"></textarea>
+    <textarea class="notes-area" id="notesField" placeholder="Water temp, current, energy levels, feed feedback, gear notes, anything for next time..." oninput="saveNotes()"></textarea>
   </div>
-
   <div class="report-section no-print">
     <h3>Export Data (send to Claude for strategic PDF)</h3>
-    <p style="font-size:11px;color:#5070a0;margin-bottom:8px;">Copy this and paste it into a new Claude conversation to generate the strategic analysis PDF.</p>
     <div class="export-box" id="exportBox"></div>
     <button class="btn-sm" onclick="copyExport()">Copy to Clipboard</button>
   </div>
@@ -258,216 +233,65 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
 
 <script>
 const MS=[
-  {id:0, name:'Mill Rock',          sub:'START',               est:'01:15',elMin:0,  miles:0.0, bridge:false,isStart:true, isFinish:false},
-  {id:1, name:'East 107th St.',     sub:'',                    est:'01:25',elMin:10, miles:0.7, bridge:false,isStart:false,isFinish:false},
-  {id:2, name:'Willis Ave Bridge',  sub:'Bridge',              est:'01:42',elMin:27, miles:1.8, bridge:true, isStart:false,isFinish:false},
-  {id:3, name:'Macombs Dam Bridge', sub:'Bridge',              est:'02:07',elMin:52, miles:3.6, bridge:true, isStart:false,isFinish:false},
-  {id:4, name:'W 207th St.',        sub:'Bridge area',         est:'02:42',elMin:87, miles:6.2, bridge:true, isStart:false,isFinish:false},
-  {id:5, name:'Henry Hudson Bridge',sub:'Spuyten Duyvil',      est:'03:04',elMin:109,miles:7.7, bridge:true, isStart:false,isFinish:false},
-  {id:6, name:'GW Bridge',          sub:'George Washington',   est:'03:30',elMin:135,miles:10.3,bridge:true, isStart:false,isFinish:false},
-  {id:7, name:'Riverbank/145th',    sub:'Pacing zone (Hudson)',est:'03:44',elMin:149,miles:11.8,bridge:false,isStart:false,isFinish:false},
-  {id:8, name:'Pier 92/94',         sub:'W 52nd St.',          est:'04:33',elMin:198,miles:16.4,bridge:false,isStart:false,isFinish:false},
-  {id:9, name:'Pier 40',            sub:'Leroy St.',           est:'05:08',elMin:233,miles:19.3,bridge:false,isStart:false,isFinish:false},
-  {id:10,name:'Pier A',             sub:'Battery Park',        est:'05:39',elMin:264,miles:21.2,bridge:false,isStart:false,isFinish:false},
-  {id:11,name:'Brooklyn Bridge',    sub:'Bridge',              est:'05:56',elMin:281,miles:22.7,bridge:true, isStart:false,isFinish:false},
-  {id:12,name:'Williamsburg Bridge',sub:'Bridge',              est:'06:16',elMin:301,miles:24.1,bridge:true, isStart:false,isFinish:false},
-  {id:13,name:'East 31st St.',      sub:'',                    est:'06:42',elMin:327,miles:26.0,bridge:false,isStart:false,isFinish:false},
-  {id:14,name:'Roosevelt Is. E63',  sub:'E 63rd St.',          est:'07:00',elMin:345,miles:27.5,bridge:false,isStart:false,isFinish:false},
-  {id:15,name:'Roosevelt Is. E75',  sub:'E 75th St.',          est:'07:06',elMin:351,miles:null, bridge:false,isStart:false,isFinish:false},
-  {id:16,name:'Mill Rock',          sub:'FINISH',              est:'07:14',elMin:359,miles:29.1,bridge:false,isStart:false,isFinish:true},
+  {id:0, name:'Mill Rock',                  sub:'START',                est:'01:15',elMin:0,  miles:0.0, bridge:false,isStart:true, isFinish:false,note:''},
+  {id:1, name:'Wards Island Bridge',        sub:'Bridge #1',            est:'01:22',elMin:7,  miles:0.5, bridge:true, isStart:false,isFinish:false,note:''},
+  {id:2, name:'East 107th St.',             sub:'',                     est:'01:25',elMin:10, miles:0.7, bridge:false,isStart:false,isFinish:false,note:''},
+  {id:3, name:'RFK Bridge',                 sub:'Bridge #2',            est:'01:39',elMin:24, miles:1.6, bridge:true, isStart:false,isFinish:false,note:''},
+  {id:4, name:'Willis Ave Bridge',          sub:'Bridge #3',            est:'01:42',elMin:27, miles:1.8, bridge:true, isStart:false,isFinish:false,note:''},
+  {id:5, name:'Third Ave Bridge',           sub:'Bridge #4',            est:'01:47',elMin:32, miles:2.2, bridge:true, isStart:false,isFinish:false,note:''},
+  {id:6, name:'Park Avenue Bridge',         sub:'Bridge #5',            est:'01:50',elMin:35, miles:2.4, bridge:true, isStart:false,isFinish:false,note:''},
+  {id:7, name:'Madison Ave Bridge',         sub:'Bridge #6',            est:'01:53',elMin:38, miles:2.6, bridge:true, isStart:false,isFinish:false,note:''},
+  {id:8, name:'145th St. Bridge',           sub:'Bridge #7',            est:'01:58',elMin:43, miles:3.0, bridge:true, isStart:false,isFinish:false,note:''},
+  {id:9, name:'Macombs Dam Bridge',         sub:'Bridge #8',            est:'02:07',elMin:52, miles:3.6, bridge:true, isStart:false,isFinish:false,note:''},
+  {id:10,name:'High Bridge',                sub:'Bridge #9',            est:'02:20',elMin:65, miles:4.6, bridge:true, isStart:false,isFinish:false,note:''},
+  {id:11,name:'Alexander Hamilton Bridge',  sub:'Bridge #10',           est:'02:22',elMin:67, miles:4.7, bridge:true, isStart:false,isFinish:false,note:''},
+  {id:12,name:'Washington Bridge',          sub:'Bridge #11',           est:'02:24',elMin:69, miles:4.9, bridge:true, isStart:false,isFinish:false,note:''},
+  {id:13,name:'University Heights Bridge',  sub:'Bridge #12',           est:'02:42',elMin:87, miles:6.2, bridge:true, isStart:false,isFinish:false,note:''},
+  {id:14,name:'Broadway Bridge',            sub:'Bridge #13',           est:'02:54',elMin:99, miles:7.1, bridge:true, isStart:false,isFinish:false,note:''},
+  {id:15,name:'Henry Hudson Bridge',        sub:'Bridge #14',           est:'03:04',elMin:109,miles:7.7, bridge:true, isStart:false,isFinish:false,note:''},
+  {id:16,name:'Spuyten Duyvil Bridge',      sub:'Bridge #15',           est:'03:07',elMin:112,miles:7.9, bridge:true, isStart:false,isFinish:false,note:''},
+  {id:17,name:'George Washington Bridge',   sub:'Bridge #16',           est:'03:30',elMin:135,miles:10.3,bridge:true, isStart:false,isFinish:false,note:'Max ebb 3:35 AM · 3.33 knots'},
+  {id:18,name:'Riverbank / 145th St.',      sub:'Hudson — pacing zone',est:'03:44',elMin:149,miles:11.8,bridge:false,isStart:false,isFinish:false,note:'Max ebb 3:02 AM · 3.2 knots'},
+  {id:19,name:"Grant's Tomb / 120th St.",   sub:'',                     est:'03:59',elMin:164,miles:13.1,bridge:false,isStart:false,isFinish:false,note:'Max ebb 3:02 AM · 3.2 knots'},
+  {id:20,name:'Pier 92/94',                 sub:'W 52nd St.',           est:'04:33',elMin:198,miles:16.4,bridge:false,isStart:false,isFinish:false,note:'Max ebb 3:15 AM · 3.6 knots'},
+  {id:21,name:'Pier 40',                    sub:'Leroy St.',            est:'05:08',elMin:233,miles:19.3,bridge:false,isStart:false,isFinish:false,note:''},
+  {id:22,name:'Pier A',                     sub:'Battery Park',         est:'05:39',elMin:264,miles:21.2,bridge:false,isStart:false,isFinish:false,note:'⚠️ Exit Hudson before 6:41 AM'},
+  {id:23,name:'Brooklyn Bridge',            sub:'Bridge #17',           est:'05:56',elMin:281,miles:22.7,bridge:true, isStart:false,isFinish:false,note:'Cannot enter E River before 4:28 AM'},
+  {id:24,name:'Manhattan Bridge',           sub:'Bridge #18',           est:'06:01',elMin:286,miles:23.0,bridge:true, isStart:false,isFinish:false,note:''},
+  {id:25,name:'Corlears Hook',              sub:'',                     est:'06:11',elMin:296,miles:23.7,bridge:false,isStart:false,isFinish:false,note:''},
+  {id:26,name:'Williamsburg Bridge',        sub:'Bridge #19',           est:'06:16',elMin:301,miles:24.1,bridge:true, isStart:false,isFinish:false,note:''},
+  {id:27,name:'East 19th St.',              sub:'',                     est:'06:34',elMin:319,miles:25.4,bridge:false,isStart:false,isFinish:false,note:''},
+  {id:28,name:'East 31st St.',              sub:'',                     est:'06:42',elMin:327,miles:26.0,bridge:false,isStart:false,isFinish:false,note:''},
+  {id:29,name:'East 41st St.',              sub:'',                     est:'06:49',elMin:334,miles:26.4,bridge:false,isStart:false,isFinish:false,note:''},
+  {id:30,name:'Queensboro Bridge',          sub:'Bridge #20',           est:'06:56',elMin:341,miles:27.1,bridge:true, isStart:false,isFinish:false,note:'Ed Koch Queensboro · E 59th St.'},
+  {id:31,name:'Roosevelt Is. E 63rd',       sub:'',                     est:'07:00',elMin:345,miles:27.5,bridge:false,isStart:false,isFinish:false,note:''},
+  {id:32,name:'Roosevelt Is. E 75th',       sub:'',                     est:'07:06',elMin:351,miles:28.2,bridge:false,isStart:false,isFinish:false,note:''},
+  {id:33,name:'Mill Rock',                  sub:'FINISH',               est:'07:14',elMin:359,miles:29.1,bridge:false,isStart:false,isFinish:true, note:''},
 ];
 const EST_TOTAL=359,MAX_FEEDS=12;
-
 let state={startTime:'01:15',actuals:{},bridgeCount:0,feedInterval:40,feeds:[],notes:''};
 function save(){try{localStorage.setItem('tracker20b',JSON.stringify(state));}catch(e){}}
 function load(){try{const d=localStorage.getItem('tracker20b');if(d)state={...state,...JSON.parse(d)};}catch(e){}}
-
 function t2m(t){if(!t)return null;const[h,m]=t.split(':').map(Number);return h*60+m;}
-function m2t(m){m=((m%1440)+1440)%1440;const h=Math.floor(m/60),mm=m%60;return String(h).padStart(2,'0')+':'+String(mm).padStart(2,'0');}
-function fmt(t){if(!t)return'—';const[h,m]=t.split(':').map(Number);const ap=h<12?'AM':'PM',hh=h%12||12;return`${hh}:${String(m).padStart(2,'0')} ${ap}`;}
+function m2t(m){m=((m%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');}
+function fmt(t){if(!t)return'—';const[h,m]=t.split(':').map(Number);return`${h%12||12}:${String(m).padStart(2,'0')} ${h<12?'AM':'PM'}`;}
 function fmtEl(min){if(min===null||isNaN(min))return'—';const h=Math.floor(min/60),m=min%60;return h>0?`${h}h ${m}m`:`${m}m`;}
 function estClock(ms){return m2t(t2m(state.startTime)+ms.elMin);}
-function actElapsed(id){
-  const a=state.actuals[id];if(!a)return null;
-  let el=t2m(a)-t2m(state.startTime);
-  if(el<-120)el+=1440;return el;
-}
-function variance(id,estEl){
-  const a=actElapsed(id);if(a===null||estEl===0)return null;
-  return((a-estEl)/estEl)*100;
-}
-function chip(v){
-  if(v===null)return'<span class="chip grey">—</span>';
-  const s=v>=0?'+':'';
-  if(v<-5)return`<span class="chip green">${s}${v.toFixed(1)}%</span>`;
-  if(v>5) return`<span class="chip red">${s}${v.toFixed(1)}%</span>`;
-  return`<span class="chip yellow">${s}${v.toFixed(1)}%</span>`;
-}
-
-// FEEDS
-function buildFeeds(keepActuals){
-  const sm=t2m(state.startTime),old=state.feeds||[],feeds=[];
-  let t=sm+state.feedInterval;
-  for(let i=0;i<MAX_FEEDS;i++){
-    const o=old[i]||{};
-    feeds.push({estTime:m2t(t),actualTime:keepActuals&&o.actualTime?o.actualTime:'',done:keepActuals?(o.done||false):false,type:i%2===0?'CW':'OUF'});
-    t+=state.feedInterval;
-    if(t-sm>EST_TOTAL+60)break;
-  }
-  state.feeds=feeds;
-}
-function recalcFeeds(){
-  let lastIdx=-1,lastMin=t2m(state.startTime);
-  state.feeds.forEach((f,i)=>{if(f.done&&f.actualTime){lastIdx=i;lastMin=t2m(f.actualTime);}});
-  for(let i=lastIdx+1;i<state.feeds.length;i++)
-    state.feeds[i].estTime=m2t(lastMin+(i-lastIdx)*state.feedInterval);
-  save();renderFeeds();
-}
-
-// RENDER MILESTONES
-function renderMilestones(){
-  const tb=document.getElementById('msBody');tb.innerHTML='';
-  MS.forEach(ms=>{
-    const ec=estClock(ms),actual=state.actuals[ms.id]||'',v=actual?variance(ms.id,ms.elMin):null;
-    const rc=ms.isStart||ms.isFinish?(ms.isStart?'start-row':'finish-row'):ms.bridge?'bridge-row':'';
-    const nb=ms.bridge?'<span class="chip bridge">🌉</span> ':'';
-    const tr=document.createElement('tr');if(rc)tr.className=rc;
-    tr.innerHTML=`<td>${nb}<span class="ms-name">${ms.name}</span>${ms.sub?`<div class="ms-sub">${ms.sub}</div>`:''}${ms.miles!==null?`<div class="ms-miles">${ms.miles} mi</div>`:''}</td><td class="ms-est">${fmt(ec)}</td><td><input type="time" value="${actual}" oninput="onActual(${ms.id},this.value)"><div style="text-align:center;margin-top:3px;"><button class="btn-sm" style="font-size:10px;padding:2px 7px;" onclick="msNow(${ms.id})">Now</button></div></td><td style="text-align:center;">${chip(v)}</td>`;
-    tb.appendChild(tr);
-  });
-}
-
-// RENDER FEEDS
-function renderFeeds(){
-  const tb=document.getElementById('feedBody');tb.innerHTML='';
-  let nextFeed=null;
-  state.feeds.forEach((f,i)=>{
-    const badge=f.type==='CW'?'<span class="cw-badge">🥥 CW</span>':'<span class="ouf-badge">🌿 OUF</span>';
-    const tr=document.createElement('tr');
-    if(f.done)tr.className='feed-done-row';
-    tr.innerHTML=`<td style="font-weight:700;color:#8090c0;">${i+1}</td><td>${badge}</td><td style="color:#8090b0;">${fmt(f.estTime)}</td><td><input type="time" value="${f.actualTime||''}" oninput="onFeedTime(${i},this.value)"></td><td><input type="checkbox" ${f.done?'checked':''} onchange="onFeedDone(${i},this.checked)" style="width:18px;height:18px;cursor:pointer;"></td>`;
-    tb.appendChild(tr);
-    if(!f.done&&!nextFeed)nextFeed=f;
-  });
-  const bar=document.getElementById('nextFeedBar');
-  bar.innerHTML=nextFeed?`Next feed: <span>${fmt(nextFeed.estTime)}</span> — ${nextFeed.type==='CW'?'🥥 Coconut Water':'🌿 Once Upon a Farm'}`:'✅ All feeds completed!';
-}
-
-// RENDER STATUS
-function renderStatus(){
-  let lastEl=null,lastMiles=0,lastEstEl=null,vars=[];
-  MS.forEach(ms=>{if(state.actuals[ms.id]){const el=actElapsed(ms.id);if(el!==null){lastEl=el;if(ms.miles!==null)lastMiles=ms.miles;lastEstEl=ms.elMin;if(ms.elMin>0)vars.push(variance(ms.id,ms.elMin));}}});
-  document.getElementById('sv-elapsed').textContent=lastEl!==null?fmtEl(lastEl):'—';
-  document.getElementById('sv-miles').textContent=lastMiles>0?lastMiles.toFixed(1):'—';
-  const sc=document.getElementById('sc-pace');
-  if(vars.length>0){const avg=vars.reduce((a,b)=>a+b,0)/vars.length;sc.className='stat-card '+(avg<-5?'green':avg>5?'red':'yellow');document.getElementById('sv-pace').textContent=(avg>=0?'+':'')+avg.toFixed(1)+'%';}
-  else{sc.className='stat-card';document.getElementById('sv-pace').textContent='—';}
-  document.getElementById('sv-bridges').textContent=state.bridgeCount;
-  const df=(state.feeds||[]).filter(f=>f.done).length;document.getElementById('sv-feeds').textContent=df;
-  const nf=(state.feeds||[]).find(f=>!f.done);document.getElementById('sv-next-feed').textContent=nf?fmt(nf.estTime):'✓';
-  if(vars.length>=2&&lastEstEl&&lastEstEl>0){
-    const avg=vars.reduce((a,b)=>a+b,0)/vars.length;
-    const rem=EST_TOTAL-lastEstEl,projRem=rem*(1+avg/100);
-    const sm=t2m(state.startTime),pf=sm+(lastEl||0)+projRem;
-    const pfT=m2t(pf),delta=pf-(sm+EST_TOTAL),d=Math.round(Math.abs(delta));
-    document.getElementById('projFinishTime').textContent=fmt(pfT);
-    const de=document.getElementById('projFinishDelta');
-    de.textContent=delta>1?`▲ ${d} min behind est.`:delta<-1?`▼ ${d} min ahead of est.`:'Right on schedule';
-    de.style.color=delta>5?'#f44336':delta<-5?'#4caf50':'#ffb300';
-    document.getElementById('proj-finish-bar').style.display='block';
-  }
-}
-
-function renderBridges(){
-  const c=state.bridgeCount;document.getElementById('bridgeCount').textContent=c;
-  const l=20-c;document.getElementById('bridgesLeft').textContent=l>0?`${l} bridge${l!==1?'s':''} remaining`:'🎉 All 20 bridges!';
-}
-
-// RENDER REPORT
-function renderReport(){
-  // Summary
-  const startAct=state.actuals[0]||state.startTime;
-  const finishAct=state.actuals[16]||null;
-  const totalEl=finishAct?actElapsed(16):null;
-  const vars=MS.filter(ms=>ms.id>0&&state.actuals[ms.id]&&ms.elMin>0).map(ms=>variance(ms.id,ms.elMin)).filter(v=>v!==null);
-  const avgVar=vars.length>0?(vars.reduce((a,b)=>a+b,0)/vars.length):null;
-  const df=(state.feeds||[]).filter(f=>f.done).length;
-  document.getElementById('rpt-summary').innerHTML=`
-    <div class="r-kv"><span class="rk">Swimmer</span><span class="rv">Joey Nizzardo</span></div>
-    <div class="r-kv"><span class="rk">Date</span><span class="rv">Monday, June 15, 2026</span></div>
-    <div class="r-kv"><span class="rk">Event</span><span class="rv">20 Bridges Swim Around Manhattan (29.1 mi)</span></div>
-    <div class="r-kv"><span class="rk">Est. Start</span><span class="rv">1:15 AM</span></div>
-    <div class="r-kv"><span class="rk">Actual Start</span><span class="rv">${fmt(startAct)}</span></div>
-    <div class="r-kv"><span class="rk">Finish Time</span><span class="rv">${finishAct?fmt(finishAct):'Not recorded'}</span></div>
-    <div class="r-kv"><span class="rk">Total Elapsed</span><span class="rv">${totalEl!==null?fmtEl(totalEl):'—'} (Est. 5h 59m)</span></div>
-    <div class="r-kv"><span class="rk">Avg. Pace Variance</span><span class="rv">${avgVar!==null?(avgVar>=0?'+':'')+avgVar.toFixed(1)+'%':'—'}</span></div>
-    <div class="r-kv"><span class="rk">Bridges Counted</span><span class="rv">${state.bridgeCount} / 20</span></div>
-    <div class="r-kv"><span class="rk">Feeds Completed</span><span class="rv">${df}</span></div>
-  `;
-
-  // Milestones
-  const msBody=document.getElementById('rpt-ms');msBody.innerHTML='';
-  MS.forEach(ms=>{
-    const a=state.actuals[ms.id]||null;
-    const aEl=a?actElapsed(ms.id):null;
-    const v=a&&ms.elMin>0?variance(ms.id,ms.elMin):null;
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${ms.bridge?'🌉 ':ms.isFinish?'🏁 ':''}${ms.name}${ms.sub?' ('+ms.sub+')':''}</td><td style="text-align:center;">${fmt(estClock(ms))}</td><td style="text-align:center;font-weight:${a?'600':'400'};color:${a?'':'#888'}">${a?fmt(a):'—'}</td><td style="text-align:center;">${aEl!==null?fmtEl(aEl):'—'}</td><td style="text-align:center;">${chip(v)}</td>`;
-    msBody.appendChild(tr);
-  });
-
-  // Section legs
-  const legBody=document.getElementById('rpt-legs');legBody.innerHTML='';
-  const logged=MS.filter(ms=>state.actuals[ms.id]);
-  for(let i=1;i<logged.length;i++){
-    const a=logged[i],b=logged[i-1];
-    const estLeg=a.elMin-b.elMin;
-    const actAEl=actElapsed(a.id),actBEl=actElapsed(b.id);
-    const actLeg=(actAEl!==null&&actBEl!==null)?actAEl-actBEl:null;
-    const lv=(actLeg!==null&&estLeg>0)?((actLeg-estLeg)/estLeg)*100:null;
-    const mDiff=(a.miles!==null&&b.miles!==null)?(a.miles-b.miles).toFixed(1):null;
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${b.name} → ${a.name}</td><td style="text-align:center;">${mDiff?mDiff+' mi':'—'}</td><td style="text-align:center;">${fmtEl(estLeg)}</td><td style="text-align:center;font-weight:600;">${actLeg!==null?fmtEl(actLeg):'—'}</td><td style="text-align:center;">${chip(lv)}</td>`;
-    legBody.appendChild(tr);
-  }
-  if(logged.length<2)legBody.innerHTML='<tr><td colspan="5" style="text-align:center;color:#5070a0;padding:10px;">No segments to analyze yet</td></tr>';
-
-  // Feeds
-  const fb=document.getElementById('rpt-feeds');fb.innerHTML='';
-  (state.feeds||[]).forEach((f,i)=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>${i+1}</td><td>${f.type==='CW'?'🥥 Coconut Water':'🌿 Once Upon a Farm'}</td><td>${fmt(f.estTime)}</td><td style="font-weight:${f.actualTime?'600':'400'}">${f.actualTime?fmt(f.actualTime):'—'}</td><td>${f.done?'✅':'—'}</td>`;
-    fb.appendChild(tr);
-  });
-
-  // Notes
-  document.getElementById('notesField').value=state.notes||'';
-
-  // Export
-  buildExport();
-}
-
-function buildExport(){
-  const exp={
-    event:'20 Bridges Swim Around Manhattan',swimmer:'Joey Nizzardo',date:'June 15 2026',
-    startTime:state.startTime,bridgeCount:state.bridgeCount,feedInterval:state.feedInterval,
-    milestones:MS.map(ms=>({name:ms.name,sub:ms.sub,estElMin:ms.elMin,miles:ms.miles,actualTime:state.actuals[ms.id]||null,actualElMin:state.actuals[ms.id]?actElapsed(ms.id):null,variancePct:state.actuals[ms.id]&&ms.elMin>0?parseFloat(variance(ms.id,ms.elMin).toFixed(2)):null})),
-    feeds:(state.feeds||[]).map((f,i)=>({num:i+1,type:f.type,estTime:f.estTime,actualTime:f.actualTime||null,done:f.done})),
-    notes:state.notes||''
-  };
-  const s=JSON.stringify(exp,null,2);
-  document.getElementById('exportBox').textContent=s;
-  return s;
-}
-function copyExport(){
-  const s=buildExport();
-  navigator.clipboard.writeText(s).then(()=>alert('Copied! Paste into Claude for your strategic PDF.')).catch(()=>{document.getElementById('exportBox').select();});
-}
-
-// EVENTS
+function actElapsed(id){const a=state.actuals[id];if(!a)return null;let el=t2m(a)-t2m(state.startTime);if(el<-120)el+=1440;return el;}
+function variance(id,estEl){const a=actElapsed(id);if(a===null||estEl===0)return null;return((a-estEl)/estEl)*100;}
+function chip(v){if(v===null)return'<span class="chip grey">—</span>';const s=v>=0?'+':'';if(v<-5)return`<span class="chip green">${s}${v.toFixed(1)}%</span>`;if(v>5)return`<span class="chip red">${s}${v.toFixed(1)}%</span>`;return`<span class="chip yellow">${s}${v.toFixed(1)}%</span>`;}
+function buildFeeds(keep){const sm=t2m(state.startTime),old=state.feeds||[],feeds=[];let t=sm+state.feedInterval;for(let i=0;i<MAX_FEEDS;i++){const o=old[i]||{};feeds.push({estTime:m2t(t),actualTime:keep&&o.actualTime?o.actualTime:'',done:keep?(o.done||false):false,type:i%2===0?'CW':'OUF'});t+=state.feedInterval;if(t-sm>EST_TOTAL+60)break;}state.feeds=feeds;}
+function recalcFeeds(){let li=-1,lm=t2m(state.startTime);state.feeds.forEach((f,i)=>{if(f.done&&f.actualTime){li=i;lm=t2m(f.actualTime);}});for(let i=li+1;i<state.feeds.length;i++)state.feeds[i].estTime=m2t(lm+(i-li)*state.feedInterval);save();renderFeeds();}
+function renderMilestones(){const tb=document.getElementById('msBody');tb.innerHTML='';MS.forEach(ms=>{const ec=estClock(ms),actual=state.actuals[ms.id]||'',v=actual?variance(ms.id,ms.elMin):null;const rc=ms.isStart||ms.isFinish?(ms.isStart?'start-row':'finish-row'):ms.bridge?'bridge-row':'';const tr=document.createElement('tr');if(rc)tr.className=rc;tr.innerHTML=`<td><span class="ms-name">${ms.bridge?'🌉 ':''}${ms.name}</span>${ms.sub?`<div class="ms-sub">${ms.sub}</div>`:''}${ms.note?`<div class="ms-note">⚡ ${ms.note}</div>`:''}${ms.miles!==null?`<div class="ms-miles">${ms.miles} mi</div>`:''}</td><td class="ms-est">${fmt(ec)}</td><td><input type="time" value="${actual}" oninput="onActual(${ms.id},this.value)"><div style="text-align:center;margin-top:3px;"><button class="btn-sm" style="font-size:10px;padding:2px 7px;" onclick="msNow(${ms.id})">Now</button></div></td><td style="text-align:center;">${chip(v)}</td>`;tb.appendChild(tr);});}
+function renderFeeds(){const tb=document.getElementById('feedBody');tb.innerHTML='';let nf=null;state.feeds.forEach((f,i)=>{const badge=f.type==='CW'?'<span class="cw-badge">🥥 CW</span>':'<span class="ouf-badge">🌿 OUF</span>';const tr=document.createElement('tr');if(f.done)tr.className='feed-done-row';tr.innerHTML=`<td style="font-weight:700;color:#8090c0;">${i+1}</td><td>${badge}</td><td style="color:#8090b0;">${fmt(f.estTime)}</td><td><input type="time" value="${f.actualTime||''}" oninput="onFeedTime(${i},this.value)"></td><td><input type="checkbox" ${f.done?'checked':''} onchange="onFeedDone(${i},this.checked)" style="width:18px;height:18px;cursor:pointer;"></td>`;tb.appendChild(tr);if(!f.done&&!nf)nf=f;});document.getElementById('nextFeedBar').innerHTML=nf?`Next feed: <span>${fmt(nf.estTime)}</span> — ${nf.type==='CW'?'🥥 Coconut Water':'🌿 Once Upon a Farm'}`:'✅ All feeds completed!';}
+function renderStatus(){let lastEl=null,lastMiles=0,lastEstEl=null,vars=[];MS.forEach(ms=>{if(state.actuals[ms.id]){const el=actElapsed(ms.id);if(el!==null){lastEl=el;if(ms.miles!==null)lastMiles=ms.miles;lastEstEl=ms.elMin;if(ms.elMin>0)vars.push(variance(ms.id,ms.elMin));}}});document.getElementById('sv-elapsed').textContent=lastEl!==null?fmtEl(lastEl):'—';document.getElementById('sv-miles').textContent=lastMiles>0?lastMiles.toFixed(1):'—';const sc=document.getElementById('sc-pace');if(vars.length>0){const avg=vars.reduce((a,b)=>a+b,0)/vars.length;sc.className='stat-card '+(avg<-5?'green':avg>5?'red':'yellow');document.getElementById('sv-pace').textContent=(avg>=0?'+':'')+avg.toFixed(1)+'%';}else{sc.className='stat-card';document.getElementById('sv-pace').textContent='—';}document.getElementById('sv-bridges').textContent=state.bridgeCount;const df=(state.feeds||[]).filter(f=>f.done).length;document.getElementById('sv-feeds').textContent=df;const nf=(state.feeds||[]).find(f=>!f.done);document.getElementById('sv-next-feed').textContent=nf?fmt(nf.estTime):'✓';if(vars.length>=2&&lastEstEl&&lastEstEl>0){const avg=vars.reduce((a,b)=>a+b,0)/vars.length,rem=EST_TOTAL-lastEstEl,prem=rem*(1+avg/100),sm=t2m(state.startTime),pf=sm+(lastEl||0)+prem,pfT=m2t(pf),delta=pf-(sm+EST_TOTAL),d=Math.round(Math.abs(delta));document.getElementById('projFinishTime').textContent=fmt(pfT);const de=document.getElementById('projFinishDelta');de.textContent=delta>1?`▲ ${d} min behind est.`:delta<-1?`▼ ${d} min ahead of est.`:'Right on schedule';de.style.color=delta>5?'#f44336':delta<-5?'#4caf50':'#ffb300';document.getElementById('proj-finish-bar').style.display='block';}}
+function renderBridges(){const c=state.bridgeCount,l=20-c;document.getElementById('bridgeCount').textContent=c;document.getElementById('bridgesLeft').textContent=l>0?`${l} bridge${l!==1?'s':''} remaining`:'🎉 All 20 bridges!';}
+function renderReport(){const startAct=state.actuals[0]||state.startTime,finishAct=state.actuals[30]||null,totalEl=finishAct?actElapsed(30):null,vars=MS.filter(ms=>ms.id>0&&state.actuals[ms.id]&&ms.elMin>0).map(ms=>variance(ms.id,ms.elMin)).filter(v=>v!==null),avgVar=vars.length>0?vars.reduce((a,b)=>a+b,0)/vars.length:null,df=(state.feeds||[]).filter(f=>f.done).length;document.getElementById('rpt-summary').innerHTML=`<div class="r-kv"><span class="rk">Swimmer</span><span class="rv">Joey Nizzardo</span></div><div class="r-kv"><span class="rk">Date</span><span class="rv">Monday, June 15, 2026</span></div><div class="r-kv"><span class="rk">Event</span><span class="rv">20 Bridges Swim Around Manhattan (29.1 mi)</span></div><div class="r-kv"><span class="rk">Est. Start</span><span class="rv">1:15 AM</span></div><div class="r-kv"><span class="rk">Actual Start</span><span class="rv">${fmt(startAct)}</span></div><div class="r-kv"><span class="rk">Finish Time</span><span class="rv">${finishAct?fmt(finishAct):'Not recorded'}</span></div><div class="r-kv"><span class="rk">Total Elapsed</span><span class="rv">${totalEl!==null?fmtEl(totalEl):'—'} (Est. 5h 59m)</span></div><div class="r-kv"><span class="rk">Avg Pace Variance</span><span class="rv">${avgVar!==null?(avgVar>=0?'+':'')+avgVar.toFixed(1)+'%':'—'}</span></div><div class="r-kv"><span class="rk">Bridges Counted</span><span class="rv">${state.bridgeCount} / 20</span></div><div class="r-kv"><span class="rk">Feeds Completed</span><span class="rv">${df}</span></div>`;const msb=document.getElementById('rpt-ms');msb.innerHTML='';MS.forEach(ms=>{const a=state.actuals[ms.id]||null,aEl=a?actElapsed(ms.id):null,v=a&&ms.elMin>0?variance(ms.id,ms.elMin):null,tr=document.createElement('tr');tr.innerHTML=`<td>${ms.bridge?'🌉 ':ms.isFinish?'🏁 ':''}${ms.name}</td><td style="text-align:center;">${fmt(estClock(ms))}</td><td style="text-align:center;font-weight:${a?'600':'400'};color:${a?'':'#888'}">${a?fmt(a):'—'}</td><td style="text-align:center;">${aEl!==null?fmtEl(aEl):'—'}</td><td style="text-align:center;">${chip(v)}</td>`;msb.appendChild(tr);});const lb=document.getElementById('rpt-legs');lb.innerHTML='';const logged=MS.filter(ms=>state.actuals[ms.id]);for(let i=1;i<logged.length;i++){const a=logged[i],b=logged[i-1],estLeg=a.elMin-b.elMin,aAEl=actElapsed(a.id),bAEl=actElapsed(b.id),actLeg=(aAEl!==null&&bAEl!==null)?aAEl-bAEl:null,lv=(actLeg!==null&&estLeg>0)?((actLeg-estLeg)/estLeg)*100:null,mDiff=(a.miles!==null&&b.miles!==null)?(a.miles-b.miles).toFixed(1):null,tr=document.createElement('tr');tr.innerHTML=`<td>${b.name} → ${a.name}</td><td style="text-align:center;">${mDiff||'—'}</td><td style="text-align:center;">${fmtEl(estLeg)}</td><td style="text-align:center;font-weight:600;">${actLeg!==null?fmtEl(actLeg):'—'}</td><td style="text-align:center;">${chip(lv)}</td>`;lb.appendChild(tr);}if(logged.length<2)lb.innerHTML='<tr><td colspan="5" style="text-align:center;color:#5070a0;padding:10px;">No segments yet</td></tr>';const fb=document.getElementById('rpt-feeds');fb.innerHTML='';(state.feeds||[]).forEach((f,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${i+1}</td><td>${f.type==='CW'?'🥥 Coconut Water':'🌿 Once Upon a Farm'}</td><td>${fmt(f.estTime)}</td><td style="font-weight:${f.actualTime?'600':'400'}">${f.actualTime?fmt(f.actualTime):'—'}</td><td>${f.done?'✅':'—'}</td>`;fb.appendChild(tr);});document.getElementById('notesField').value=state.notes||'';buildExport();}
+function buildExport(){const exp={event:'20 Bridges Swim Around Manhattan',swimmer:'Joey Nizzardo',date:'June 15 2026',startTime:state.startTime,bridgeCount:state.bridgeCount,feedInterval:state.feedInterval,milestones:MS.map(ms=>({name:ms.name,sub:ms.sub,estElMin:ms.elMin,miles:ms.miles,actualTime:state.actuals[ms.id]||null,actualElMin:state.actuals[ms.id]?actElapsed(ms.id):null,variancePct:state.actuals[ms.id]&&ms.elMin>0?parseFloat(variance(ms.id,ms.elMin).toFixed(2)):null})),feeds:(state.feeds||[]).map((f,i)=>({num:i+1,type:f.type,estTime:f.estTime,actualTime:f.actualTime||null,done:f.done})),notes:state.notes||''};const s=JSON.stringify(exp,null,2);document.getElementById('exportBox').textContent=s;return s;}
+function copyExport(){const s=buildExport();navigator.clipboard.writeText(s).then(()=>alert('Copied! Paste into Claude for your strategic PDF.')).catch(()=>{});}
 function onStartChange(){state.startTime=document.getElementById('startTime').value;buildFeeds(true);save();renderAll();}
-function setNow(id){const n=new Date();const t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');document.getElementById(id).value=t;state.startTime=t;buildFeeds(true);save();renderAll();}
-function msNow(id){const n=new Date();const t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');state.actuals[id]=t;autoBridge(id);save();renderAll();}
+function setNow(id){const n=new Date(),t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');document.getElementById(id).value=t;state.startTime=t;buildFeeds(true);save();renderAll();}
+function msNow(id){const n=new Date(),t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');state.actuals[id]=t;autoBridge(id);save();renderAll();}
 function onActual(id,v){if(v)state.actuals[id]=v;else delete state.actuals[id];if(v)autoBridge(id);save();renderStatus();renderBridges();}
 function autoBridge(id){const ms=MS.find(m=>m.id===id);if(ms&&ms.bridge){const n=MS.filter(m=>m.bridge&&state.actuals[m.id]).length;if(state.bridgeCount<n)state.bridgeCount=n;}}
 function onFeedTime(i,v){state.feeds[i].actualTime=v;save();renderFeeds();renderStatus();}
@@ -475,27 +299,10 @@ function onFeedDone(i,c){state.feeds[i].done=c;save();renderFeeds();renderStatus
 function adjustBridge(d){state.bridgeCount=Math.max(0,Math.min(20,state.bridgeCount+d));save();renderBridges();renderStatus();}
 function setFeedInterval(n){state.feedInterval=n;save();renderAll();}
 function saveNotes(){state.notes=document.getElementById('notesField').value;save();}
-function resetAll(){if(!confirm('Reset ALL data? This cannot be undone.'))return;state={startTime:'01:15',actuals:{},bridgeCount:0,feedInterval:40,feeds:[],notes:''};buildFeeds(false);document.getElementById('startTime').value='01:15';save();renderAll();}
-
-function switchTab(name,el){
-  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById('tab-'+name).classList.add('active');
-  el.classList.add('active');
-  if(name==='report')renderReport();
-  if(name==='status')renderStatus();
-}
-
-function renderAll(){
-  renderMilestones();renderFeeds();renderStatus();renderBridges();
-  document.getElementById('btn40').className='itbtn'+(state.feedInterval===40?' active':'');
-  document.getElementById('btn30').className='itbtn'+(state.feedInterval===30?' active':'');
-}
-
-load();
-document.getElementById('startTime').value=state.startTime;
-if(!state.feeds||state.feeds.length===0)buildFeeds(false);
-renderAll();
+function resetAll(){if(!confirm('Reset ALL data? Cannot be undone.'))return;state={startTime:'01:15',actuals:{},bridgeCount:0,feedInterval:40,feeds:[],notes:''};buildFeeds(false);document.getElementById('startTime').value='01:15';save();renderAll();}
+function switchTab(name,el){document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.getElementById('tab-'+name).classList.add('active');el.classList.add('active');if(name==='report')renderReport();if(name==='status')renderStatus();}
+function renderAll(){renderMilestones();renderFeeds();renderStatus();renderBridges();document.getElementById('btn40').className='itbtn'+(state.feedInterval===40?' active':'');document.getElementById('btn30').className='itbtn'+(state.feedInterval===30?' active':'');}
+load();document.getElementById('startTime').value=state.startTime;if(!state.feeds||state.feeds.length===0)buildFeeds(false);renderAll();
 </script>
 </body>
 </html>
