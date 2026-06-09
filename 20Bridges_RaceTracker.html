@@ -171,6 +171,7 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
 <!-- VIEWER TABS -->
 <div id="viewerTabs" class="tabs" style="display:none;">
   <div class="tab active" onclick="switchTab('live',this)">👁 Live</div>
+  <div class="tab" onclick="switchTab('milestones',this)">Miles</div>
   <div class="tab" onclick="switchTab('vmap',this)">🗺 Map</div>
   <div class="tab" onclick="switchTab('vnyow',this)">📡 NYOW</div>
   <div class="tab" onclick="switchTab('vlinks',this)">🔗 Links</div>
@@ -202,20 +203,14 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
   <div class="warn-box">⚠️ Must exit Hudson before <b>6:41 AM</b> · Cannot enter East River before <b>4:28 AM</b></div>
   <div class="note-box">🌅 Sunrise 5:24 AM · 🚢 Pier 25 departs 12:15 AM · ☔ Rain date Jun 17 ~2:00 AM</div>
 
-  <!-- Water Temp Log -->
-  <div class="wt-log">
-    <h2>💧 Water Temp Log</h2>
-    <div class="wt-input-row">
-      <input type="number" id="wtInput" class="wt-input" placeholder="e.g. 72" step="0.1">
-      <select id="wtUnit" class="wt-unit">
-        <option value="F">°F</option>
-        <option value="C">°C</option>
-      </select>
-      <button class="btn-sm" id="fetchTempBtn" onclick="fetchWaterTemp()" title="Auto-fetch from NOAA Battery station">🌊 Fetch</button>
-      <button class="btn-sm btn-green" onclick="logWaterTemp()">Log</button>
+  <!-- Water Temp indicator -->
+  <div class="settings-row" style="justify-content:space-between;align-items:center;">
+    <div>
+      <div style="font-size:10px;color:#5070a0;text-transform:uppercase;letter-spacing:.06em;">🌡 Current Water Temp (The Battery)</div>
+      <div id="wtCurrentDisplay" style="font-size:24px;font-weight:700;color:#60c0e0;margin-top:3px;">—</div>
+      <div id="wtCurrentTime" style="font-size:10px;color:#3a5070;margin-top:1px;"></div>
     </div>
-    <div style="font-size:10px;color:#4a6080;margin-bottom:6px;">🌊 Fetch pulls live Battery temp from NOAA · override any value before logging</div>
-    <div id="wtList"><span style="color:#5070a0;font-size:12px;">No temps logged yet</span></div>
+    <button class="btn-sm" id="fetchTempStatusBtn" onclick="fetchWaterTempStatus()">🌊 Refresh</button>
   </div>
 
   <!-- Quick Links -->
@@ -335,7 +330,10 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
 
 <!-- ===== LIVE (VIEWER) ===== -->
 <div id="tab-live" class="panel">
-  <div class="note-box">Read-only view · Updates automatically when admin logs checkpoints</div>
+  <div class="note-box" style="display:flex;justify-content:space-between;align-items:center;">
+    <span>Read-only view · Updates automatically when admin logs checkpoints</span>
+    <button class="btn-sm" onclick="copyViewerUrl()" style="flex-shrink:0;margin-left:10px;">📋 Share</button>
+  </div>
   <div id="vproj-bar" class="proj-bar" style="display:none;">
     <div class="pf-label">Projected Finish</div>
     <div class="pf-time" id="vProjTime">—</div>
@@ -385,6 +383,10 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
     <a class="ext-link" href="https://www.nyopenwater.org/20-bridges-swim/" target="_blank"><span class="el-icon">🏊</span> 20 Bridges Results — NYOpenWater.org</a>
   </div>
   <div id="vlive-wt2" class="link-card" style="margin-top:4px;"></div>
+  <div class="link-card">
+    <h3>📋 Share This View</h3>
+    <button class="ext-link" onclick="copyViewerUrl()" style="cursor:pointer;border:none;width:100%;text-align:left;">📋 Copy viewer link to share with others</button>
+  </div>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -605,9 +607,14 @@ function renderBridges(){
 }
 
 function renderWaterTemps(){
-  const el=document.getElementById('wtList');if(!el)return;
-  if(!state.waterTemps||state.waterTemps.length===0){el.innerHTML='<span style="color:#5070a0;font-size:12px;">No temps logged yet</span>';return;}
-  el.innerHTML=state.waterTemps.map((w,i)=>`<div class="wt-list-item"><span style="color:#7090b0;">${w.time}</span><span style="font-weight:600;color:#60c0e0;">${w.temp}°${w.unit}</span><button class="btn-sm btn-danger" onclick="deleteWaterTemp(${i})" style="font-size:10px;padding:1px 5px;">✕</button></div>`).join('');
+  const disp=document.getElementById('wtCurrentDisplay');
+  const ts=document.getElementById('wtCurrentTime');
+  if(!state.waterTemps||state.waterTemps.length===0){
+    if(disp)disp.textContent='—';if(ts)ts.textContent='';return;
+  }
+  const last=state.waterTemps[state.waterTemps.length-1];
+  if(disp)disp.textContent=`${last.temp}°${last.unit}`;
+  if(ts)ts.textContent=`as of ${last.time}`;
 }
 
 function renderViewerWaterTemps(){
@@ -668,43 +675,25 @@ function saveNotes(){state.notes=document.getElementById('notesField').value;sav
 function resetAll(){if(!confirm('Reset ALL data? Cannot be undone.'))return;state={startTime:'01:15',actuals:{},bridgeCount:0,feedInterval:40,feeds:[],notes:'',waterTemps:[],photos:{}};buildFeeds(false);document.getElementById('startTime').value='01:15';save();renderAll();}
 
 // ---- Water temp ----
-async function fetchWaterTemp(){
-  const btn=document.getElementById('fetchTempBtn');
-  if(btn){btn.textContent='Fetching…';btn.disabled=true;}
+async function fetchWaterTempStatus(){
+  const btn=document.getElementById('fetchTempStatusBtn');
+  if(btn){btn.textContent='…';btn.disabled=true;}
   try{
-    // NOAA Battery station 8518750, last 1 hour of water temperature, English units
     const url='https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?station=8518750&product=water_temperature&time_zone=lst_ldt&units=english&application=race_tracker&format=json&range=1';
-    const res=await fetch(url);
-    const data=await res.json();
+    const res=await fetch(url);const data=await res.json();
     if(data.data&&data.data.length>0){
-      const latest=data.data[data.data.length-1];
-      const tempF=parseFloat(latest.v);
-      const inp=document.getElementById('wtInput');
-      if(inp)inp.value=tempF.toFixed(1);
-      // Make sure unit is set to F
-      const unitSel=document.getElementById('wtUnit');
-      if(unitSel)unitSel.value='F';
-      if(btn){btn.textContent='🌊 Fetch ✓';setTimeout(()=>{btn.textContent='🌊 Fetch';btn.disabled=false;},2500);}
-    }else{
-      throw new Error('No NOAA data returned');
+      const tempF=parseFloat(data.data[data.data.length-1].v);
+      const n=new Date(),t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+      if(!state.waterTemps)state.waterTemps=[];
+      state.waterTemps.push({time:t,temp:tempF.toFixed(1),unit:'F'});
+      save();renderWaterTemps();renderViewerWaterTemps();
     }
+    if(btn){btn.textContent='🌊 Refresh';btn.disabled=false;}
   }catch(e){
-    console.warn('Water temp fetch failed:',e);
-    if(btn){btn.textContent='Failed – try again';setTimeout(()=>{btn.textContent='🌊 Fetch';btn.disabled=false;},2500);}
+    console.warn('Water temp fetch:',e);
+    if(btn){btn.textContent='Failed';setTimeout(()=>{btn.textContent='🌊 Refresh';btn.disabled=false;},2000);}
   }
 }
-
-function logWaterTemp(){
-  const val=parseFloat(document.getElementById('wtInput').value);
-  if(isNaN(val))return;
-  const unit=document.getElementById('wtUnit').value;
-  const n=new Date(),t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
-  if(!state.waterTemps)state.waterTemps=[];
-  state.waterTemps.push({time:t,temp:val,unit});
-  document.getElementById('wtInput').value='';
-  save();renderWaterTemps();
-}
-function deleteWaterTemp(i){state.waterTemps.splice(i,1);save();renderWaterTemps();}
 
 // ---- Photos ----
 let pendingPhotoId=null;
@@ -852,10 +841,12 @@ if(IS_VIEWER){
   document.getElementById('bannerSub').textContent='Joey Nizzardo · June 15, 2026 · Read-only live view';
   document.getElementById('adminTabs').style.display='none';
   document.getElementById('viewerTabs').style.display='flex';
-  // Hide all admin panels
-  ['status','milestones','bridges','feeds','map','nyow','report'].forEach(n=>{
+  // Hide admin-only panels (milestones is shared — kept accessible)
+  ['status','bridges','feeds','map','nyow','report'].forEach(n=>{
     const p=document.getElementById('tab-'+n);if(p){p.classList.remove('active');p.style.display='none';}
   });
+  // milestones: hide by default but keep in DOM (viewer tab will show it)
+  const mp=document.getElementById('tab-milestones');if(mp){mp.classList.remove('active');mp.style.display='none';}
   // Show viewer live panel
   const lp=document.getElementById('tab-live');if(lp){lp.style.display='';lp.classList.add('active');}
   renderViewerStatus();
