@@ -130,11 +130,24 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
 .fb-setup{background:#0a1a2a;border:1px solid #1a3a50;border-radius:6px;padding:10px 12px;font-size:11px;color:#5080a0;margin-top:10px;}
 .fb-setup b{color:#7090c0;}
 .photo-report{width:60px;height:60px;object-fit:cover;border-radius:4px;cursor:pointer;border:1px solid #2a3a60;}
+/* Feed note input */
+.feed-note-input{background:#050510;border:1px solid #1a2a40;border-radius:4px;color:#b0c0e0;padding:3px 5px;font-size:11px;width:100%;min-width:70px;}
+.feed-note-input:focus{outline:none;border-color:#4da8ff;}
+/* Pre-race checklist */
+.cl-section{background:#131328;border:1px solid #1e2a50;border-radius:8px;padding:12px 14px;margin-bottom:12px;}
+.cl-section h3{font-size:12px;color:#90b8e8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;border-bottom:1px solid #1e2a50;padding-bottom:6px;}
+.cl-item{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:1px solid #12122a;}
+.cl-item:last-child{border-bottom:none;}
+.cl-item input[type=checkbox]{width:18px;height:18px;margin-top:1px;cursor:pointer;flex-shrink:0;accent-color:#4da8ff;}
+.cl-item label{font-size:12px;color:#c0cce0;cursor:pointer;line-height:1.4;}
+.cl-item.cl-done label{text-decoration:line-through;color:#3a5070;}
+.cl-progress{font-size:11px;color:#5070a0;margin-bottom:8px;text-align:right;}
+.cl-reset-btn{margin-top:4px;}
 @media print{
   body{background:#fff;color:#000;padding:0;}
   .tabs,.tab,.btn-sm,.bridge-btns,.settings-row,.note-box,.warn-box,.notes-area,
   #tab-status,#tab-milestones,#tab-bridges,#tab-feeds,#tab-map,#tab-nyow,
-  #tab-live,#tab-vmap,#tab-vnyow,#tab-vlinks,#tab-about,
+  #tab-live,#tab-vmap,#tab-vnyow,#tab-vlinks,#tab-about,#tab-checklist,
   .panel:not(#tab-report):not(#tab-report-v){display:none!important;}
   #tab-report,#tab-report-v{display:block!important;padding:0;}
   .banner{background:#1a2e6b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
@@ -167,6 +180,7 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
   <div class="tab" onclick="switchTab('map',this)">🗺 Map</div>
   <div class="tab" onclick="switchTab('nyow',this)">📡 NYOW</div>
   <div class="tab" onclick="switchTab('report',this)">Report</div>
+  <div class="tab" onclick="switchTab('checklist',this)">✅ Pre-Race</div>
   <div class="tab" onclick="switchTab('about',this)">ℹ️</div>
 </div>
 
@@ -274,7 +288,7 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
   </div>
   <div class="next-feed-bar" id="nextFeedBar">Next feed: —</div>
   <table class="feed-table">
-    <thead><tr><th>#</th><th>Type</th><th>Est.</th><th>Actual</th><th>✓</th></tr></thead>
+    <thead><tr><th>#</th><th>Type</th><th>Est.</th><th>Actual</th><th>Notes</th><th>✓</th></tr></thead>
     <tbody id="feedBody"></tbody>
   </table>
   <div class="note-box" style="margin-top:10px;">Odd = 🥥 Coconut Water · Even = 🌿 Once Upon a Farm. Toggle interval then "Recalc →" to shift future feeds from last completed.</div>
@@ -297,6 +311,14 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
   <iframe class="nyow-frame" src="https://ultraswimming.org/track/NYOW" title="NYOW Live Tracker" allowfullscreen></iframe>
 </div>
 
+<!-- ===== PRE-RACE CHECKLIST (ADMIN) ===== -->
+<div id="tab-checklist" class="panel">
+  <div class="note-box">Check off each item before boarding. Tap any item to toggle. Progress saves automatically.</div>
+  <div id="cl-progress-bar" class="cl-progress"></div>
+  <div id="cl-body"></div>
+  <button class="btn-sm btn-danger cl-reset-btn" onclick="resetChecklist()">Reset Checklist</button>
+</div>
+
 <!-- ===== ABOUT ===== -->
 <div id="tab-about" class="panel">
   <div style="max-width:420px;margin:0 auto;">
@@ -307,15 +329,15 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
       <div style="background:#0a0a1a;border:1px solid #2a4a80;border-radius:7px;padding:14px;text-align:left;">
         <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a30;">
           <span style="color:#5070a0;font-size:12px;">Version</span>
-          <span style="color:#4da8ff;font-weight:700;font-size:12px;">2.5.3</span>
+          <span style="color:#4da8ff;font-weight:700;font-size:12px;">2.6.0</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a30;">
           <span style="color:#5070a0;font-size:12px;">Build date</span>
-          <span style="color:#e0e8ff;font-size:12px;">2026-06-10</span>
+          <span style="color:#e0e8ff;font-size:12px;">2026-06-11</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a30;">
           <span style="color:#5070a0;font-size:12px;">Build time</span>
-          <span style="color:#e0e8ff;font-size:12px;">21:45 EDT</span>
+          <span style="color:#e0e8ff;font-size:12px;">11:45 EDT</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:5px 0;">
           <span style="color:#5070a0;font-size:12px;">Feed rows</span>
@@ -328,7 +350,8 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
       <div>✓ Firebase real-time sync (Admin → Viewer)</div>
       <div>✓ Accurate in-water route (101 waypoints)</div>
       <div>✓ NOAA water temp auto-fetch on milestone log</div>
-      <div>✓ 20 feed rows</div>
+      <div>✓ 20 feed rows with per-feed notes</div>
+      <div>✓ Pre-race checklist (20 items, 3 stages)</div>
       <div>✓ Photo capture per milestone</div>
       <div>✓ Viewer share link</div>
     </div>
@@ -355,7 +378,7 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
   </div>
   <div class="report-section">
     <h3>Feed Log</h3>
-    <table class="r-table"><thead><tr><th>#</th><th>Type</th><th>Est.</th><th>Actual</th><th>Done</th></tr></thead>
+    <table class="r-table"><thead><tr><th>#</th><th>Type</th><th>Est.</th><th>Actual</th><th>Notes</th><th>Done</th></tr></thead>
     <tbody id="rpt-feeds"></tbody></table>
   </div>
   <div class="report-section">
@@ -598,7 +621,30 @@ const MS_ROUTE_IDX={
 };
 
 const EST_TOTAL=359, MAX_FEEDS=20;
-let state={startTime:'01:15',actuals:{},bridgeCount:0,feedInterval:40,feeds:[],notes:'',waterTemps:[],photos:{},milestoneTemps:{}};
+let state={startTime:'01:15',actuals:{},bridgeCount:0,feedInterval:40,feeds:[],notes:'',waterTemps:[],photos:{},milestoneTemps:{},checklist:{}};
+
+const CHECKLIST=[
+  {id:'c01',section:'Day Before — Sunday',text:'Carb powder mixed at ½ strength — sealed bottle in cooler'},
+  {id:'c02',section:'Day Before — Sunday',text:'Coconut water: 10+ bottles packed in cooler'},
+  {id:'c03',section:'Day Before — Sunday',text:'Once Upon a Farm packs: 8+ packed'},
+  {id:'c04',section:'Day Before — Sunday',text:'Gu espresso gels (2) in boat bag'},
+  {id:'c05',section:'Day Before — Sunday',text:'Regular Coke (2 cans) packed'},
+  {id:'c06',section:'Day Before — Sunday',text:'Medical kit: Aleve, Bonine, Immodium'},
+  {id:'c07',section:'Day Before — Sunday',text:'Feed Ziploc #2 (kayaker copy) printed'},
+  {id:'c08',section:'Day Before — Sunday',text:'Course map + race materials Ziploc #1 printed'},
+  {id:'c09',section:'Day Before — Sunday',text:'Large flashlight for kayaker\'s hull'},
+  {id:'c10',section:'Day Before — Sunday',text:'Dry bag packed (clothes, towel, bathing suit)'},
+  {id:'c11',section:'At Dock — Midnight Sunday',text:'ID on person'},
+  {id:'c12',section:'At Dock — Midnight Sunday',text:'Phone charged + backup battery in bag'},
+  {id:'c13',section:'At Dock — Midnight Sunday',text:'Tracker bookmarked: ultraswimming.org/track/NYOW (Joey = #3)'},
+  {id:'c14',section:'At Dock — Midnight Sunday',text:'Kayaker briefed — feed Ziploc #2 delivered'},
+  {id:'c15',section:'At Dock — Midnight Sunday',text:'Large flashlight handed to kayaker'},
+  {id:'c16',section:'At Dock — Midnight Sunday',text:'All feeds loaded on boat (cooler + OUF + carb bottle)'},
+  {id:'c17',section:'At Dock — Midnight Sunday',text:'Bonine taken ~1 hr before boarding'},
+  {id:'c18',section:'Pre-Swim — At Water',text:'Joey anti-chafe applied'},
+  {id:'c19',section:'Pre-Swim — At Water',text:'Observer log confirmed with Erik Messinger'},
+  {id:'c20',section:'Pre-Swim — At Water',text:'Joey\'s kayaker identified and ready'},
+];
 let fbRef=null, adminMap=null, viewerMap=null, adminProgressMarker=null, viewerProgressMarker=null;
 
 // ---- Utilities ----
@@ -617,7 +663,7 @@ function variance(id,estEl){const a=actElapsed(id);if(a===null||estEl===0)return
 function chip(v){if(v===null)return'<span class="chip grey">—</span>';const s=v>=0?'+':'';if(v<-5)return`<span class="chip green">${s}${v.toFixed(1)}%</span>`;if(v>5)return`<span class="chip red">${s}${v.toFixed(1)}%</span>`;return`<span class="chip yellow">${s}${v.toFixed(1)}%</span>`;}
 
 // ---- Feed functions ----
-function buildFeeds(keep){const sm=t2m(state.startTime),old=state.feeds||[],feeds=[];let t=sm+state.feedInterval;for(let i=0;i<MAX_FEEDS;i++){const o=old[i]||{};feeds.push({estTime:m2t(t),actualTime:keep&&o.actualTime?o.actualTime:'',done:keep?(o.done||false):false,type:i%2===0?'CW':'OUF'});t+=state.feedInterval;}state.feeds=feeds;}
+function buildFeeds(keep){const sm=t2m(state.startTime),old=state.feeds||[],feeds=[];let t=sm+state.feedInterval;for(let i=0;i<MAX_FEEDS;i++){const o=old[i]||{};feeds.push({estTime:m2t(t),actualTime:keep&&o.actualTime?o.actualTime:'',done:keep?(o.done||false):false,type:i%2===0?'CW':'OUF',notes:keep&&o.notes?o.notes:''});t+=state.feedInterval;}state.feeds=feeds;}
 function recalcFeeds(){let li=-1,lm=t2m(state.startTime);state.feeds.forEach((f,i)=>{if(f.done&&f.actualTime){li=i;lm=t2m(f.actualTime);}});for(let i=li+1;i<state.feeds.length;i++)state.feeds[i].estTime=m2t(lm+(i-li)*state.feedInterval);save();renderFeeds();}
 
 // ---- Render functions ----
@@ -656,7 +702,7 @@ function renderFeeds(){
   state.feeds.forEach((f,i)=>{
     const badge=f.type==='CW'?'<span class="cw-badge">🥥 CW</span>':'<span class="ouf-badge">🌿 OUF</span>';
     const tr=document.createElement('tr');if(f.done)tr.className='feed-done-row';
-    tr.innerHTML=`<td style="font-weight:700;color:#8090c0;">${i+1}</td><td>${badge}</td><td style="color:#8090b0;">${fmt(f.estTime)}</td><td><input type="time" value="${f.actualTime||''}" oninput="onFeedTime(${i},this.value)"></td><td><input type="checkbox" ${f.done?'checked':''} onchange="onFeedDone(${i},this.checked)" style="width:18px;height:18px;cursor:pointer;"></td>`;
+    tr.innerHTML=`<td style="font-weight:700;color:#8090c0;">${i+1}</td><td>${badge}</td><td style="color:#8090b0;">${fmt(f.estTime)}</td><td><input type="time" value="${f.actualTime||''}" oninput="onFeedTime(${i},this.value)"></td><td><input class="feed-note-input" type="text" value="${f.notes||''}" placeholder="e.g. +carb ok" oninput="onFeedNote(${i},this.value)"></td><td><input type="checkbox" ${f.done?'checked':''} onchange="onFeedDone(${i},this.checked)" style="width:18px;height:18px;cursor:pointer;"></td>`;
     tb.appendChild(tr);if(!f.done&&!nf)nf=f;
   });
   const nfb=document.getElementById('nextFeedBar');if(nfb)nfb.innerHTML=nf?`Next feed: <span>${fmt(nf.estTime)}</span> — ${nf.type==='CW'?'🥥 Coconut Water':'🌿 Once Upon a Farm'}`:'✅ All feeds completed!';
@@ -746,7 +792,7 @@ function renderReport(){
   // Legs
   const lb=document.getElementById('rpt-legs');if(lb){lb.innerHTML='';const logged=MS.filter(ms=>state.actuals[ms.id]);for(let i=1;i<logged.length;i++){const a=logged[i],b=logged[i-1],estLeg=a.elMin-b.elMin,aAEl=actElapsed(a.id),bAEl=actElapsed(b.id),actLeg=(aAEl!==null&&bAEl!==null)?aAEl-bAEl:null,lv=(actLeg!==null&&estLeg>0)?((actLeg-estLeg)/estLeg)*100:null,mDiff=(a.miles!==null&&b.miles!==null)?(a.miles-b.miles).toFixed(1):null,tr=document.createElement('tr');tr.innerHTML=`<td>${b.name} → ${a.name}</td><td style="text-align:center;">${mDiff||'—'}</td><td style="text-align:center;">${fmtEl(estLeg)}</td><td style="text-align:center;font-weight:600;">${actLeg!==null?fmtEl(actLeg):'—'}</td><td style="text-align:center;">${chip(lv)}</td>`;lb.appendChild(tr);}if(logged.length<2)lb.innerHTML='<tr><td colspan="5" style="text-align:center;color:#5070a0;padding:10px;">No segments yet</td></tr>';}
   // Feeds
-  const fb=document.getElementById('rpt-feeds');if(fb){fb.innerHTML='';(state.feeds||[]).forEach((f,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${i+1}</td><td>${f.type==='CW'?'🥥 Coconut Water':'🌿 Once Upon a Farm'}</td><td>${fmt(f.estTime)}</td><td style="font-weight:${f.actualTime?'600':'400'}">${f.actualTime?fmt(f.actualTime):'—'}</td><td>${f.done?'✅':'—'}</td>`;fb.appendChild(tr);});}
+  const fb=document.getElementById('rpt-feeds');if(fb){fb.innerHTML='';(state.feeds||[]).forEach((f,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${i+1}</td><td>${f.type==='CW'?'🥥 Coconut Water':'🌿 Once Upon a Farm'}</td><td>${fmt(f.estTime)}</td><td style="font-weight:${f.actualTime?'600':'400'}">${f.actualTime?fmt(f.actualTime):'—'}</td><td style="font-size:11px;color:#9090b0;">${f.notes||'—'}</td><td>${f.done?'✅':'—'}</td>`;fb.appendChild(tr);});}
   const nf2=document.getElementById('notesField');if(nf2)nf2.value=state.notes||'';
   buildExport();
 }
@@ -781,10 +827,11 @@ function onActual(id,v){if(v)state.actuals[id]=v;else delete state.actuals[id];i
 function autoBridge(id){const ms=MS.find(m=>m.id===id);if(ms&&ms.bridge){const n=MS.filter(m=>m.bridge&&state.actuals[m.id]).length;if(state.bridgeCount<n)state.bridgeCount=n;}}
 function onFeedTime(i,v){state.feeds[i].actualTime=v;save();renderFeeds();renderStatus();}
 function onFeedDone(i,c){state.feeds[i].done=c;save();renderFeeds();renderStatus();}
+function onFeedNote(i,v){state.feeds[i].notes=v;save();}
 function adjustBridge(d){state.bridgeCount=Math.max(0,Math.min(20,state.bridgeCount+d));save();renderBridges();renderStatus();}
 function setFeedInterval(n){state.feedInterval=n;save();renderAll();}
 function saveNotes(){state.notes=document.getElementById('notesField').value;save();}
-function resetAll(){if(!confirm('Reset ALL data? Cannot be undone.'))return;state={startTime:'01:15',actuals:{},bridgeCount:0,feedInterval:40,feeds:[],notes:'',waterTemps:[],photos:{}};buildFeeds(false);document.getElementById('startTime').value='01:15';save();renderAll();}
+function resetAll(){if(!confirm('Reset ALL data? Cannot be undone.'))return;state={startTime:'01:15',actuals:{},bridgeCount:0,feedInterval:40,feeds:[],notes:'',waterTemps:[],photos:{},milestoneTemps:{},checklist:{}};buildFeeds(false);document.getElementById('startTime').value='01:15';save();renderAll();}
 
 // ---- Water temp ----
 async function fetchWaterTempStatus(){
@@ -892,9 +939,46 @@ function switchTab(name,el){
   if(name==='report')renderReport();
   if(name==='status')renderStatus();
   if(name==='live')renderViewerStatus();
+  if(name==='checklist')renderChecklist();
   if(name==='map'){setTimeout(()=>{initAdminMap();adminMap.invalidateSize();updateMapProgress(adminMap,adminMarkerRef);},120);}
   if(name==='vmap'){setTimeout(()=>{initViewerMap();viewerMap.invalidateSize();updateMapProgress(viewerMap,viewerMarkerRef);},120);}
 }
+
+// ---- Checklist ----
+function renderChecklist(){
+  if(!state.checklist)state.checklist={};
+  const body=document.getElementById('cl-body');if(!body)return;
+  const total=CHECKLIST.length,done=CHECKLIST.filter(c=>state.checklist[c.id]).length;
+  const pb=document.getElementById('cl-progress-bar');
+  if(pb)pb.textContent=`${done} / ${total} complete`;
+  // Group by section
+  const sections={};
+  CHECKLIST.forEach(c=>{if(!sections[c.section])sections[c.section]=[];sections[c.section].push(c);});
+  let html='';
+  Object.keys(sections).forEach(sec=>{
+    html+=`<div class="cl-section"><h3>${sec}</h3>`;
+    sections[sec].forEach(c=>{
+      const checked=!!state.checklist[c.id];
+      html+=`<div class="cl-item${checked?' cl-done':''}" id="clrow-${c.id}">
+        <input type="checkbox" id="cl-${c.id}" ${checked?'checked':''} onchange="onChecklistItem('${c.id}',this.checked)">
+        <label for="cl-${c.id}">${c.text}</label>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  body.innerHTML=html;
+}
+function onChecklistItem(id,checked){
+  if(!state.checklist)state.checklist={};
+  state.checklist[id]=checked;
+  save();
+  // Update row style without full re-render (faster feel)
+  const row=document.getElementById('clrow-'+id);
+  if(row){if(checked)row.classList.add('cl-done');else row.classList.remove('cl-done');}
+  const total=CHECKLIST.length,done=CHECKLIST.filter(c=>state.checklist[c.id]).length;
+  const pb=document.getElementById('cl-progress-bar');if(pb)pb.textContent=`${done} / ${total} complete`;
+}
+function resetChecklist(){if(!confirm('Reset checklist? All checks will be cleared.'))return;state.checklist={};save();renderChecklist();}
 
 // ---- Viewer URL ----
 function copyViewerUrl(){
@@ -943,6 +1027,7 @@ load();
 if(!state.waterTemps)state.waterTemps=[];
 if(!state.photos)state.photos={};
 if(!state.milestoneTemps)state.milestoneTemps={};
+if(!state.checklist)state.checklist={};
 
 // Set viewer URL display
 const vuEl=document.getElementById('viewerUrl');
