@@ -133,7 +133,7 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
   body{background:#fff;color:#000;padding:0;}
   .tabs,.tab,.btn-sm,.bridge-btns,.settings-row,.note-box,.warn-box,.notes-area,
   #tab-status,#tab-milestones,#tab-bridges,#tab-feeds,#tab-map,#tab-nyow,
-  #tab-live,#tab-vmap,#tab-vnyow,#tab-vlinks,
+  #tab-live,#tab-vmap,#tab-vnyow,#tab-vlinks,#tab-about,
   .panel:not(#tab-report):not(#tab-report-v){display:none!important;}
   #tab-report,#tab-report-v{display:block!important;padding:0;}
   .banner{background:#1a2e6b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
@@ -166,6 +166,7 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
   <div class="tab" onclick="switchTab('map',this)">🗺 Map</div>
   <div class="tab" onclick="switchTab('nyow',this)">📡 NYOW</div>
   <div class="tab" onclick="switchTab('report',this)">Report</div>
+  <div class="tab" onclick="switchTab('about',this)">ℹ️</div>
 </div>
 
 <!-- VIEWER TABS -->
@@ -175,6 +176,7 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
   <div class="tab" onclick="switchTab('vmap',this)">🗺 Map</div>
   <div class="tab" onclick="switchTab('vnyow',this)">📡 NYOW</div>
   <div class="tab" onclick="switchTab('vlinks',this)">🔗 Links</div>
+  <div class="tab" onclick="switchTab('about',this)">ℹ️</div>
 </div>
 
 <!-- ===== STATUS (ADMIN) ===== -->
@@ -292,6 +294,44 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
   </div>
   <div class="note-box" style="margin-bottom:6px;">Live embed below (loads if allowed by the site). If blank, use the link above.</div>
   <iframe class="nyow-frame" src="https://ultraswimming.org/track/NYOW" title="NYOW Live Tracker" allowfullscreen></iframe>
+</div>
+
+<!-- ===== ABOUT ===== -->
+<div id="tab-about" class="panel">
+  <div style="max-width:420px;margin:0 auto;">
+    <div style="background:#131328;border:1px solid #1e2a50;border-radius:10px;padding:20px 18px;margin-bottom:14px;text-align:center;">
+      <div style="font-size:36px;margin-bottom:8px;">🌊</div>
+      <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:4px;">20 Bridges Race Tracker</div>
+      <div style="font-size:12px;color:#7090c0;margin-bottom:18px;">Joey Nizzardo — June 15, 2026</div>
+      <div style="background:#0a0a1a;border:1px solid #2a4a80;border-radius:7px;padding:14px;text-align:left;">
+        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a30;">
+          <span style="color:#5070a0;font-size:12px;">Version</span>
+          <span style="color:#4da8ff;font-weight:700;font-size:12px;">2.5.0</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a30;">
+          <span style="color:#5070a0;font-size:12px;">Build date</span>
+          <span style="color:#e0e8ff;font-size:12px;">2026-06-10</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a30;">
+          <span style="color:#5070a0;font-size:12px;">Build time</span>
+          <span style="color:#e0e8ff;font-size:12px;">21:45 EDT</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;">
+          <span style="color:#5070a0;font-size:12px;">Feed rows</span>
+          <span style="color:#e0e8ff;font-size:12px;">20</span>
+        </div>
+      </div>
+    </div>
+    <div style="background:#131328;border:1px solid #1e2a50;border-radius:10px;padding:14px 16px;font-size:12px;color:#7090c0;line-height:1.7;">
+      <div style="color:#90b8e8;font-weight:600;margin-bottom:6px;">What's in this build</div>
+      <div>✓ Firebase real-time sync (Admin → Viewer)</div>
+      <div>✓ Accurate in-water route (101 waypoints)</div>
+      <div>✓ NOAA water temp auto-fetch on milestone log</div>
+      <div>✓ 20 feed rows</div>
+      <div>✓ Photo capture per milestone</div>
+      <div>✓ Viewer share link</div>
+    </div>
+  </div>
 </div>
 
 <!-- ===== REPORT (ADMIN) ===== -->
