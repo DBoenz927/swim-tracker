@@ -306,7 +306,7 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
       <div style="background:#0a0a1a;border:1px solid #2a4a80;border-radius:7px;padding:14px;text-align:left;">
         <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a30;">
           <span style="color:#5070a0;font-size:12px;">Version</span>
-          <span style="color:#4da8ff;font-weight:700;font-size:12px;">2.5.0</span>
+          <span style="color:#4da8ff;font-weight:700;font-size:12px;">2.5.1</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a30;">
           <span style="color:#5070a0;font-size:12px;">Build date</span>
@@ -616,7 +616,7 @@ function variance(id,estEl){const a=actElapsed(id);if(a===null||estEl===0)return
 function chip(v){if(v===null)return'<span class="chip grey">—</span>';const s=v>=0?'+':'';if(v<-5)return`<span class="chip green">${s}${v.toFixed(1)}%</span>`;if(v>5)return`<span class="chip red">${s}${v.toFixed(1)}%</span>`;return`<span class="chip yellow">${s}${v.toFixed(1)}%</span>`;}
 
 // ---- Feed functions ----
-function buildFeeds(keep){const sm=t2m(state.startTime),old=state.feeds||[],feeds=[];let t=sm+state.feedInterval;for(let i=0;i<MAX_FEEDS;i++){const o=old[i]||{};feeds.push({estTime:m2t(t),actualTime:keep&&o.actualTime?o.actualTime:'',done:keep?(o.done||false):false,type:i%2===0?'CW':'OUF'});t+=state.feedInterval;if(t-sm>EST_TOTAL+60)break;}state.feeds=feeds;}
+function buildFeeds(keep){const sm=t2m(state.startTime),old=state.feeds||[],feeds=[];let t=sm+state.feedInterval;for(let i=0;i<MAX_FEEDS;i++){const o=old[i]||{};feeds.push({estTime:m2t(t),actualTime:keep&&o.actualTime?o.actualTime:'',done:keep?(o.done||false):false,type:i%2===0?'CW':'OUF'});t+=state.feedInterval;}state.feeds=feeds;}
 function recalcFeeds(){let li=-1,lm=t2m(state.startTime);state.feeds.forEach((f,i)=>{if(f.done&&f.actualTime){li=i;lm=t2m(f.actualTime);}});for(let i=li+1;i<state.feeds.length;i++)state.feeds[i].estTime=m2t(lm+(i-li)*state.feedInterval);save();renderFeeds();}
 
 // ---- Render functions ----
