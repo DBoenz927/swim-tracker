@@ -306,7 +306,7 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
       <div style="background:#0a0a1a;border:1px solid #2a4a80;border-radius:7px;padding:14px;text-align:left;">
         <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a30;">
           <span style="color:#5070a0;font-size:12px;">Version</span>
-          <span style="color:#4da8ff;font-weight:700;font-size:12px;">2.5.1</span>
+          <span style="color:#4da8ff;font-weight:700;font-size:12px;">2.5.2</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a30;">
           <span style="color:#5070a0;font-size:12px;">Build date</span>
@@ -965,7 +965,7 @@ if(IS_VIEWER){
 }else{
   // Admin mode
   document.getElementById('startTime').value=state.startTime;
-  if(!state.feeds||state.feeds.length===0)buildFeeds(false);
+  if(!state.feeds||state.feeds.length<MAX_FEEDS)buildFeeds(true);
   renderAll();
   initFirebase();
 }
