@@ -807,8 +807,8 @@ function copyExport(){const s=buildExport();navigator.clipboard.writeText(s).the
 
 // ---- Event handlers ----
 function onStartChange(){state.startTime=document.getElementById('startTime').value;buildFeeds(true);save();renderAll();}
-function setNow(id){const n=new Date(),t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');document.getElementById(id).value=t;state.startTime=t;buildFeeds(true);save();renderAll();}
-function msNow(id){const n=new Date(),t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');state.actuals[id]=t;autoBridge(id);save();renderAll();updateAllMaps();fetchMilestoneTemp(id);}
+function setNow(id){const n=new Date(),t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');document.getElementById(id).value=t;state.startTime=t;state.actuals[0]=t;buildFeeds(true);save();renderAll();}
+function msNow(id){const n=new Date(),t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');state.actuals[id]=t;if(id===0){state.startTime=t;const si=document.getElementById('startTime');if(si)si.value=t;buildFeeds(true);}autoBridge(id);save();renderAll();updateAllMaps();fetchMilestoneTemp(id);}
 
 async function fetchMilestoneTemp(id){
   try{
@@ -828,7 +828,7 @@ function onMilestoneTemp(id,v){
   if(v)state.milestoneTemps[id]=v;else delete state.milestoneTemps[id];
   save();
 }
-function onActual(id,v){if(v)state.actuals[id]=v;else delete state.actuals[id];if(v)autoBridge(id);save();renderStatus();renderBridges();updateAllMaps();}
+function onActual(id,v){if(v)state.actuals[id]=v;else delete state.actuals[id];if(id===0){state.startTime=v||'01:15';const si=document.getElementById('startTime');if(si)si.value=state.startTime;buildFeeds(true);}if(v)autoBridge(id);save();renderStatus();renderBridges();updateAllMaps();}
 function autoBridge(id){const ms=MS.find(m=>m.id===id);if(ms&&ms.bridge){const n=MS.filter(m=>m.bridge&&state.actuals[m.id]).length;if(state.bridgeCount<n)state.bridgeCount=n;}}
 function onFeedTime(i,v){state.feeds[i].actualTime=v;save();renderFeeds();renderStatus();}
 function onFeedDone(i,c){state.feeds[i].done=c;save();renderFeeds();renderStatus();}
