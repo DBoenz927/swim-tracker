@@ -213,6 +213,16 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
     <div class="stat-card" id="sc-miles"><div class="val" id="sv-miles">—</div><div class="lbl">Miles</div></div>
   </div>
   <div class="stat-row">
+    <div class="stat-card" id="sc-speed" style="flex:1;">
+      <div class="val" id="sv-speed">—</div>
+      <div class="lbl" style="display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;">
+        <span>Avg Speed</span>
+        <button onclick="toggleSpeedUnit()" style="background:#1e3a70;border:1px solid #2a5090;color:#90c0ff;padding:1px 7px;border-radius:4px;font-size:9px;cursor:pointer;letter-spacing:.04em;line-height:1.5;">kn ⇄ mph</button>
+        <span id="speedUnitLbl" style="color:#4da8ff;font-size:9px;">knots</span>
+      </div>
+    </div>
+  </div>
+  <div class="stat-row">
     <div class="stat-card"><div class="val" id="sv-bridges">0</div><div class="lbl">Bridges</div></div>
     <div class="stat-card"><div class="val" id="sv-feeds">0</div><div class="lbl">Feeds</div></div>
     <div class="stat-card"><div class="val" id="sv-next-feed">—</div><div class="lbl">Next Feed</div></div>
@@ -330,7 +340,7 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
       <div style="background:#0a0a1a;border:1px solid #2a4a80;border-radius:7px;padding:14px;text-align:left;">
         <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a30;">
           <span style="color:#5070a0;font-size:12px;">Version</span>
-          <span style="color:#4da8ff;font-weight:700;font-size:12px;">2.6.0</span>
+          <span style="color:#4da8ff;font-weight:700;font-size:12px;">2.7.0</span>
         </div>
         <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a30;">
           <span style="color:#5070a0;font-size:12px;">Build date</span>
@@ -354,6 +364,8 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
       <div>✓ 20 feed rows with per-feed notes</div>
       <div>✓ Pre-race checklist (20 items, 3 stages)</div>
       <div>✓ Photo capture per milestone</div>
+      <div>✓ Avg speed card with kn ⇄ mph toggle</div>
+      <div>✓ Speed history tracked at each checkpoint</div>
       <div>✓ Viewer share link</div>
     </div>
   </div>
@@ -376,6 +388,11 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
     <h3>Section Analysis (leg-by-leg pace)</h3>
     <table class="r-table"><thead><tr><th>Leg</th><th>Mi</th><th>Est.</th><th>Actual</th><th>±</th></tr></thead>
     <tbody id="rpt-legs"></tbody></table>
+  </div>
+  <div class="report-section">
+    <h3>Speed History (cumulative avg at each checkpoint)</h3>
+    <table class="r-table"><thead><tr><th>Checkpoint</th><th>Miles</th><th>Elapsed</th><th>Avg kn</th><th>Avg mph</th></tr></thead>
+    <tbody id="rpt-speed"></tbody></table>
   </div>
   <div class="report-section">
     <h3>Feed Log</h3>
@@ -409,6 +426,14 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;ma
     <div class="live-card" id="vlc-pace"><div class="lv" id="vlv-pace">—</div><div class="ll">Pace %</div></div>
     <div class="live-card" id="vlc-miles"><div class="lv" id="vlv-miles">—</div><div class="ll">Miles</div></div>
     <div class="live-card"><div class="lv" id="vlv-bridges">0</div><div class="ll">Bridges</div></div>
+    <div class="live-card" id="vlc-speed" style="grid-column:span 2;">
+      <div class="lv" id="vlv-speed">—</div>
+      <div class="ll" id="vlv-speed-lbl" style="display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;">
+        <span>Avg Speed</span>
+        <button onclick="toggleSpeedUnit()" style="background:#1e3a70;border:1px solid #2a5090;color:#90c0ff;padding:1px 7px;border-radius:4px;font-size:9px;cursor:pointer;letter-spacing:.04em;line-height:1.5;">kn ⇄ mph</button>
+        <span id="vSpeedUnitLbl" style="color:#4da8ff;font-size:9px;">knots</span>
+      </div>
+    </div>
   </div>
   <div id="vlast-ms" class="note-box" style="font-size:13px;color:#c8d8f0;"></div>
   <div class="warn-box">⚠️ Must exit Hudson before <b>6:41 AM</b> · Cannot enter East River before <b>4:28 AM</b></div>
@@ -626,7 +651,7 @@ const MS_ROUTE_IDX={
 };
 
 const EST_TOTAL=359, MAX_FEEDS=20;
-let state={startTime:'01:15',actuals:{},bridgeCount:0,feedInterval:40,feeds:[],notes:'',waterTemps:[],photos:{},milestoneTemps:{},checklist:{}};
+let state={startTime:'01:15',actuals:{},bridgeCount:0,feedInterval:40,feeds:[],notes:'',waterTemps:[],photos:{},milestoneTemps:{},checklist:{},speedUnit:'kn',speedHistory:[]};
 
 const CHECKLIST=[
   {id:'c01',section:'Day Before — Sunday',text:'Carb powder mixed at ½ strength — sealed bottle in cooler'},
@@ -737,7 +762,7 @@ function renderStatus(){
     const pd=document.getElementById('projFinishDelta');if(pd){pd.textContent=delta>1?`▲ ${d} min behind est.`:delta<-1?`▼ ${d} min ahead of est.`:'Right on schedule';pd.style.color=delta>5?'#f44336':delta<-5?'#4caf50':'#ffb300';}
     const pb=document.getElementById('proj-finish-bar');if(pb)pb.style.display='block';
   }
-  renderWaterTemps();
+  renderWaterTemps();renderSpeedCards();
 }
 
 function renderViewerStatus(){
@@ -760,7 +785,7 @@ function renderViewerStatus(){
     const vpb=document.getElementById('vproj-bar');if(vpb)vpb.style.display='block';
   }
   // Water temps in viewer
-  renderViewerWaterTemps();
+  renderViewerWaterTemps();renderSpeedCards();
 }
 
 function renderBridges(){
@@ -796,19 +821,21 @@ function renderReport(){
   const msb=document.getElementById('rpt-ms');if(msb){msb.innerHTML='';MS.forEach(ms=>{const a=state.actuals[ms.id]||null,aEl=a?actElapsed(ms.id):null,v=a&&ms.elMin>0?variance(ms.id,ms.elMin):null,ph=state.photos&&state.photos[ms.id]?`<img class="photo-report" src="${state.photos[ms.id]}" onclick="viewPhoto(${ms.id})">`:'—',wt=(state.milestoneTemps&&state.milestoneTemps[ms.id])||'—';const tr=document.createElement('tr');tr.innerHTML=`<td>${ms.bridge?'🌉 ':ms.isFinish?'🏁 ':''}${ms.name}</td><td style="text-align:center;">${fmt(estClock(ms))}</td><td style="text-align:center;font-weight:${a?'600':'400'};color:${a?'':'#888'}">${a?fmt(a):'—'}</td><td style="text-align:center;color:#60c0e0;font-size:11px;">${wt}</td><td style="text-align:center;">${aEl!==null?fmtEl(aEl):'—'}</td><td style="text-align:center;">${chip(v)}</td><td style="text-align:center;">${ph}</td>`;msb.appendChild(tr);});}
   // Legs
   const lb=document.getElementById('rpt-legs');if(lb){lb.innerHTML='';const logged=MS.filter(ms=>state.actuals[ms.id]);for(let i=1;i<logged.length;i++){const a=logged[i],b=logged[i-1],estLeg=a.elMin-b.elMin,aAEl=actElapsed(a.id),bAEl=actElapsed(b.id),actLeg=(aAEl!==null&&bAEl!==null)?aAEl-bAEl:null,lv=(actLeg!==null&&estLeg>0)?((actLeg-estLeg)/estLeg)*100:null,mDiff=(a.miles!==null&&b.miles!==null)?(a.miles-b.miles).toFixed(1):null,tr=document.createElement('tr');tr.innerHTML=`<td>${b.name} → ${a.name}</td><td style="text-align:center;">${mDiff||'—'}</td><td style="text-align:center;">${fmtEl(estLeg)}</td><td style="text-align:center;font-weight:600;">${actLeg!==null?fmtEl(actLeg):'—'}</td><td style="text-align:center;">${chip(lv)}</td>`;lb.appendChild(tr);}if(logged.length<2)lb.innerHTML='<tr><td colspan="5" style="text-align:center;color:#5070a0;padding:10px;">No segments yet</td></tr>';}
+  // Speed history
+  const sb=document.getElementById('rpt-speed');if(sb){const sh=state.speedHistory||[];sb.innerHTML=sh.length>0?sh.map(h=>`<tr><td>${h.msName}</td><td style="text-align:center;">${h.miles.toFixed(1)}</td><td style="text-align:center;">${fmtEl(h.elMin)}</td><td style="text-align:center;font-weight:600;color:#4da8ff;">${h.speedKn.toFixed(2)}</td><td style="text-align:center;color:#7090b0;">${h.speedMph.toFixed(2)}</td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:#5070a0;padding:10px;">No checkpoints logged yet</td></tr>';}
   // Feeds
   const fb=document.getElementById('rpt-feeds');if(fb){fb.innerHTML='';(state.feeds||[]).forEach((f,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${i+1}</td><td>${f.type==='CW'?'🥥 Coconut Water':'🌿 Once Upon a Farm'}</td><td>${fmt(f.estTime)}</td><td style="font-weight:${f.actualTime?'600':'400'}">${f.actualTime?fmt(f.actualTime):'—'}</td><td style="font-size:11px;color:#9090b0;">${f.notes||'—'}</td><td>${f.done?'✅':'—'}</td>`;fb.appendChild(tr);});}
   const nf2=document.getElementById('notesField');if(nf2)nf2.value=state.notes||'';
   buildExport();
 }
 
-function buildExport(){const exp={event:'20 Bridges Swim Around Manhattan',swimmer:'Joey Nizzardo',date:'June 15 2026',startTime:state.startTime,bridgeCount:state.bridgeCount,feedInterval:state.feedInterval,waterTemps:state.waterTemps||[],milestones:MS.map(ms=>({name:ms.name,sub:ms.sub,estElMin:ms.elMin,miles:ms.miles,actualTime:state.actuals[ms.id]||null,actualElMin:state.actuals[ms.id]?actElapsed(ms.id):null,variancePct:state.actuals[ms.id]&&ms.elMin>0?parseFloat(variance(ms.id,ms.elMin).toFixed(2)):null})),feeds:(state.feeds||[]).map((f,i)=>({num:i+1,type:f.type,estTime:f.estTime,actualTime:f.actualTime||null,done:f.done})),notes:state.notes||''};const s=JSON.stringify(exp,null,2);const eb=document.getElementById('exportBox');if(eb)eb.textContent=s;return s;}
+function buildExport(){const spd=calcAvgSpeed();const exp={event:'20 Bridges Swim Around Manhattan',swimmer:'Joey Nizzardo',date:'June 15 2026',startTime:state.startTime,bridgeCount:state.bridgeCount,feedInterval:state.feedInterval,avgSpeedKn:spd?parseFloat(spd.kn.toFixed(3)):null,avgSpeedMph:spd?parseFloat(spd.mph.toFixed(3)):null,speedHistory:state.speedHistory||[],waterTemps:state.waterTemps||[],milestones:MS.map(ms=>({name:ms.name,sub:ms.sub,estElMin:ms.elMin,miles:ms.miles,actualTime:state.actuals[ms.id]||null,actualElMin:state.actuals[ms.id]?actElapsed(ms.id):null,variancePct:state.actuals[ms.id]&&ms.elMin>0?parseFloat(variance(ms.id,ms.elMin).toFixed(2)):null})),feeds:(state.feeds||[]).map((f,i)=>({num:i+1,type:f.type,estTime:f.estTime,actualTime:f.actualTime||null,done:f.done})),notes:state.notes||''};const s=JSON.stringify(exp,null,2);const eb=document.getElementById('exportBox');if(eb)eb.textContent=s;return s;}
 function copyExport(){const s=buildExport();navigator.clipboard.writeText(s).then(()=>alert('Copied! Paste into Claude for your strategic PDF.')).catch(()=>{});}
 
 // ---- Event handlers ----
 function onStartChange(){state.startTime=document.getElementById('startTime').value;buildFeeds(true);save();renderAll();}
 function setNow(id){const n=new Date(),t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');document.getElementById(id).value=t;state.startTime=t;state.actuals[0]=t;buildFeeds(true);save();renderAll();}
-function msNow(id){const n=new Date(),t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');state.actuals[id]=t;if(id===0){state.startTime=t;const si=document.getElementById('startTime');if(si)si.value=t;buildFeeds(true);}autoBridge(id);save();renderAll();updateAllMaps();fetchMilestoneTemp(id);}
+function msNow(id){const n=new Date(),t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');state.actuals[id]=t;if(id===0){state.startTime=t;const si=document.getElementById('startTime');if(si)si.value=t;buildFeeds(true);}autoBridge(id);recordSpeedHistory(id);save();renderAll();updateAllMaps();fetchMilestoneTemp(id);}
 
 async function fetchMilestoneTemp(id){
   try{
@@ -828,7 +855,7 @@ function onMilestoneTemp(id,v){
   if(v)state.milestoneTemps[id]=v;else delete state.milestoneTemps[id];
   save();
 }
-function onActual(id,v){if(v)state.actuals[id]=v;else delete state.actuals[id];if(id===0){state.startTime=v||'01:15';const si=document.getElementById('startTime');if(si)si.value=state.startTime;buildFeeds(true);}if(v)autoBridge(id);save();renderStatus();renderBridges();updateAllMaps();}
+function onActual(id,v){if(v)state.actuals[id]=v;else{delete state.actuals[id];if(state.speedHistory)state.speedHistory=state.speedHistory.filter(h=>h.msId!==id);}if(id===0){state.startTime=v||'01:15';const si=document.getElementById('startTime');if(si)si.value=state.startTime;buildFeeds(true);}if(v){autoBridge(id);recordSpeedHistory(id);}save();renderStatus();renderBridges();updateAllMaps();}
 function autoBridge(id){const ms=MS.find(m=>m.id===id);if(ms&&ms.bridge){const n=MS.filter(m=>m.bridge&&state.actuals[m.id]).length;if(state.bridgeCount<n)state.bridgeCount=n;}}
 function onFeedTime(i,v){state.feeds[i].actualTime=v;save();renderFeeds();renderStatus();}
 function onFeedDone(i,c){state.feeds[i].done=c;save();renderFeeds();renderStatus();}
@@ -836,7 +863,7 @@ function onFeedNote(i,v){state.feeds[i].notes=v;save();}
 function adjustBridge(d){state.bridgeCount=Math.max(0,Math.min(20,state.bridgeCount+d));save();renderBridges();renderStatus();}
 function setFeedInterval(n){state.feedInterval=n;save();renderAll();}
 function saveNotes(){state.notes=document.getElementById('notesField').value;save();}
-function resetAll(){if(!confirm('Reset ALL data? Cannot be undone.'))return;state={startTime:'01:15',actuals:{},bridgeCount:0,feedInterval:40,feeds:[],notes:'',waterTemps:[],photos:{},milestoneTemps:{},checklist:{}};buildFeeds(false);document.getElementById('startTime').value='01:15';save();renderAll();}
+function resetAll(){if(!confirm('Reset ALL data? Cannot be undone.'))return;state={startTime:'01:15',actuals:{},bridgeCount:0,feedInterval:40,feeds:[],notes:'',waterTemps:[],photos:{},milestoneTemps:{},checklist:{},speedUnit:'kn',speedHistory:[]};buildFeeds(false);document.getElementById('startTime').value='01:15';save();renderAll();}
 
 // ---- Water temp ----
 async function fetchWaterTempStatus(){
@@ -985,6 +1012,42 @@ function onChecklistItem(id,checked){
 }
 function resetChecklist(){if(!confirm('Reset checklist? All checks will be cleared.'))return;state.checklist={};save();renderChecklist();}
 
+// ---- Speed ----
+function calcAvgSpeed(){
+  const{lastEl,lastMiles}=calcStatusVars();
+  if(!lastMiles||!lastEl||lastEl<=0)return null;
+  const mph=lastMiles/(lastEl/60);
+  const kn=mph*0.868976;
+  return{mph,kn};
+}
+function toggleSpeedUnit(){
+  state.speedUnit=state.speedUnit==='kn'?'mph':'kn';
+  save();renderSpeedCards();
+}
+function renderSpeedCards(){
+  const s=calcAvgSpeed();
+  const isKn=state.speedUnit==='kn';
+  const val=s?(isKn?s.kn.toFixed(2):s.mph.toFixed(2)):'—';
+  const unit=isKn?'knots':'mph';
+  const sv=document.getElementById('sv-speed');if(sv)sv.textContent=val;
+  const sul=document.getElementById('speedUnitLbl');if(sul)sul.textContent=unit;
+  const vv=document.getElementById('vlv-speed');if(vv)vv.textContent=val;
+  const vul=document.getElementById('vSpeedUnitLbl');if(vul)vul.textContent=unit;
+}
+function recordSpeedHistory(msId){
+  const ms=MS.find(m=>m.id===msId);
+  if(!ms||!ms.miles||ms.miles<=0)return;
+  const el=actElapsed(msId);
+  if(!el||el<=0)return;
+  const mph=ms.miles/(el/60);
+  const kn=mph*0.868976;
+  if(!state.speedHistory)state.speedHistory=[];
+  const entry={msId,msName:ms.name,miles:ms.miles,elMin:el,speedMph:parseFloat(mph.toFixed(3)),speedKn:parseFloat(kn.toFixed(3)),time:state.actuals[msId]||''};
+  const idx=state.speedHistory.findIndex(h=>h.msId===msId);
+  if(idx>=0)state.speedHistory[idx]=entry;else state.speedHistory.push(entry);
+  state.speedHistory.sort((a,b)=>a.miles-b.miles);
+}
+
 // ---- Viewer URL ----
 function copyViewerUrl(){
   const url=window.location.href.split('?')[0]+'?mode=viewer';
@@ -1033,6 +1096,8 @@ if(!state.waterTemps)state.waterTemps=[];
 if(!state.photos)state.photos={};
 if(!state.milestoneTemps)state.milestoneTemps={};
 if(!state.checklist)state.checklist={};
+if(!state.speedHistory)state.speedHistory=[];
+if(!state.speedUnit)state.speedUnit='kn';
 
 // Set viewer URL display
 const vuEl=document.getElementById('viewerUrl');
