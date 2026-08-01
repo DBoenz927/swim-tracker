@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Swim Across the Sound Race Tracker – Joey Nizzardo</title>
+<meta name="theme-color" content="#0d2240">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SATS Tracker">
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Swim%20Across%20the%20Sound%20Tracker%22%2C%22short_name%22%3A%22SATS%20Tracker%22%2C%22start_url%22%3A%22./SATS_RaceTracker.html%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230d0d1a%22%2C%22theme_color%22%3A%22%230d2240%22%7D">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#0d0d1a;color:#e8eaf0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;padding-bottom:60px;}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:#7090c0;margin:0 0 8px;}
+.banner{background:linear-gradient(135deg,#0d2240,#081830);padding:14px 16px 10px;border-bottom:2px solid #1e5fa8;}
+.banner h1{font-size:17px;font-weight:700;color:#fff;letter-spacing:.03em;}
+.banner .sub{font-size:11px;color:#7090c0;margin-top:2px;}
+.viewer-badge{background:#1a4010;color:#60e050;padding:1px 7px;border-radius:9px;font-size:10px;font-weight:700;letter-spacing:.04em;margin-left:8px;}
+.tabs{display:flex;background:#111128;border-bottom:1px solid #1e2a50;overflow-x:auto;}
+.tab{flex:1;min-width:50px;padding:9px 3px;text-align:center;font-size:11px;font-weight:600;color:#5070a0;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
+.tab.active{color:#4da8ff;border-bottom:2px solid #4da8ff;}
+.panel{display:none;padding:12px 10px;}
+.panel.active{display:block;}
+.stat-row{display:flex;gap:8px;margin-bottom:12px;}
+.stat-card{flex:1;background:#131328;border:1px solid #1e2a50;border-radius:8px;padding:10px 8px;text-align:center;}
+.stat-card .val{font-size:22px;font-weight:700;color:#4da8ff;line-height:1.1;}
+.stat-card .lbl{font-size:10px;color:#5070a0;margin-top:2px;text-transform:uppercase;letter-spacing:.06em;}
+.stat-card.green .val{color:#4caf50;}
+.stat-card.red .val{color:#f44336;}
+.stat-card.yellow .val{color:#ffb300;}
+.settings-row{background:#131328;border:1px solid #1e2a50;border-radius:8px;padding:10px 12px;margin-bottom:12px;display:flex;align-items:center;flex-wrap:wrap;gap:10px;}
+.settings-row label{font-size:12px;color:#7090c0;}
+.settings-row input[type=time]{background:#0a0a1a;border:1px solid #2a4a80;border-radius:5px;color:#e0e8ff;padding:5px 8px;font-size:14px;width:110px;}
+.btn-sm{background:#1e3a70;border:1px solid #2a5090;color:#90c0ff;padding:5px 10px;border-radius:5px;font-size:12px;cursor:pointer;white-space:nowrap;}
+.btn-sm:active{background:#2a4a90;}
+.btn-danger{background:#4a1010;border-color:#7a2020;color:#ff8080;}
+.btn-green{background:#0d3a1a;border-color:#1a6030;color:#60d080;}
+.btn-photo{background:#0d0d2a;border:1px solid #2a2a5a;color:#7080c0;padding:3px 6px;font-size:13px;}
+.ms-table{width:100%;border-collapse:collapse;font-size:12px;}
+.ms-table th{background:#0d2240;color:#90b8e8;padding:7px 5px;text-align:center;font-size:11px;font-weight:600;}
+.ms-table td{padding:6px 5px;border-bottom:1px solid #1a1a30;vertical-align:middle;}
+.ms-table tr.start-row td{background:#0d2010;}
+.ms-table tr.finish-row td{background:#0d2010;}
+.ms-table input[type=time]{background:#0a0a1a;border:1px solid #2a3a60;border-radius:4px;color:#e0e8ff;padding:3px 4px;font-size:12px;width:85px;}
+.ms-table input[type=time]:focus{outline:none;border-color:#4da8ff;}
+.photo-thumb{width:44px;height:44px;object-fit:cover;border-radius:4px;cursor:pointer;border:1px solid #2a3a60;display:block;margin-top:3px;}
+.chip{display:inline-block;padding:2px 7px;border-radius:10px;font-size:11px;font-weight:700;}
+.chip.green{background:#1a3d1a;color:#4caf50;}
+.chip.red{background:#3d1a1a;color:#f44336;}
+.chip.yellow{background:#3d2e00;color:#ffb300;}
+.chip.grey{background:#2a2a3a;color:#6080a0;}
+.ms-name{font-size:12px;font-weight:600;color:#c8d8f0;}
+.ms-sub{font-size:10px;color:#e0c060;}
+.ms-note{font-size:10px;color:#a06030;margin-top:1px;}
+.ms-miles{font-size:10px;color:#6080a0;}
+.co-status-btns{display:flex;gap:4px;flex-wrap:wrap;justify-content:center;}
+.co-btn{padding:3px 7px;border-radius:5px;font-size:10px;font-weight:700;cursor:pointer;border:1px solid #2a3a60;background:#0a0a1a;color:#6080a0;}
+.co-btn.on-green{background:#1a3d1a;border-color:#2a6a2a;color:#4caf50;}
+.co-btn.on-yellow{background:#3d2e00;border-color:#6a5000;color:#ffb300;}
+.co-btn.on-red{background:#3d1a1a;border-color:#6a2a2a;color:#f44336;}
+.feed-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+.feed-header h2{margin:0;}
+.interval-toggle{display:flex;gap:6px;}
+.itbtn{padding:5px 12px;border-radius:5px;font-size:12px;font-weight:700;cursor:pointer;border:1px solid #2a4a80;background:#131328;color:#5070a0;}
+.itbtn.active{background:#1a3070;color:#90c0ff;border-color:#4a7ad0;}
+.feed-table{width:100%;border-collapse:collapse;font-size:12px;}
+.feed-table th{background:#0d2240;color:#90b8e8;padding:7px 5px;text-align:center;font-size:11px;}
+.feed-table td{padding:6px 5px;border-bottom:1px solid #1a1a30;vertical-align:middle;text-align:center;}
+.feed-table input[type=time]{background:#0a0a1a;border:1px solid #2a3a60;border-radius:4px;color:#e0e8ff;padding:3px 4px;font-size:12px;width:85px;}
+.feed-done-row td{opacity:.45;}
+.cw-badge{background:#003a40;color:#40d0e0;border-radius:4px;padding:2px 6px;font-size:10px;font-weight:700;}
+.ouf-badge{background:#3a1a40;color:#c060e0;border-radius:4px;padding:2px 6px;font-size:10px;font-weight:700;}
+.next-feed-bar{background:#0a1a2a;border:1px solid #1a4a2a;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;color:#60c080;}
+.next-feed-bar span{font-weight:700;color:#a0e8b0;}
+.proj-bar{background:#0a1a0a;border:1px solid #1a4a2a;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:13px;}
+.proj-bar .pf-label{color:#5080a0;font-size:11px;text-transform:uppercase;letter-spacing:.06em;}
+.proj-bar .pf-time{font-size:22px;font-weight:700;color:#60c080;margin-top:2px;}
+.proj-bar .pf-delta{font-size:12px;margin-top:2px;}
+.note-box{background:#131328;border-left:3px solid #1e5fa8;border-radius:0 6px 6px 0;padding:8px 10px;font-size:11px;color:#7090b0;margin-bottom:10px;}
+.warn-box{background:#1a1400;border-left:3px solid #c9971e;border-radius:0 6px 6px 0;padding:8px 10px;font-size:11px;color:#e0b040;margin-bottom:10px;}
+.notes-area{width:100%;background:#0a0a1a;border:1px solid #2a3a60;border-radius:6px;color:#e0e8ff;padding:10px;font-size:13px;font-family:inherit;resize:vertical;min-height:100px;margin-bottom:10px;}
+.notes-area:focus{outline:none;border-color:#4da8ff;}
+.link-card{background:#131328;border:1px solid #1e2a50;border-radius:8px;padding:12px;margin-bottom:10px;}
+.link-card h3{font-size:12px;color:#90b8e8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.ext-link{display:flex;align-items:center;gap:8px;background:#1a3070;border:1px solid #2a5090;color:#90c0ff;padding:9px 12px;border-radius:6px;font-size:13px;font-weight:600;text-decoration:none;margin-bottom:6px;}
+.ext-link:hover{background:#253d8a;}
+.ext-link .el-icon{font-size:16px;}
+.wt-input{background:#0a0a1a;border:1px solid #2a3a60;border-radius:5px;color:#e0e8ff;padding:5px 8px;font-size:14px;width:72px;}
+.map-wrap{width:100%;height:calc(100vh - 145px);min-height:350px;border-radius:8px;overflow:hidden;}
+.live-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.live-card{background:#131328;border:1px solid #1e2a50;border-radius:8px;padding:12px 8px;text-align:center;}
+.live-card .lv{font-size:26px;font-weight:700;color:#4da8ff;line-height:1.1;}
+.live-card .ll{font-size:10px;color:#5070a0;text-transform:uppercase;letter-spacing:.06em;margin-top:3px;}
+.live-card.green .lv{color:#4caf50;}
+.live-card.red .lv{color:#f44336;}
+.live-card.yellow .lv{color:#ffb300;}
+#tab-report .report-section,#tab-report-v .report-section{background:#131328;border:1px solid #1e2a50;border-radius:8px;padding:12px;margin-bottom:14px;}
+.report-section h3{color:#90b8e8;font-size:12px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;border-bottom:1px solid #1e2a50;padding-bottom:6px;}
+.r-kv{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #1a1a30;font-size:12px;}
+.r-kv .rk{color:#5070a0;}
+.r-kv .rv{color:#e0e8ff;font-weight:600;}
+.r-table{width:100%;border-collapse:collapse;font-size:11px;}
+.r-table th{background:#0d2240;color:#90b8e8;padding:5px 4px;font-size:10px;}
+.r-table td{padding:5px 4px;border-bottom:1px solid #1a1a30;text-align:center;}
+.export-box{background:#0a0a1a;border:1px solid #2a3a60;border-radius:6px;padding:10px;font-size:10px;color:#6080a0;white-space:pre-wrap;max-height:200px;overflow:auto;margin-bottom:8px;font-family:monospace;}
+.cl-section{margin-bottom:14px;}
+.cl-section h3{font-size:11px;color:#90b8e8;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;}
+.cl-item{display:flex;gap:8px;align-items:flex-start;padding:6px 0;border-bottom:1px solid #1a1a30;}
+.cl-item:last-child{border-bottom:none;}
+.cl-item input[type=checkbox]{width:18px;height:18px;margin-top:1px;cursor:pointer;flex-shrink:0;accent-color:#4da8ff;}
+.cl-item label{font-size:12px;color:#c0cce0;cursor:pointer;line-height:1.4;}
+.cl-item.cl-done label{text-decoration:line-through;color:#3a5070;}
+.cl-progress{font-size:11px;color:#5070a0;margin-bottom:8px;text-align:right;}
+.cl-reset-btn{margin-top:4px;}
+@media print{
+  body{background:#fff;color:#000;padding:0;}
+  .tabs,.tab,.btn-sm,.settings-row,.note-box,.warn-box,.notes-area,
+  #tab-status,#tab-milestones,#tab-cutoffs,#tab-feeds,#tab-map,
+  #tab-live,#tab-vmap,#tab-vlinks,#tab-about,#tab-checklist,
+  .panel:not(#tab-report):not(#tab-report-v){display:none!important;}
+  #tab-report,#tab-report-v{display:block!important;padding:0;}
+  .banner{background:#0d2240!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .report-section{border:1px solid #ccc;background:#fff!important;}
+  .report-section h3{color:#0d2240!important;border-color:#ccc;}
+  .r-table th{background:#0d2240!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .r-table td{border-color:#eee;}
+  .chip.green{background:#d4edda!important;color:#155724!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .chip.red{background:#f8d7da!important;color:#721c24!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .chip.yellow{background:#fff3cd!important;color:#856404!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .chip.grey{background:#e9ecef!important;color:#495057!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .no-print{display:none!important;}
+  .export-box{display:none!important;}
+}
+</style>
+</head>
+<body>
+
+<div class="banner">
+  <h1>🏊 SATS Race Tracker <span id="viewerBadge" class="viewer-badge" style="display:none;">LIVE VIEWER</span></h1>
+  <div class="sub" id="bannerSub">Joey Nizzardo &nbsp;·&nbsp; August 1, 2026 &nbsp;·&nbsp; Swim Across the Sound · 14.5 mi</div>
+</div>
+
+<!-- ADMIN TABS -->
+<div id="adminTabs" class="tabs">
+  <div class="tab active" onclick="switchTab('status',this)">Status</div>
+  <div class="tab" onclick="switchTab('milestones',this)">Miles</div>
+  <div class="tab" onclick="switchTab('cutoffs',this)">⏱ Cutoffs</div>
+  <div class="tab" onclick="switchTab('feeds',this)">Feeds</div>
+  <div class="tab" onclick="switchTab('map',this)">🗺 Map</div>
+  <div class="tab" onclick="switchTab('report',this)">Report</div>
+  <div class="tab" onclick="switchTab('checklist',this)">✅ Pre-Race</div>
+  <div class="tab" onclick="switchTab('about',this)">ℹ️</div>
+</div>
+
+<!-- VIEWER TABS -->
+<div id="viewerTabs" class="tabs" style="display:none;">
+  <div class="tab active" onclick="switchTab('live',this)">👁 Live</div>
+  <div class="tab" onclick="switchTab('milestones',this)">Miles</div>
+  <div class="tab" onclick="switchTab('vmap',this)">🗺 Map</div>
+  <div class="tab" onclick="switchTab('vlinks',this)">🔗 Links</div>
+  <div class="tab" onclick="switchTab('about',this)">ℹ️</div>
+</div>
+
+<!-- ===== STATUS (ADMIN) ===== -->
+<div id="tab-status" class="panel active">
+  <div class="settings-row">
+    <label>Wave 1 Start:</label>
+    <input type="time" id="startTime" value="07:00" oninput="onStartChange()">
+    <button class="btn-sm" onclick="setNow('startTime')">Set Now</button>
+    <button class="btn-sm btn-danger" onclick="resetAll()">Reset</button>
+  </div>
+  <div id="proj-finish-bar" class="proj-bar" style="display:none;">
+    <div class="pf-label">Projected Finish</div>
+    <div class="pf-time" id="projFinishTime">—</div>
+    <div class="pf-delta" id="projFinishDelta"></div>
+  </div>
+  <div class="stat-row">
+    <div class="stat-card" id="sc-elapsed"><div class="val" id="sv-elapsed">—</div><div class="lbl">Elapsed</div></div>
+    <div class="stat-card" id="sc-pace"><div class="val" id="sv-pace">—</div><div class="lbl">Pace %</div></div>
+    <div class="stat-card" id="sc-miles"><div class="val" id="sv-miles">—</div><div class="lbl">Miles</div></div>
+  </div>
+  <div class="stat-row">
+    <div class="stat-card" id="sc-speed" style="flex:1;">
+      <div class="val" id="sv-speed">—</div>
+      <div class="lbl" style="display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;">
+        <span>Avg Speed</span>
+        <button onclick="toggleSpeedUnit()" style="background:#1e3a70;border:1px solid #2a5090;color:#90c0ff;padding:1px 7px;border-radius:4px;font-size:9px;cursor:pointer;letter-spacing:.04em;line-height:1.5;">kn ⇄ mph</button>
+        <span id="speedUnitLbl" style="color:#4da8ff;font-size:9px;">knots</span>
+      </div>
+    </div>
+  </div>
+  <div class="stat-row">
+    <div class="stat-card"><div class="val" id="sv-nextcutoff">—</div><div class="lbl">Next Cutoff</div></div>
+    <div class="stat-card"><div class="val" id="sv-feeds">0</div><div class="lbl">Feeds</div></div>
+    <div class="stat-card"><div class="val" id="sv-next-feed">—</div><div class="lbl">Next Feed</div></div>
+  </div>
+  <div class="warn-box">⚠️ No beach entry this year — boats shuttle swimmers <b>~2000m offshore</b> for a boat jump-off start (rain runoff advisory). Route is new for 2026 — CT side only.</div>
+  <div class="note-box">🌊 Water temp 70–74°F · ⏱ Time limit 9:30 · 🏁 Finish: Captain's Cove Seaport</div>
+  <div class="note-box">🌊 <b>Tide watch (NOAA Bridgeport):</b> Low 7:47 AM · High 1:55 PM — swim runs almost entirely on the flood. Flood sets west in the Sound: favorable push on the <b>outbound leg</b> (Start → Buoy 1 → 2 → 3, heading SW/S). The <b>return leg</b> (Buoy 3 → 4 → Finish, heading back NE) swims against that same flow — expect it to feel harder, though current eases as the tide nears high/slack around 1:55 PM, close to the ~1:30 PM ETA. Swirlier current likely near the Black Rock Harbor / Captain's Cove turn regardless.</div>
+
+  <div class="settings-row" style="justify-content:space-between;align-items:center;">
+    <div>
+      <div style="font-size:10px;color:#5070a0;text-transform:uppercase;letter-spacing:.06em;">🌡 Current Water Temp (Bridgeport, NOAA 8467150)</div>
+      <div id="wtCurrentDisplay" style="font-size:24px;font-weight:700;color:#60c0e0;margin-top:3px;">—</div>
+      <div id="wtCurrentTime" style="font-size:10px;color:#3a5070;margin-top:1px;"></div>
+    </div>
+    <button class="btn-sm" id="fetchTempStatusBtn" onclick="fetchWaterTempStatus()">🌊 Refresh</button>
+  </div>
+
+  <div class="link-card">
+    <h3>🔗 Quick Links</h3>
+    <a class="ext-link" href="https://tidesandcurrents.noaa.gov/stationhome.html?id=8467150" target="_blank"><span class="el-icon">🌊</span> NOAA Water Temp — Bridgeport Station</a>
+    <a class="ext-link" href="https://forecast.weather.gov/MapClick.php?lat=41.1821&lon=-73.1906" target="_blank"><span class="el-icon">☀️</span> NWS Forecast — Bridgeport, CT</a>
+    <a class="ext-link" href="https://giving.stvincents.org/swim-marathon" target="_blank"><span class="el-icon">🏆</span> Official Event Site — St. Vincent's SATS</a>
+  </div>
+
+  <div class="note-box">
+    <b>Viewer link (share with Sarah &amp; family):</b><br>
+    <span id="viewerUrl" style="color:#4da8ff;font-size:11px;word-break:break-all;"></span><br>
+    <button class="btn-sm" style="margin-top:6px;" onclick="copyViewerUrl()">📋 Copy Viewer Link</button>
+  </div>
+
+  <div class="note-box" id="fbSetupHint">
+    <b>Real-time sync (Firebase):</b> Uses the same shared Swim for These Firebase project as the 20 Bridges tracker, under its own data path — Admin and Viewer stay in sync automatically.
+  </div>
+</div>
+
+<!-- ===== MILESTONES (ADMIN) ===== -->
+<div id="tab-milestones" class="panel">
+  <div class="note-box">Follows the official 2026 buoy chart in order: Start → Buoy 1 → Buoy 2 → Buoy 3 → Buoy 4 → Finish (Black Rock Harbor). Clock estimates are best-effort — this course has never been swum before, so treat times as a guide, not gospel. Tap "Now" or enter time.</div>
+  <table class="ms-table">
+    <thead><tr><th>Checkpoint</th><th>Est.</th><th>Actual</th><th>±</th></tr></thead>
+    <tbody id="msBody"></tbody>
+  </table>
+</div>
+
+<!-- ===== CUTOFFS (ADMIN) ===== -->
+<div id="tab-cutoffs" class="panel">
+  <div class="note-box">Official time cutoffs, measured as distance from Buoy 4 (Black Rock Harbor entrance). This app can't measure GPS distance live — log the actual clock time and mark status yourself based on what the escort boat captain / observer reports.</div>
+  <div class="note-box">⚠️ Note: the "Buoy 4" in these official cutoff rules is described as being at the Black Rock Harbor entrance (near the finish). The "Buoy 4" on the Milestones tab is the course turn-buoy from the swimmer chart, roughly mid-course. These may be two different physical marks with the same number — treat them separately.</div>
+  <table class="ms-table">
+    <thead><tr><th>Cutoff</th><th>Est. Clock</th><th>Actual</th><th>Status</th></tr></thead>
+    <tbody id="coBody"></tbody>
+  </table>
+</div>
+
+<!-- ===== FEEDS (ADMIN) ===== -->
+<div id="tab-feeds" class="panel">
+  <div class="feed-header">
+    <h2>Feed Schedule</h2>
+    <div class="interval-toggle">
+      <button class="itbtn" id="btn40" onclick="setFeedInterval(40)">40 min</button>
+      <button class="itbtn" id="btn30" onclick="setFeedInterval(30)">30 min</button>
+    </div>
+    <button class="btn-sm" onclick="recalcFeeds()">Recalc →</button>
+  </div>
+  <div class="next-feed-bar" id="nextFeedBar">Next feed: —</div>
+  <table class="feed-table">
+    <thead><tr><th>#</th><th>Type</th><th>Est.</th><th>Actual</th><th>Notes</th><th>✓</th></tr></thead>
+    <tbody id="feedBody"></tbody>
+  </table>
+  <div class="note-box" style="margin-top:10px;">Odd = 🥥 Coconut Water (orange bottle) · Even = 🌿 OUF Fruit Blend + Carb Powder (blue bottle, 12 oz water + 4 oz Once Upon a Farm pouch + carb powder). Toggle interval then "Recalc →" to shift future feeds from last completed.</div>
+  <div class="note-box">🔥 All feeds served cool by default. Keep <b>one feed warm in a thermos</b> as backup, in case Joey asks for it mid-swim.</div>
+</div>
+
+<!-- ===== MAP (ADMIN) ===== -->
+<div id="tab-map" class="panel" style="padding:8px;">
+  <div class="note-box" style="margin-bottom:6px;">⚠️ Route follows the official buoy chart (Start → Buoy 1 → 2 → 3 → 4 → Finish), but exact GPS positions are interpolated from the chart image, not surveyed — treat as orientation only. Gold marker = Joey's last logged checkpoint.</div>
+  <div id="adminMapEl" class="map-wrap"></div>
+</div>
+
+<!-- ===== PRE-RACE CHECKLIST (ADMIN) ===== -->
+<div id="tab-checklist" class="panel">
+  <div class="note-box">Check off each item before boarding. Tap any item to toggle. Progress saves automatically.</div>
+  <div id="cl-progress-bar" class="cl-progress"></div>
+  <div id="cl-body"></div>
+  <button class="btn-sm btn-danger cl-reset-btn" onclick="resetChecklist()">Reset Checklist</button>
+</div>
+
+<!-- ===== ABOUT ===== -->
+<div id="tab-about" class="panel">
+  <div style="max-width:420px;margin:0 auto;">
+    <div style="background:#131328;border:1px solid #1e2a50;border-radius:10px;padding:20px 18px;margin-bottom:14px;text-align:center;">
+      <div style="font-size:36px;margin-bottom:8px;">🌊</div>
+      <div style="font-size:18px;font-weight:700;color:#fff;margin-bottom:4px;">SATS Race Tracker</div>
+      <div style="font-size:12px;color:#7090c0;margin-bottom:18px;">Joey Nizzardo — August 1, 2026</div>
+      <div style="background:#0a0a1a;border:1px solid #2a4a80;border-radius:7px;padding:14px;text-align:left;">
+        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a30;">
+          <span style="color:#5070a0;font-size:12px;">Version</span>
+          <span style="color:#4da8ff;font-weight:700;font-size:12px;">1.0.0</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a30;">
+          <span style="color:#5070a0;font-size:12px;">Build date</span>
+          <span style="color:#e0e8ff;font-size:12px;">2026-07-31</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:5px 0;">
+          <span style="color:#5070a0;font-size:12px;">Feed rows</span>
+          <span style="color:#e0e8ff;font-size:12px;">14</span>
+        </div>
+      </div>
+    </div>
+    <div style="background:#131328;border:1px solid #1e2a50;border-radius:10px;padding:14px 16px;font-size:12px;color:#7090c0;line-height:1.7;">
+      <div style="color:#90b8e8;font-weight:600;margin-bottom:6px;">What's in this build</div>
+      <div>✓ No embedded live tracker — kept out on purpose (took over the 20 Bridges app once the race started)</div>
+      <div>✓ Firebase real-time sync (Admin → Viewer), shared project / separate data path</div>
+      <div>✓ Cutoffs tab in place of a bridge counter — logs and status for all 6 official cutoffs</div>
+      <div>✓ Official buoy-chart route: Start → Buoy 1 → Buoy 2 → Buoy 3 → Buoy 4 → Finish</div>
+      <div>✓ "Now" button on Milestones, Cutoffs, and Feeds for one-tap logging</div>
+      <div>✓ NOAA water temp auto-fetch (Bridgeport station 8467150)</div>
+      <div>✓ 14 feed rows (Coconut Water / OUF Fruit Blend) with per-feed notes</div>
+      <div>✓ Pre-race checklist, 3 stages</div>
+      <div>✓ Avg speed card with kn ⇄ mph toggle</div>
+      <div>✓ Viewer share link</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== REPORT (ADMIN) ===== -->
+<div id="tab-report" class="panel">
+  <div class="no-print" style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;">
+    <button class="btn-sm btn-green" onclick="window.print()">🖨 Print / Save PDF</button>
+    <button class="btn-sm" onclick="copyExport()">📋 Copy Raw Data</button>
+  </div>
+  <div class="report-section"><h3>Race Summary</h3><div id="rpt-summary"></div></div>
+  <div class="report-section"><h3>Water Temperatures</h3><div id="rpt-wt"></div></div>
+  <div class="report-section">
+    <h3>Milestone Log — Est. vs. Actual</h3>
+    <table class="r-table"><thead><tr><th>Checkpoint</th><th>Est.</th><th>Actual</th><th>Elapsed</th><th>Variance</th></tr></thead>
+    <tbody id="rpt-ms"></tbody></table>
+  </div>
+  <div class="report-section">
+    <h3>Cutoff Log</h3>
+    <table class="r-table"><thead><tr><th>Cutoff</th><th>Requirement</th><th>Actual</th><th>Status</th></tr></thead>
+    <tbody id="rpt-co"></tbody></table>
+  </div>
+  <div class="report-section">
+    <h3>Speed History (cumulative avg at each checkpoint)</h3>
+    <table class="r-table"><thead><tr><th>Checkpoint</th><th>Miles</th><th>Elapsed</th><th>Avg kn</th><th>Avg mph</th></tr></thead>
+    <tbody id="rpt-speed"></tbody></table>
+  </div>
+  <div class="report-section">
+    <h3>Feed Log</h3>
+    <table class="r-table"><thead><tr><th>#</th><th>Type</th><th>Est.</th><th>Actual</th><th>Notes</th><th>Done</th></tr></thead>
+    <tbody id="rpt-feeds"></tbody></table>
+  </div>
+  <div class="report-section">
+    <h3>Race Notes</h3>
+    <textarea class="notes-area" id="notesField" placeholder="Water temp, current, energy levels, feed feedback, gear notes, how the new start/course felt, anything for next time..." oninput="saveNotes()"></textarea>
+  </div>
+  <div class="report-section no-print">
+    <h3>Export Data</h3>
+    <div class="export-box" id="exportBox"></div>
+    <button class="btn-sm" onclick="copyExport()">Copy to Clipboard</button>
+  </div>
+</div>
+
+<!-- ===== LIVE (VIEWER) ===== -->
+<div id="tab-live" class="panel">
+  <div class="note-box" style="display:flex;justify-content:space-between;align-items:center;">
+    <span>Read-only view · Updates automatically when admin logs checkpoints</span>
+    <button class="btn-sm" onclick="copyViewerUrl()" style="flex-shrink:0;margin-left:10px;">📋 Share</button>
+  </div>
+  <div id="vproj-bar" class="proj-bar" style="display:none;">
+    <div class="pf-label">Projected Finish</div>
+    <div class="pf-time" id="vProjTime">—</div>
+    <div class="pf-delta" id="vProjDelta"></div>
+  </div>
+  <div class="live-grid">
+    <div class="live-card" id="vlc-elapsed"><div class="lv" id="vlv-elapsed">—</div><div class="ll">Elapsed</div></div>
+    <div class="live-card" id="vlc-pace"><div class="lv" id="vlv-pace">—</div><div class="ll">Pace %</div></div>
+    <div class="live-card" id="vlc-miles"><div class="lv" id="vlv-miles">—</div><div class="ll">Miles</div></div>
+    <div class="live-card"><div class="lv" id="vlv-nextcutoff">—</div><div class="ll">Next Cutoff</div></div>
+    <div class="live-card" id="vlc-speed" style="grid-column:span 2;">
+      <div class="lv" id="vlv-speed">—</div>
+      <div class="ll" id="vlv-speed-lbl" style="display:flex;align-items:center;justify-content:center;gap:5px;flex-wrap:wrap;">
+        <span>Avg Speed</span>
+        <button onclick="toggleSpeedUnit()" style="background:#1e3a70;border:1px solid #2a5090;color:#90c0ff;padding:1px 7px;border-radius:4px;font-size:9px;cursor:pointer;letter-spacing:.04em;line-height:1.5;">kn ⇄ mph</button>
+        <span id="vSpeedUnitLbl" style="color:#4da8ff;font-size:9px;">knots</span>
+      </div>
+    </div>
+  </div>
+  <div id="vlast-ms" class="note-box" style="font-size:13px;color:#c8d8f0;"></div>
+  <div class="warn-box">⚠️ Boat jump-off start ~2000m offshore this year — no beach entry (rain runoff advisory). New CT-side route.</div>
+  <div class="note-box">🌊 Water temp 70–74°F · 🏁 Finish: Captain's Cove Seaport</div>
+  <div class="note-box">🌊 <b>Tide:</b> Low 7:47 AM · High 1:55 PM. Flood (west-setting) favors the outbound leg out to Buoy 3; the return leg back to the harbor swims against it, easing as the tide nears high near the finish.</div>
+  <div id="vlive-wt" style="margin-top:8px;"></div>
+</div>
+
+<!-- ===== MAP (VIEWER) ===== -->
+<div id="tab-vmap" class="panel" style="padding:8px;">
+  <div class="note-box" style="margin-bottom:6px;">⚠️ Route follows the official buoy chart (Start → Buoy 1 → 2 → 3 → 4 → Finish); GPS positions are interpolated, not surveyed. Gold = Joey's last logged checkpoint.</div>
+  <div id="viewerMapEl" class="map-wrap"></div>
+</div>
+
+<!-- ===== LINKS (VIEWER) ===== -->
+<div id="tab-vlinks" class="panel">
+  <div class="link-card">
+    <h3>🌊 Water Temperature</h3>
+    <a class="ext-link" href="https://tidesandcurrents.noaa.gov/stationhome.html?id=8467150" target="_blank"><span class="el-icon">🌡</span> NOAA — Bridgeport Station</a>
+  </div>
+  <div class="link-card">
+    <h3>☀️ Weather</h3>
+    <a class="ext-link" href="https://forecast.weather.gov/MapClick.php?lat=41.1821&lon=-73.1906" target="_blank"><span class="el-icon">☀️</span> NWS Forecast — Bridgeport, CT</a>
+  </div>
+  <div class="link-card">
+    <h3>🏆 Official Event</h3>
+    <a class="ext-link" href="https://giving.stvincents.org/swim-marathon" target="_blank"><span class="el-icon">🏊</span> St. Vincent's Swim Across the Sound</a>
+  </div>
+  <div class="link-card">
+    <h3>📋 Share This View</h3>
+    <button class="ext-link" onclick="copyViewerUrl()" style="cursor:pointer;border:none;width:100%;text-align:left;">📋 Copy viewer link to share with others</button>
+  </div>
+  <div id="vlive-wt2" class="link-card" style="margin-top:4px;"></div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ===== FIREBASE CONFIG (OPTIONAL) =====
+// Same shared Firebase project used for the 20 Bridges tracker — this app writes to its
+// own data path (sats2026_v1/state) so the two trackers never collide.
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDXwOMOglZov2YNJRFhwNKzYdWbAJWWWF8",
+  authDomain: "swim-tracker-ea22c.firebaseapp.com",
+  databaseURL: "https://swim-tracker-ea22c-default-rtdb.firebaseio.com",
+  projectId: "swim-tracker-ea22c",
+  storageBucket: "swim-tracker-ea22c.firebasestorage.app",
+  messagingSenderId: "845729802338",
+  appId: "1:845729802338:web:aefae0915364da4029093b"
+};
+// ==========================================
+
+const IS_VIEWER = new URLSearchParams(window.location.search).get('mode') === 'viewer';
+
+// Distance: ~14.5 mi. Start moved to ~2000m (1.2 mi) offshore — boat jump-off, no beach
+// entry (rain runoff advisory). Course follows the official buoy chart in order:
+// Start -> Buoy 1 -> Buoy 2 -> Buoy 3 -> Buoy 4 -> Finish (Black Rock Harbor / Captain's Cove).
+// Coordinates below are interpolated from the official course chart image (landmark-anchored:
+// Penfield Reef Lighthouse, Captain's Cove Seaport, Seaside Beach) — good for orientation, not
+// GPS-precise. Clock estimates assume ~6h30m winning pace, distributed by leg mileage.
+const MS=[
+  {id:0, name:'Start / Jump Point',     sub:'~2000m off Seaside Beach', est:'07:00', elMin:0,   miles:0.0,  isStart:true, isFinish:false, note:'Boat jump-off — no beach entry this year'},
+  {id:1, name:'Buoy 1',                 sub:'Near Penfield Reef Lighthouse', est:'08:14', elMin:74,  miles:2.75,  isStart:false, isFinish:false, note:''},
+  {id:2, name:'Buoy 2',                 sub:'Open water, SW of Buoy 1', est:'09:25', elMin:145, miles:5.39,  isStart:false, isFinish:false, note:''},
+  {id:3, name:'Buoy 3',                 sub:'Southernmost turn point', est:'10:28', elMin:208, miles:7.74,  isStart:false, isFinish:false, note:''},
+  {id:4, name:'Buoy 4',                 sub:'Turning back toward the harbor', est:'11:43', elMin:283, miles:10.53, isStart:false, isFinish:false, note:'Course turn buoy — official cutoff rules reference a separate "Buoy 4" near the harbor entrance; see Cutoffs tab note'},
+  {id:5, name:"Black Rock Harbor",      sub:"Captain's Cove Seaport — FINISH", est:'13:30', elMin:390, miles:14.5, isStart:false, isFinish:true, note:''},
+];
+
+// Coordinates interpolated from the official 2026 course chart, anchored to known real-world
+// landmarks (Penfield Reef Lighthouse 41.117112,-73.222058; Captain's Cove 41.1589,-73.2119;
+// Seaside Beach ~41.1597,-73.2025). Good for orientation — not a GPS survey.
+const MS_COORDS={
+  0:[41.1457,-73.2175],  // ~2000m off Seaside Beach, toward Buoy 1
+  1:[41.1289,-73.2359],  // Buoy 1 — near Penfield Reef Lighthouse
+  2:[41.1123,-73.2814],  // Buoy 2
+  3:[41.0798,-73.2678],  // Buoy 3 — southernmost turn
+  4:[41.0990,-73.2206],  // Buoy 4
+  5:[41.1589,-73.2119],  // Captain's Cove Seaport / Black Rock Harbor — FINISH
+};
+
+const ROUTE_COORDS=[
+  [41.1457,-73.2175],  // Start / Jump Point
+  [41.1289,-73.2359],  // Buoy 1
+  [41.1123,-73.2814],  // Buoy 2
+  [41.0798,-73.2678],  // Buoy 3
+  [41.0990,-73.2206],  // Buoy 4
+  [41.1589,-73.2119],  // Finish
+];
+const MS_ROUTE_IDX={0:0,1:1,2:2,3:3,4:4,5:5};
+
+const EST_TOTAL=390, MAX_FEEDS=14;
+let state={startTime:'07:00',actuals:{},cutoffs:{},feedInterval:40,feeds:[],notes:'',waterTemps:[],milestoneTemps:{},checklist:{},speedUnit:'kn',speedHistory:[]};
+
+const CUTOFFS=[
+  {id:0,label:'2 Hours',   elMin:120, req:'Within 11 mi of Buoy 4'},
+  {id:1,label:'4 Hours',   elMin:240, req:'Within 8 mi of Buoy 4'},
+  {id:2,label:'6 Hours',   elMin:360, req:'Within 5 mi of Buoy 4'},
+  {id:3,label:'8 Hours',   elMin:480, req:'Within 2 mi of Buoy 4'},
+  {id:4,label:'9 Hours',   elMin:540, req:'Reach Buoy 2A (1.3 mi to finish)'},
+  {id:5,label:'9:30 (Max)',elMin:570, req:"Finish at Captain's Cove"},
+];
+
+const CHECKLIST=[
+  {id:'c01',section:'Day Before — Friday, July 31',text:'Coconut water: 10+ bottles packed in cooler'},
+  {id:'c02',section:'Day Before — Friday, July 31',text:'Once Upon a Farm fruit pouches: 8+ packed'},
+  {id:'c03',section:'Day Before — Friday, July 31',text:'Carb powder measured and bagged for mixing'},
+  {id:'c04',section:'Day Before — Friday, July 31',text:'Vegan sting treatment packed: vinegar or baking-soda paste (no meat tenderizer)'},
+  {id:'c05',section:'Day Before — Friday, July 31',text:'Medical kit packed (vegan-friendly basics)'},
+  {id:'c06',section:'Day Before — Friday, July 31',text:'Feed protocol confirmed with Michael (crew)'},
+  {id:'c07',section:'Day Before — Friday, July 31',text:'Goggles (2 pairs), anti-chafe, vegan lip balm, vegan reef-safe sunscreen packed'},
+  {id:'c08',section:'Day Before — Friday, July 31',text:'Dry bag packed: towel, warm layers, post-swim clothes'},
+  {id:'c09',section:'Race Morning — 5:00 AM Captain\'s Cove',text:'ID on person'},
+  {id:'c10',section:'Race Morning — 5:00 AM Captain\'s Cove',text:'Phone charged + backup battery'},
+  {id:'c11',section:'Race Morning — 5:00 AM Captain\'s Cove',text:'Escort boat captain briefed on updated route + feed protocol'},
+  {id:'c12',section:'Race Morning — 5:00 AM Captain\'s Cove',text:'Confirm boat has GPS, radio, cell phone, EMT aboard'},
+  {id:'c13',section:'Race Morning — 5:00 AM Captain\'s Cove',text:'Feed cooler loaded onto escort boat'},
+  {id:'c13b',section:'Race Morning — 5:00 AM Captain\'s Cove',text:'One backup feed prepped warm in a thermos (Joey may request it mid-swim)'},
+  {id:'c14',section:'Pre-Swim — At Boat / Jump Point',text:'Joey fully anti-chafed'},
+  {id:'c15',section:'Pre-Swim — At Boat / Jump Point',text:'Cap on, goggles set (clear + tinted backup)'},
+  {id:'c16',section:'Pre-Swim — At Boat / Jump Point',text:'Observer role confirmed, if assigned'},
+  {id:'c17',section:'Pre-Swim — At Boat / Jump Point',text:'Mental reset — new boat-jump start, new course. Landmark by landmark.'},
+];
+let fbRef=null, adminMap=null, viewerMap=null, adminProgressMarker=null, viewerProgressMarker=null;
+
+// ---- Utilities ----
+function save(){
+  try{localStorage.setItem('tracker_sats2026',JSON.stringify(state));}catch(e){}
+  if(fbRef&&!IS_VIEWER){fbRef.set(state).catch(e=>console.warn('FB sync:',e));}
+}
+function load(){try{const d=localStorage.getItem('tracker_sats2026');if(d)state={...state,...JSON.parse(d)};}catch(e){}}
+function t2m(t){if(!t)return null;const[h,m]=t.split(':').map(Number);return h*60+m;}
+function m2t(m){m=((m%1440)+1440)%1440;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');}
+function fmt(t){if(!t)return'—';const[h,m]=t.split(':').map(Number);return`${h%12||12}:${String(m).padStart(2,'0')} ${h<12?'AM':'PM'}`;}
+function fmtEl(min){if(min===null||isNaN(min))return'—';const h=Math.floor(min/60),m=min%60;return h>0?`${h}h ${m}m`:`${m}m`;}
+function estClock(ms){return m2t(t2m(state.startTime)+ms.elMin);}
+function actElapsed(id){const a=state.actuals[id];if(!a)return null;let el=t2m(a)-t2m(state.startTime);if(el<-120)el+=1440;return el;}
+function variance(id,estEl){const a=actElapsed(id);if(a===null||estEl===0)return null;return((a-estEl)/estEl)*100;}
+function chip(v){if(v===null)return'<span class="chip grey">—</span>';const s=v>=0?'+':'';if(v<-5)return`<span class="chip green">${s}${v.toFixed(1)}%</span>`;if(v>5)return`<span class="chip red">${s}${v.toFixed(1)}%</span>`;return`<span class="chip yellow">${s}${v.toFixed(1)}%</span>`;}
+
+// ---- Feed functions ----
+function buildFeeds(keep){const sm=t2m(state.startTime),old=state.feeds||[],feeds=[];let t=sm+state.feedInterval;for(let i=0;i<MAX_FEEDS;i++){const o=old[i]||{};feeds.push({estTime:m2t(t),actualTime:keep&&o.actualTime?o.actualTime:'',done:keep?(o.done||false):false,type:i%2===0?'CW':'OUF',notes:keep&&o.notes?o.notes:''});t+=state.feedInterval;}state.feeds=feeds;}
+function recalcFeeds(){let li=-1,lm=t2m(state.startTime);state.feeds.forEach((f,i)=>{if(f.done&&f.actualTime){li=i;lm=t2m(f.actualTime);}});for(let i=li+1;i<state.feeds.length;i++)state.feeds[i].estTime=m2t(lm+(i-li)*state.feedInterval);save();renderFeeds();}
+
+// ---- Render functions ----
+function renderMilestones(){
+  const tb=document.getElementById('msBody');if(!tb)return;tb.innerHTML='';
+  MS.forEach(ms=>{
+    const ec=estClock(ms),actual=state.actuals[ms.id]||'',v=actual?variance(ms.id,ms.elMin):null;
+    const rc=ms.isStart||ms.isFinish?(ms.isStart?'start-row':'finish-row'):'';
+    const mTemp=(state.milestoneTemps&&state.milestoneTemps[ms.id])||'';
+    const tr=document.createElement('tr');if(rc)tr.className=rc;
+    tr.innerHTML=`<td>
+      <span class="ms-name">${ms.name}</span>
+      ${ms.sub?`<div class="ms-sub">${ms.sub}</div>`:''}
+      ${ms.note?`<div class="ms-note">⚡ ${ms.note}</div>`:''}
+      ${ms.miles!==null?`<div class="ms-miles">${ms.miles} mi</div>`:''}
+    </td>
+    <td class="ms-est">${fmt(ec)}</td>
+    <td>${IS_VIEWER
+      ?`<span style="color:${actual?'#e0e8ff':'#3a4a60'};font-size:12px;font-weight:${actual?'600':'400'}">${actual?fmt(actual):'—'}</span>${mTemp?`<div style="font-size:11px;color:#60c0e0;margin-top:2px;">🌡 ${mTemp}</div>`:''}`
+      :`<input type="time" value="${actual}" oninput="onActual(${ms.id},this.value)">
+        <div style="text-align:center;margin-top:3px;"><button class="btn-sm" style="font-size:10px;padding:2px 7px;" onclick="msNow(${ms.id})">Now</button></div>
+        <input type="text" value="${mTemp}" placeholder="🌡 —°F" oninput="onMilestoneTemp(${ms.id},this.value)" style="width:72px;background:#050510;border:1px solid #1a2a40;border-radius:4px;color:#60c0e0;padding:2px 5px;font-size:11px;margin-top:4px;text-align:center;display:block;">`
+    }</td>
+    <td style="text-align:center;">${chip(v)}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+function renderCutoffs(){
+  const tb=document.getElementById('coBody');if(!tb)return;tb.innerHTML='';
+  CUTOFFS.forEach(co=>{
+    const ec=m2t(t2m(state.startTime)+co.elMin);
+    const rec=state.cutoffs[co.id]||{time:'',status:''};
+    const statuses=[['green','Clear'],['yellow','Tight'],['red','Missed']];
+    const btns=statuses.map(([s,label])=>`<button class="co-btn${rec.status===s?' on-'+s:''}" onclick="setCutoffStatus(${co.id},'${s}')">${label}</button>`).join('');
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>
+      <span class="ms-name">${co.label}</span>
+      <div class="ms-sub">${co.req}</div>
+    </td>
+    <td class="ms-est">${fmt(ec)}</td>
+    <td>${IS_VIEWER
+      ?`<span style="color:${rec.time?'#e0e8ff':'#3a4a60'};font-size:12px;">${rec.time?fmt(rec.time):'—'}</span>`
+      :`<input type="time" value="${rec.time||''}" oninput="onCutoffTime(${co.id},this.value)">
+        <div style="text-align:center;margin-top:3px;"><button class="btn-sm" style="font-size:10px;padding:2px 7px;" onclick="cutoffNow(${co.id})">Now</button></div>`
+    }</td>
+    <td style="text-align:center;">${IS_VIEWER?(rec.status?`<span class="chip ${rec.status==='green'?'green':rec.status==='yellow'?'yellow':'red'}">${rec.status==='green'?'Clear':rec.status==='yellow'?'Tight':'Missed'}</span>`:'<span class="chip grey">—</span>'):`<div class="co-status-btns">${btns}</div>`}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+function renderFeeds(){
+  const tb=document.getElementById('feedBody');if(!tb)return;tb.innerHTML='';
+  let nf=null;
+  state.feeds.forEach((f,i)=>{
+    const badge=f.type==='CW'?'<span class="cw-badge">🥥 CW</span>':'<span class="ouf-badge">🌿 OUF</span>';
+    const tr=document.createElement('tr');if(f.done)tr.className='feed-done-row';
+    tr.innerHTML=`<td style="font-weight:700;color:#8090c0;">${i+1}</td><td>${badge}</td><td style="color:#8090b0;">${fmt(f.estTime)}</td><td><input type="time" value="${f.actualTime||''}" oninput="onFeedTime(${i},this.value)"><div style="text-align:center;margin-top:3px;"><button class="btn-sm" style="font-size:10px;padding:2px 7px;" onclick="feedNow(${i})">Now</button></div></td><td><input class="feed-note-input" type="text" value="${f.notes||''}" placeholder="e.g. +carb ok" oninput="onFeedNote(${i},this.value)"></td><td><input type="checkbox" ${f.done?'checked':''} onchange="onFeedDone(${i},this.checked)" style="width:18px;height:18px;cursor:pointer;"></td>`;
+    tb.appendChild(tr);if(!f.done&&!nf)nf=f;
+  });
+  const nfb=document.getElementById('nextFeedBar');if(nfb)nfb.innerHTML=nf?`Next feed: <span>${fmt(nf.estTime)}</span> — ${nf.type==='CW'?'🥥 Coconut Water':'🌿 OUF Fruit Blend + Carb Powder'}`:'✅ All feeds completed!';
+}
+
+function calcStatusVars(){
+  let lastEl=null,lastMiles=0,lastEstEl=null,vars=[];
+  MS.forEach(ms=>{if(state.actuals[ms.id]){const el=actElapsed(ms.id);if(el!==null){lastEl=el;if(ms.miles!==null)lastMiles=ms.miles;lastEstEl=ms.elMin;if(ms.elMin>0)vars.push(variance(ms.id,ms.elMin));}}});
+  return{lastEl,lastMiles,lastEstEl,vars};
+}
+
+function nextCutoffLabel(){
+  const{lastEl}=calcStatusVars();
+  const elapsedNow=lastEl!==null?lastEl:0;
+  const nc=CUTOFFS.find(c=>!(state.cutoffs[c.id]&&state.cutoffs[c.id].time));
+  return nc?nc.label:'✓ All logged';
+}
+
+function renderStatus(){
+  const{lastEl,lastMiles,lastEstEl,vars}=calcStatusVars();
+  const se=document.getElementById('sv-elapsed');if(se)se.textContent=lastEl!==null?fmtEl(lastEl):'—';
+  const sm=document.getElementById('sv-miles');if(sm)sm.textContent=lastMiles>0?lastMiles.toFixed(1):'—';
+  const sc=document.getElementById('sc-pace');
+  if(vars.length>0){const avg=vars.reduce((a,b)=>a+b,0)/vars.length;if(sc)sc.className='stat-card '+(avg<-5?'green':avg>5?'red':'yellow');const sp=document.getElementById('sv-pace');if(sp)sp.textContent=(avg>=0?'+':'')+avg.toFixed(1)+'%';}
+  else{if(sc)sc.className='stat-card';const sp=document.getElementById('sv-pace');if(sp)sp.textContent='—';}
+  const svc=document.getElementById('sv-nextcutoff');if(svc)svc.textContent=nextCutoffLabel();
+  const df=(state.feeds||[]).filter(f=>f.done).length;
+  const svf=document.getElementById('sv-feeds');if(svf)svf.textContent=df;
+  const nf=(state.feeds||[]).find(f=>!f.done);
+  const svn=document.getElementById('sv-next-feed');if(svn)svn.textContent=nf?fmt(nf.estTime):'✓';
+  if(vars.length>=2&&lastEstEl&&lastEstEl>0){
+    const avg=vars.reduce((a,b)=>a+b,0)/vars.length,rem=EST_TOTAL-lastEstEl,prem=rem*(1+avg/100),sm2=t2m(state.startTime),pf=sm2+(lastEl||0)+prem,pfT=m2t(pf),delta=pf-(sm2+EST_TOTAL),d=Math.round(Math.abs(delta));
+    const pt=document.getElementById('projFinishTime');if(pt)pt.textContent=fmt(pfT);
+    const pd=document.getElementById('projFinishDelta');if(pd){pd.textContent=delta>1?`▲ ${d} min behind est.`:delta<-1?`▼ ${d} min ahead of est.`:'Right on schedule';pd.style.color=delta>5?'#f44336':delta<-5?'#4caf50':'#ffb300';}
+    const pb=document.getElementById('proj-finish-bar');if(pb)pb.style.display='block';
+  }
+  renderWaterTemps();renderSpeedCards();
+}
+
+function renderViewerStatus(){
+  const{lastEl,lastMiles,lastEstEl,vars}=calcStatusVars();
+  const ve=document.getElementById('vlv-elapsed');if(ve)ve.textContent=lastEl!==null?fmtEl(lastEl):'—';
+  const vm=document.getElementById('vlv-miles');if(vm)vm.textContent=lastMiles>0?lastMiles.toFixed(1):'—';
+  const vc=document.getElementById('vlv-nextcutoff');if(vc)vc.textContent=nextCutoffLabel();
+  const vlc=document.getElementById('vlc-pace');
+  if(vars.length>0){const avg=vars.reduce((a,b)=>a+b,0)/vars.length;if(vlc)vlc.className='live-card '+(avg<-5?'green':avg>5?'red':'yellow');const vp=document.getElementById('vlv-pace');if(vp)vp.textContent=(avg>=0?'+':'')+avg.toFixed(1)+'%';}
+  else{if(vlc)vlc.className='live-card';const vp=document.getElementById('vlv-pace');if(vp)vp.textContent='—';}
+  let lastMs=null;MS.forEach(ms=>{if(state.actuals[ms.id])lastMs=ms;});
+  const vlm=document.getElementById('vlast-ms');
+  if(vlm)vlm.innerHTML=lastMs?`📍 Last: <b>${lastMs.name}</b>${lastMs.sub?' — '+lastMs.sub:''} at <b>${fmt(state.actuals[lastMs.id])}</b>`:'Waiting for first checkpoint…';
+  if(vars.length>=2&&lastEstEl&&lastEstEl>0){
+    const avg=vars.reduce((a,b)=>a+b,0)/vars.length,rem=EST_TOTAL-lastEstEl,prem=rem*(1+avg/100),sm2=t2m(state.startTime),pf=sm2+(lastEl||0)+prem,pfT=m2t(pf),delta=pf-(sm2+EST_TOTAL),d=Math.round(Math.abs(delta));
+    const vpt=document.getElementById('vProjTime');if(vpt)vpt.textContent=fmt(pfT);
+    const vpd=document.getElementById('vProjDelta');if(vpd){vpd.textContent=delta>1?`▲ ${d} min behind est.`:delta<-1?`▼ ${d} min ahead of est.`:'Right on schedule';vpd.style.color=delta>5?'#f44336':delta<-5?'#4caf50':'#ffb300';}
+    const vpb=document.getElementById('vproj-bar');if(vpb)vpb.style.display='block';
+  }
+  renderViewerWaterTemps();renderSpeedCards();
+}
+
+function renderWaterTemps(){
+  const disp=document.getElementById('wtCurrentDisplay');
+  const ts=document.getElementById('wtCurrentTime');
+  if(!state.waterTemps||state.waterTemps.length===0){
+    if(disp)disp.textContent='—';if(ts)ts.textContent='';return;
+  }
+  const last=state.waterTemps[state.waterTemps.length-1];
+  if(disp)disp.textContent=`${last.temp}°${last.unit}`;
+  if(ts)ts.textContent=`as of ${last.time}`;
+}
+
+function renderViewerWaterTemps(){
+  const wts=state.waterTemps||[];
+  const html=wts.length>0?`<div class="link-card"><h3>💧 Water Temps</h3>${wts.map(w=>`<div class="r-kv"><span class="rk">${w.time}</span><span class="rv" style="color:#60c0e0;">${w.temp}°${w.unit}</span></div>`).join('')}</div>`:'';
+  const e1=document.getElementById('vlive-wt');const e2=document.getElementById('vlive-wt2');
+  if(e1)e1.innerHTML=html;if(e2)e2.innerHTML=html;
+}
+
+function renderReport(){
+  const startAct=state.actuals[0]||state.startTime,finishAct=state.actuals[5]||null,totalEl=finishAct?actElapsed(5):null,vars=MS.filter(ms=>ms.id>0&&state.actuals[ms.id]&&ms.elMin>0).map(ms=>variance(ms.id,ms.elMin)).filter(v=>v!==null),avgVar=vars.length>0?vars.reduce((a,b)=>a+b,0)/vars.length:null,df=(state.feeds||[]).filter(f=>f.done).length;
+  const rs=document.getElementById('rpt-summary');if(rs)rs.innerHTML=`<div class="r-kv"><span class="rk">Swimmer</span><span class="rv">Joey Nizzardo</span></div><div class="r-kv"><span class="rk">Date</span><span class="rv">Saturday, August 1, 2026</span></div><div class="r-kv"><span class="rk">Event</span><span class="rv">Swim Across the Sound (~14.5 mi)</span></div><div class="r-kv"><span class="rk">Est. Wave 1 Start</span><span class="rv">7:00 AM</span></div><div class="r-kv"><span class="rk">Actual Start</span><span class="rv">${fmt(startAct)}</span></div><div class="r-kv"><span class="rk">Finish Time</span><span class="rv">${finishAct?fmt(finishAct):'Not recorded'}</span></div><div class="r-kv"><span class="rk">Total Elapsed</span><span class="rv">${totalEl!==null?fmtEl(totalEl):'—'} (Est. 6h 30m)</span></div><div class="r-kv"><span class="rk">Avg Pace Variance</span><span class="rv">${avgVar!==null?(avgVar>=0?'+':'')+avgVar.toFixed(1)+'%':'—'}</span></div><div class="r-kv"><span class="rk">Feeds Completed</span><span class="rv">${df}</span></div>`;
+  const rwt=document.getElementById('rpt-wt');if(rwt){const wts=state.waterTemps||[];rwt.innerHTML=wts.length>0?wts.map(w=>`<div class="r-kv"><span class="rk">${w.time}</span><span class="rv" style="color:#60c0e0;">${w.temp}°${w.unit}</span></div>`).join(''):'<span style="color:#5070a0;font-size:12px;">No water temps logged</span>';}
+  const msb=document.getElementById('rpt-ms');if(msb){msb.innerHTML='';MS.forEach(ms=>{const a=state.actuals[ms.id]||null,aEl=a?actElapsed(ms.id):null,v=a&&ms.elMin>0?variance(ms.id,ms.elMin):null;const tr=document.createElement('tr');tr.innerHTML=`<td>${ms.isFinish?'🏁 ':''}${ms.name}</td><td>${fmt(estClock(ms))}</td><td style="font-weight:${a?'600':'400'};color:${a?'':'#888'}">${a?fmt(a):'—'}</td><td>${aEl!==null?fmtEl(aEl):'—'}</td><td>${chip(v)}</td>`;msb.appendChild(tr);});}
+  const cob=document.getElementById('rpt-co');if(cob){cob.innerHTML='';CUTOFFS.forEach(co=>{const rec=state.cutoffs[co.id]||{time:'',status:''};const statusLabel=rec.status==='green'?'Clear':rec.status==='yellow'?'Tight':rec.status==='red'?'Missed':'—';const tr=document.createElement('tr');tr.innerHTML=`<td>${co.label}</td><td style="font-size:10px;">${co.req}</td><td>${rec.time?fmt(rec.time):'—'}</td><td>${rec.status?`<span class="chip ${rec.status}">${statusLabel}</span>`:'<span class="chip grey">—</span>'}</td>`;cob.appendChild(tr);});}
+  const sb=document.getElementById('rpt-speed');if(sb){const sh=state.speedHistory||[];sb.innerHTML=sh.length>0?sh.map(h=>`<tr><td>${h.msName}</td><td>${h.miles.toFixed(1)}</td><td>${fmtEl(h.elMin)}</td><td style="font-weight:600;color:#4da8ff;">${h.speedKn.toFixed(2)}</td><td style="color:#7090b0;">${h.speedMph.toFixed(2)}</td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;color:#5070a0;padding:10px;">No checkpoints logged yet</td></tr>';}
+  const fb=document.getElementById('rpt-feeds');if(fb){fb.innerHTML='';(state.feeds||[]).forEach((f,i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${i+1}</td><td>${f.type==='CW'?'🥥 Coconut Water':'🌿 OUF Fruit Blend'}</td><td>${fmt(f.estTime)}</td><td style="font-weight:${f.actualTime?'600':'400'}">${f.actualTime?fmt(f.actualTime):'—'}</td><td style="font-size:11px;color:#9090b0;">${f.notes||'—'}</td><td>${f.done?'✅':'—'}</td>`;fb.appendChild(tr);});}
+  const nf2=document.getElementById('notesField');if(nf2)nf2.value=state.notes||'';
+  buildExport();
+}
+
+function buildExport(){const spd=calcAvgSpeed();const exp={event:'Swim Across the Sound',swimmer:'Joey Nizzardo',date:'August 1 2026',distanceMi:14.5,startTime:state.startTime,feedInterval:state.feedInterval,avgSpeedKn:spd?parseFloat(spd.kn.toFixed(3)):null,avgSpeedMph:spd?parseFloat(spd.mph.toFixed(3)):null,speedHistory:state.speedHistory||[],waterTemps:state.waterTemps||[],milestones:MS.map(ms=>({name:ms.name,sub:ms.sub,estElMin:ms.elMin,miles:ms.miles,actualTime:state.actuals[ms.id]||null,actualElMin:state.actuals[ms.id]?actElapsed(ms.id):null,variancePct:state.actuals[ms.id]&&ms.elMin>0?parseFloat(variance(ms.id,ms.elMin).toFixed(2)):null})),cutoffs:CUTOFFS.map(co=>({label:co.label,req:co.req,actualTime:(state.cutoffs[co.id]&&state.cutoffs[co.id].time)||null,status:(state.cutoffs[co.id]&&state.cutoffs[co.id].status)||null})),feeds:(state.feeds||[]).map((f,i)=>({num:i+1,type:f.type,estTime:f.estTime,actualTime:f.actualTime||null,done:f.done})),notes:state.notes||''};const s=JSON.stringify(exp,null,2);const eb=document.getElementById('exportBox');if(eb)eb.textContent=s;return s;}
+function copyExport(){const s=buildExport();navigator.clipboard.writeText(s).then(()=>alert('Copied! Paste into Claude for your strategic PDF.')).catch(()=>{});}
+
+// ---- Event handlers ----
+function onStartChange(){state.startTime=document.getElementById('startTime').value;buildFeeds(true);save();renderAll();}
+function setNow(id){const n=new Date(),t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');document.getElementById(id).value=t;state.startTime=t;state.actuals[0]=t;buildFeeds(true);save();renderAll();}
+function msNow(id){const n=new Date(),t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');state.actuals[id]=t;if(id===0){state.startTime=t;const si=document.getElementById('startTime');if(si)si.value=t;buildFeeds(true);}recordSpeedHistory(id);save();renderAll();updateAllMaps();fetchMilestoneTemp(id);}
+
+async function fetchMilestoneTemp(id){
+  try{
+    const url='https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?station=8467150&product=water_temperature&time_zone=lst_ldt&units=english&application=race_tracker&format=json&range=1';
+    const res=await fetch(url);const data=await res.json();
+    if(data.data&&data.data.length>0){
+      const tempF=parseFloat(data.data[data.data.length-1].v);
+      if(!state.milestoneTemps)state.milestoneTemps={};
+      state.milestoneTemps[id]=tempF.toFixed(1)+'°F';
+      save();renderMilestones();
+    }
+  }catch(e){console.warn('Milestone temp fetch:',e);}
+}
+
+function onMilestoneTemp(id,v){
+  if(!state.milestoneTemps)state.milestoneTemps={};
+  if(v)state.milestoneTemps[id]=v;else delete state.milestoneTemps[id];
+  save();
+}
+function onActual(id,v){if(v)state.actuals[id]=v;else{delete state.actuals[id];if(state.speedHistory)state.speedHistory=state.speedHistory.filter(h=>h.msId!==id);}if(id===0){state.startTime=v||'07:00';const si=document.getElementById('startTime');if(si)si.value=state.startTime;buildFeeds(true);}if(v)recordSpeedHistory(id);save();renderStatus();updateAllMaps();}
+function onCutoffTime(id,v){if(!state.cutoffs[id])state.cutoffs[id]={time:'',status:''};state.cutoffs[id].time=v;save();renderStatus();}
+function cutoffNow(id){const n=new Date(),t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');if(!state.cutoffs[id])state.cutoffs[id]={time:'',status:''};state.cutoffs[id].time=t;save();renderCutoffs();renderStatus();}
+function setCutoffStatus(id,s){if(!state.cutoffs[id])state.cutoffs[id]={time:'',status:''};state.cutoffs[id].status=state.cutoffs[id].status===s?'':s;save();renderCutoffs();renderStatus();}
+function onFeedTime(i,v){state.feeds[i].actualTime=v;save();renderFeeds();renderStatus();}
+function feedNow(i){const n=new Date(),t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');state.feeds[i].actualTime=t;state.feeds[i].done=true;save();renderFeeds();renderStatus();}
+function onFeedDone(i,c){state.feeds[i].done=c;save();renderFeeds();renderStatus();}
+function onFeedNote(i,v){state.feeds[i].notes=v;save();}
+function setFeedInterval(n){state.feedInterval=n;save();renderAll();}
+function saveNotes(){state.notes=document.getElementById('notesField').value;save();}
+function resetAll(){if(!confirm('Reset ALL data? Cannot be undone.'))return;state={startTime:'07:00',actuals:{},cutoffs:{},feedInterval:40,feeds:[],notes:'',waterTemps:[],milestoneTemps:{},checklist:{},speedUnit:'kn',speedHistory:[]};buildFeeds(false);document.getElementById('startTime').value='07:00';save();renderAll();}
+
+// ---- Water temp ----
+async function fetchWaterTempStatus(){
+  const btn=document.getElementById('fetchTempStatusBtn');
+  if(btn){btn.textContent='…';btn.disabled=true;}
+  try{
+    const url='https://api.tidesandcurrents.noaa.gov/api/prod/datagetter?station=8467150&product=water_temperature&time_zone=lst_ldt&units=english&application=race_tracker&format=json&range=1';
+    const res=await fetch(url);const data=await res.json();
+    if(data.data&&data.data.length>0){
+      const tempF=parseFloat(data.data[data.data.length-1].v);
+      const n=new Date(),t=String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0');
+      if(!state.waterTemps)state.waterTemps=[];
+      state.waterTemps.push({time:t,temp:tempF.toFixed(1),unit:'F'});
+      save();renderWaterTemps();renderViewerWaterTemps();
+    }
+    if(btn){btn.textContent='🌊 Refresh';btn.disabled=false;}
+  }catch(e){
+    console.warn('Water temp fetch:',e);
+    if(btn){btn.textContent='Failed';setTimeout(()=>{btn.textContent='🌊 Refresh';btn.disabled=false;},2000);}
+  }
+}
+
+// ---- Map ----
+function buildMapForEl(elId){
+  const map=L.map(elId).setView([41.12,-73.245],12);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap contributors',maxZoom:17}).addTo(map);
+  L.polyline(ROUTE_COORDS,{color:'#4da8ff',weight:3,opacity:0.7,dashArray:'6,6'}).addTo(map);
+  const startIcon=L.circleMarker(MS_COORDS[0],{radius:7,color:'#4caf50',fillColor:'#4caf50',fillOpacity:1}).bindPopup('🟢 START: ~2000m off Seaside Beach<br>Boat jump-off · 7:00 AM');
+  startIcon.addTo(map);
+  const finishIcon=L.circleMarker(MS_COORDS[5],{radius:7,color:'#e0c060',fillColor:'#e0c060',fillOpacity:1}).bindPopup("🏁 FINISH: Captain's Cove Seaport");
+  finishIcon.addTo(map);
+  return map;
+}
+function updateMapProgress(map,progressMarkerRef){
+  if(!map)return;
+  if(progressMarkerRef.marker){map.removeLayer(progressMarkerRef.marker);progressMarkerRef.marker=null;}
+  if(progressMarkerRef.line){map.removeLayer(progressMarkerRef.line);progressMarkerRef.line=null;}
+  let lastId=null;
+  MS.forEach(ms=>{if(state.actuals[ms.id]&&MS_COORDS[ms.id]&&MS_ROUTE_IDX[ms.id]!==undefined)lastId=ms.id;});
+  if(lastId!==null){
+    const ms=MS.find(m=>m.id===lastId);
+    const routeIdx=MS_ROUTE_IDX[lastId];
+    const progressCoords=ROUTE_COORDS.slice(0,routeIdx+1);
+    if(progressCoords.length>1){
+      progressMarkerRef.line=L.polyline(progressCoords,{color:'#e0c060',weight:7,opacity:0.85}).addTo(map);
+    }
+    const swimIcon=L.divIcon({html:'<span style="font-size:24px;line-height:1;display:block;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.8));">🏊‍♂️</span>',className:'',iconSize:[28,28],iconAnchor:[14,14]});
+    progressMarkerRef.marker=L.marker(MS_COORDS[lastId],{icon:swimIcon,zIndexOffset:1000}).bindPopup(`🏊‍♂️ Joey: ${ms.name}<br>${fmt(state.actuals[lastId])}`).addTo(map);
+    map.panTo(MS_COORDS[lastId]);
+  }
+}
+
+const adminMarkerRef={marker:null,line:null};
+const viewerMarkerRef={marker:null,line:null};
+
+function initAdminMap(){
+  if(adminMap)return;
+  adminMap=buildMapForEl('adminMapEl');
+  updateMapProgress(adminMap,adminMarkerRef);
+}
+function initViewerMap(){
+  if(viewerMap)return;
+  viewerMap=buildMapForEl('viewerMapEl');
+  updateMapProgress(viewerMap,viewerMarkerRef);
+}
+function updateAllMaps(){
+  updateMapProgress(adminMap,adminMarkerRef);
+  updateMapProgress(viewerMap,viewerMarkerRef);
+}
+
+// ---- Tab switching ----
+function switchTab(name,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  const panel=document.getElementById('tab-'+name);
+  if(panel)panel.classList.add('active');
+  if(el)el.classList.add('active');
+  if(name==='report')renderReport();
+  if(name==='status')renderStatus();
+  if(name==='live')renderViewerStatus();
+  if(name==='checklist')renderChecklist();
+  if(name==='cutoffs')renderCutoffs();
+  if(name==='map'){setTimeout(()=>{initAdminMap();adminMap.invalidateSize();updateMapProgress(adminMap,adminMarkerRef);},120);}
+  if(name==='vmap'){setTimeout(()=>{initViewerMap();viewerMap.invalidateSize();updateMapProgress(viewerMap,viewerMarkerRef);},120);}
+}
+
+// ---- Checklist ----
+function renderChecklist(){
+  if(!state.checklist)state.checklist={};
+  const body=document.getElementById('cl-body');if(!body)return;
+  const total=CHECKLIST.length,done=CHECKLIST.filter(c=>state.checklist[c.id]).length;
+  const pb=document.getElementById('cl-progress-bar');
+  if(pb)pb.textContent=`${done} / ${total} complete`;
+  const sections={};
+  CHECKLIST.forEach(c=>{if(!sections[c.section])sections[c.section]=[];sections[c.section].push(c);});
+  let html='';
+  Object.keys(sections).forEach(sec=>{
+    html+=`<div class="cl-section"><h3>${sec}</h3>`;
+    sections[sec].forEach(c=>{
+      const checked=!!state.checklist[c.id];
+      html+=`<div class="cl-item${checked?' cl-done':''}" id="clrow-${c.id}">
+        <input type="checkbox" id="cl-${c.id}" ${checked?'checked':''} onchange="onChecklistItem('${c.id}',this.checked)">
+        <label for="cl-${c.id}">${c.text}</label>
+      </div>`;
+    });
+    html+='</div>';
+  });
+  body.innerHTML=html;
+}
+function onChecklistItem(id,checked){
+  if(!state.checklist)state.checklist={};
+  state.checklist[id]=checked;
+  save();
+  const row=document.getElementById('clrow-'+id);
+  if(row){if(checked)row.classList.add('cl-done');else row.classList.remove('cl-done');}
+  const total=CHECKLIST.length,done=CHECKLIST.filter(c=>state.checklist[c.id]).length;
+  const pb=document.getElementById('cl-progress-bar');if(pb)pb.textContent=`${done} / ${total} complete`;
+}
+function resetChecklist(){if(!confirm('Reset checklist? All checks will be cleared.'))return;state.checklist={};save();renderChecklist();}
+
+// ---- Speed ----
+function calcAvgSpeed(){
+  const{lastEl,lastMiles}=calcStatusVars();
+  if(!lastMiles||!lastEl||lastEl<=0)return null;
+  const mph=lastMiles/(lastEl/60);
+  const kn=mph*0.868976;
+  return{mph,kn};
+}
+function toggleSpeedUnit(){
+  state.speedUnit=state.speedUnit==='kn'?'mph':'kn';
+  save();renderSpeedCards();
+}
+function renderSpeedCards(){
+  const s=calcAvgSpeed();
+  const isKn=state.speedUnit==='kn';
+  const val=s?(isKn?s.kn.toFixed(2):s.mph.toFixed(2)):'—';
+  const unit=isKn?'knots':'mph';
+  const sv=document.getElementById('sv-speed');if(sv)sv.textContent=val;
+  const sul=document.getElementById('speedUnitLbl');if(sul)sul.textContent=unit;
+  const vv=document.getElementById('vlv-speed');if(vv)vv.textContent=val;
+  const vul=document.getElementById('vSpeedUnitLbl');if(vul)vul.textContent=unit;
+}
+function recordSpeedHistory(msId){
+  const ms=MS.find(m=>m.id===msId);
+  if(!ms||!ms.miles||ms.miles<=0)return;
+  const el=actElapsed(msId);
+  if(!el||el<=0)return;
+  const mph=ms.miles/(el/60);
+  const kn=mph*0.868976;
+  if(!state.speedHistory)state.speedHistory=[];
+  const entry={msId,msName:ms.name,miles:ms.miles,elMin:el,speedMph:parseFloat(mph.toFixed(3)),speedKn:parseFloat(kn.toFixed(3)),time:state.actuals[msId]||''};
+  const idx=state.speedHistory.findIndex(h=>h.msId===msId);
+  if(idx>=0)state.speedHistory[idx]=entry;else state.speedHistory.push(entry);
+  state.speedHistory.sort((a,b)=>a.miles-b.miles);
+}
+
+// ---- Viewer URL ----
+function copyViewerUrl(){
+  const url=window.location.href.split('?')[0]+'?mode=viewer';
+  navigator.clipboard.writeText(url).then(()=>alert('Viewer link copied!\n\n'+url)).catch(()=>{alert('Viewer URL:\n'+url);});
+}
+
+// ---- Firebase ----
+function initFirebase(){
+  if(!FIREBASE_CONFIG.apiKey)return;
+  const s1=document.createElement('script');
+  s1.src='https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js';
+  s1.onload=()=>{
+    const s2=document.createElement('script');
+    s2.src='https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js';
+    s2.onload=()=>{
+      try{
+        if(!firebase.apps.length)firebase.initializeApp(FIREBASE_CONFIG);
+        fbRef=firebase.database().ref('sats2026_v1/state');
+        if(IS_VIEWER){
+          fbRef.on('value',snap=>{
+            const d=snap.val();
+            if(d){state={...state,...d};renderAll();updateAllMaps();}
+          });
+        }
+        const fh=document.getElementById('fbSetupHint');
+        if(fh)fh.innerHTML='<b style="color:#4caf50;">✅ Firebase connected</b> — real-time sync active (sats2026_v1 data path).';
+      }catch(e){console.warn('Firebase init failed:',e);}
+    };
+    document.head.appendChild(s2);
+  };
+  document.head.appendChild(s1);
+}
+
+// ---- renderAll ----
+function renderAll(){
+  renderMilestones();renderCutoffs();renderFeeds();renderStatus();
+  if(IS_VIEWER)renderViewerStatus();
+  const b40=document.getElementById('btn40');const b30=document.getElementById('btn30');
+  if(b40)b40.className='itbtn'+(state.feedInterval===40?' active':'');
+  if(b30)b30.className='itbtn'+(state.feedInterval===30?' active':'');
+}
+
+// ---- Init ----
+load();
+if(!state.waterTemps)state.waterTemps=[];
+if(!state.milestoneTemps)state.milestoneTemps={};
+if(!state.checklist)state.checklist={};
+if(!state.cutoffs)state.cutoffs={};
+if(!state.speedHistory)state.speedHistory=[];
+if(!state.speedUnit)state.speedUnit='kn';
+
+const vuEl=document.getElementById('viewerUrl');
+if(vuEl)vuEl.textContent=window.location.href.split('?')[0]+'?mode=viewer';
+
+if(IS_VIEWER){
+  document.getElementById('viewerBadge').style.display='inline';
+  document.getElementById('bannerSub').textContent='Joey Nizzardo · August 1, 2026 · Read-only live view';
+  document.getElementById('adminTabs').style.display='none';
+  document.getElementById('viewerTabs').style.display='flex';
+  ['status','cutoffs','feeds','map','report'].forEach(n=>{
+    const p=document.getElementById('tab-'+n);if(p){p.classList.remove('active');p.style.display='none';}
+  });
+  const mp=document.getElementById('tab-milestones');if(mp){mp.classList.remove('active');mp.style.display='none';}
+  const lp=document.getElementById('tab-live');if(lp){lp.style.display='';lp.classList.add('active');}
+  renderViewerStatus();
+  initFirebase();
+}else{
+  document.getElementById('startTime').value=state.startTime;
+  if(!state.feeds||state.feeds.length<MAX_FEEDS)buildFeeds(true);
+  renderAll();
+  initFirebase();
+}
+</script>
+</body>
+</html>
